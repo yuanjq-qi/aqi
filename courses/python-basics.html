@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python基础 - 袁佳琪的个人页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-xl font-bold text-blue-600">袁佳琪的个人页面</a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="../index.html" class="text-gray-700 hover:text-blue-600 transition-colors">首页</a>
+                    <a href="../index.html#courses" class="text-gray-700 hover:text-blue-600 transition-colors">课程</a>
+                </div>
+                <button class="md:hidden text-gray-700">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 课程详情 -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <div class="flex items-center mb-6">
+                    <div class="text-blue-600 text-5xl mr-4">
+                        <i class="fa fa-code"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold">Python基础</h1>
+                </div>
+                
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">课程简介</h2>
+                    <p class="text-gray-600 mb-4">
+                        Python基础课程是商务数据分析与应用专业的核心课程之一，主要介绍Python编程语言的基础知识和应用。
+                    </p>
+                    <p class="text-gray-600">
+                        通过本课程的学习，学生将掌握Python的基本语法、数据类型、控制结构、函数、模块等基础知识，为后续的数据分析课程打下坚实的基础。
+                    </p>
+                </div>
+                
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">课程内容</h2>
+                    <ul class="list-disc pl-6 text-gray-600 space-y-2">
+                        <li>Python环境搭建</li>
+                        <li>基本语法和数据类型</li>
+                        <li>控制结构（条件语句、循环）</li>
+                        <li>函数和模块</li>
+                        <li>文件操作</li>
+                        <li>异常处理</li>
+                        <li>面向对象编程基础</li>
+                    </ul>
+                </div>
+                
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">学习目标</h2>
+                    <ul class="list-disc pl-6 text-gray-600 space-y-2">
+                        <li>掌握Python的基本语法和编程思想</li>
+                        <li>能够编写简单的Python程序</li>
+                        <li>了解Python在数据分析中的应用</li>
+                        <li>为后续课程学习做好准备</li>
+                    </ul>
+                </div>
+                
+                <div class="flex justify-center">
+                    <a href="../index.html#courses" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        返回课程列表
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2026 袁佳琪的个人页面</p>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
