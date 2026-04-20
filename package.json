@@ -1,0 +1,11 @@
+{
+  "name": "yuanjiaqi-personal-page",
+  "version": "1.0.0",
+  "description": "袁佳琪的个人页面",
+  "scripts": {
+    "build": "echo 'No build needed for static site'"
+  },
+  "keywords": ["personal", "website", "static"],
+  "author": "袁佳琪",
+  "license": "MIT"
+}
