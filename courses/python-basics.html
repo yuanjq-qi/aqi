@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         
         body {
             font-family: 'Noto Sans SC', sans-serif;
@@ -200,7 +200,7 @@
 
     <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12">
         <div class="container mx-auto px-4 text-center">
-            <p>&amp;copy; 2026 袁佳琪的个人页面</p>
+            <p>&copy; 2026 袁佳琪的个人页面</p>
         </div>
     </footer>
 
@@ -235,18 +235,18 @@
             typeLabel.className = q.type === 1 ? 'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold' : 'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
             let optionsHtml = '';
             q.options.forEach((opt, index) => {
-                const isSelected = userAnswers[currentIndex] !== null &amp;&amp; (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
+                const isSelected = userAnswers[currentIndex] !== null && (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
                 let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
                 if (isSelected) optionClass += ' selected';
-                if (isSubmitted &amp;&amp; opt.isCorrect) optionClass += ' correct';
-                if (isSubmitted &amp;&amp; isSelected &amp;&amp; !opt.isCorrect) optionClass += ' wrong';
+                if (isSubmitted && opt.isCorrect) optionClass += ' correct';
+                if (isSubmitted && isSelected && !opt.isCorrect) optionClass += ' wrong';
                 if (isSubmitted) optionClass += ' disabled';
                 const checkbox = q.type === 2 ? `<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected ? 'bg-purple-500 border-purple-500' : ''}"></span>` : '';
                 optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${checkbox}${opt.text}</div>`;
             });
             container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${isSubmitted ? `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>` : ''}`;
             document.getElementById('prevBtn').disabled = currentIndex === 0;
-            if (currentIndex === questions.length - 1 &amp;&amp; userAnswers.every(a => a !== null)) {
+            if (currentIndex === questions.length - 1 && userAnswers.every(a => a !== null)) {
                 document.getElementById('nextBtn').classList.add('hidden');
                 document.getElementById('submitAllBtn').classList.remove('hidden');
             } else {
@@ -265,7 +265,7 @@
         function showResults() { 
             const wrongQuestions = [];
             userAnswers.forEach((answer, index) => {
-                if (answer !== null &amp;&amp; !isAnswerCorrect(index)) {
+                if (answer !== null && !isAnswerCorrect(index)) {
                     const q = questions[index];
                     const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
                     const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
@@ -280,7 +280,7 @@
             });
             StorageManager.saveQuizResult(COURSE_ID, { score: correctCount, total: questions.length, wrongQuestions: wrongQuestions });
             
-            document.getElementById('resultSection').classList.remove('hidden'); document.querySelector('section.py-12').classList.add('hidden'); const score = correctCount; const total = questions.length; const rate = Math.round((score / total) * 100); document.getElementById('finalScore').textContent = `${score}/${total}`; document.getElementById('finalCorrect').textContent = correctCount; document.getElementById('finalWrong').textContent = wrongCount; document.getElementById('finalRate').textContent = `${rate}%`; let grade = ''; let message = ''; let icon = ''; if (rate >= 90) { grade = '优秀'; message = '太棒了！你对Python基础知识掌握得非常扎实！'; icon = '🏆'; } else if (rate >= 80) { grade = '良好'; message = '非常出色！继续保持！'; icon = '🎉'; } else if (rate >= 70) { grade = '中等'; message = '不错！还有一些细节需要加强。'; icon = '👍'; } else if (rate >= 60) { grade = '及格'; message = '刚好及格，建议复习一下。'; icon = '💪'; } else { grade = '需努力'; message = '加油！多做练习，你会进步的！'; icon = '📚'; } document.getElementById('resultIcon').textContent = icon; document.getElementById('finalGrade').textContent = grade; document.getElementById('finalGrade').className = `font-bold text-2xl ${rate >= 90 ? 'text-green-600' : rate >= 70 ? 'text-blue-600' : rate >= 60 ? 'text-yellow-600' : 'text-red-600'}`; document.getElementById('gradeMessage').textContent = message; const wrongQuestionsContainer = document.getElementById('wrongQuestions'); const wrongQuestionsList = document.getElementById('wrongQuestionsList'); const wrongIndices = []; userAnswers.forEach((answer, index) => { if (answer !== null &amp;&amp; !isAnswerCorrect(index)) wrongIndices.push(index); }); if (wrongIndices.length > 0) { wrongQuestionsContainer.classList.remove('hidden'); wrongQuestionsList.innerHTML = ''; wrongIndices.forEach(index => { const q = questions[index]; const userAnswer = userAnswers[index]; let userAnswerText = q.type === 1 ? q.options[userAnswer].text : userAnswer.map(i => q.options[i].text).join('、'); const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、'); wrongQuestionsList.innerHTML += `<div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500"><div class="font-semibold text-gray-800 mb-2">${index + 1}. ${q.title}</div><div class="text-gray-600 text-sm mb-2"><strong>你的答案：</strong>${userAnswerText}</div><div class="text-green-600 text-sm mb-2"><strong>正确答案：</strong>${correctAnswerText}</div><div class="text-purple-600 text-sm"><strong>解析：</strong>${q.explanation}</div></div>`; }); } else { wrongQuestionsContainer.classList.add('hidden'); } document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' }); }
+            document.getElementById('resultSection').classList.remove('hidden'); document.querySelector('section.py-12').classList.add('hidden'); const score = correctCount; const total = questions.length; const rate = Math.round((score / total) * 100); document.getElementById('finalScore').textContent = `${score}/${total}`; document.getElementById('finalCorrect').textContent = correctCount; document.getElementById('finalWrong').textContent = wrongCount; document.getElementById('finalRate').textContent = `${rate}%`; let grade = ''; let message = ''; let icon = ''; if (rate >= 90) { grade = '优秀'; message = '太棒了！你对Python基础知识掌握得非常扎实！'; icon = '🏆'; } else if (rate >= 80) { grade = '良好'; message = '非常出色！继续保持！'; icon = '🎉'; } else if (rate >= 70) { grade = '中等'; message = '不错！还有一些细节需要加强。'; icon = '👍'; } else if (rate >= 60) { grade = '及格'; message = '刚好及格，建议复习一下。'; icon = '💪'; } else { grade = '需努力'; message = '加油！多做练习，你会进步的！'; icon = '📚'; } document.getElementById('resultIcon').textContent = icon; document.getElementById('finalGrade').textContent = grade; document.getElementById('finalGrade').className = `font-bold text-2xl ${rate >= 90 ? 'text-green-600' : rate >= 70 ? 'text-blue-600' : rate >= 60 ? 'text-yellow-600' : 'text-red-600'}`; document.getElementById('gradeMessage').textContent = message; const wrongQuestionsContainer = document.getElementById('wrongQuestions'); const wrongQuestionsList = document.getElementById('wrongQuestionsList'); const wrongIndices = []; userAnswers.forEach((answer, index) => { if (answer !== null && !isAnswerCorrect(index)) wrongIndices.push(index); }); if (wrongIndices.length > 0) { wrongQuestionsContainer.classList.remove('hidden'); wrongQuestionsList.innerHTML = ''; wrongIndices.forEach(index => { const q = questions[index]; const userAnswer = userAnswers[index]; let userAnswerText = q.type === 1 ? q.options[userAnswer].text : userAnswer.map(i => q.options[i].text).join('、'); const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、'); wrongQuestionsList.innerHTML += `<div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500"><div class="font-semibold text-gray-800 mb-2">${index + 1}. ${q.title}</div><div class="text-gray-600 text-sm mb-2"><strong>你的答案：</strong>${userAnswerText}</div><div class="text-green-600 text-sm mb-2"><strong>正确答案：</strong>${correctAnswerText}</div><div class="text-purple-600 text-sm"><strong>解析：</strong>${q.explanation}</div></div>`; }); } else { wrongQuestionsContainer.classList.add('hidden'); } document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' }); }
         function restartQuiz() { currentIndex = 0; userAnswers = new Array(questions.length).fill(null); correctCount = 0; wrongCount = 0; isSubmitted = false; document.getElementById('resultSection').classList.add('hidden'); document.querySelector('section.py-12').classList.remove('hidden'); document.getElementById('progressBar').style.width = '0%'; init(); }
         function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
         init();

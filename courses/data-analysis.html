@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         
         body {
             font-family: 'Noto Sans SC', sans-serif;
@@ -216,7 +216,7 @@
     <!-- 页脚 -->
     <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12">
         <div class="container mx-auto px-4 text-center">
-            <p>&amp;copy; 2026 袁佳琪的个人页面</p>
+            <p>&copy; 2026 袁佳琪的个人页面</p>
         </div>
     </footer>
 
@@ -378,13 +378,13 @@
             
             let optionsHtml = '';
             q.options.forEach((opt, index) => {
-                const isSelected = userAnswers[currentIndex] !== null &amp;&amp; 
+                const isSelected = userAnswers[currentIndex] !== null && 
                     (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
                 
                 let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
                 if (isSelected) optionClass += ' selected';
-                if (isSubmitted &amp;&amp; opt.isCorrect) optionClass += ' correct';
-                if (isSubmitted &amp;&amp; isSelected &amp;&amp; !opt.isCorrect) optionClass += ' wrong';
+                if (isSubmitted && opt.isCorrect) optionClass += ' correct';
+                if (isSubmitted && isSelected && !opt.isCorrect) optionClass += ' wrong';
                 if (isSubmitted) optionClass += ' disabled';
                 
                 const checkbox = q.type === 2 ? 
@@ -421,7 +421,7 @@
             
             document.getElementById('prevBtn').disabled = currentIndex === 0;
             
-            if (currentIndex === questions.length - 1 &amp;&amp; userAnswers.every(a => a !== null)) {
+            if (currentIndex === questions.length - 1 && userAnswers.every(a => a !== null)) {
                 document.getElementById('nextBtn').classList.add('hidden');
                 document.getElementById('submitAllBtn').classList.remove('hidden');
             } else {
@@ -550,7 +550,7 @@
         function showResults() {
             const wrongQuestions = [];
             userAnswers.forEach((answer, index) => {
-                if (answer !== null &amp;&amp; !isAnswerCorrect(index)) {
+                if (answer !== null && !isAnswerCorrect(index)) {
                     const q = questions[index];
                     const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
                     const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
@@ -617,7 +617,7 @@
             
             const wrongIndices = [];
             userAnswers.forEach((answer, index) => {
-                if (answer !== null &amp;&amp; !isAnswerCorrect(index)) {
+                if (answer !== null && !isAnswerCorrect(index)) {
                     wrongIndices.push(index);
                 }
             });
