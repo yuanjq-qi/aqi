@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数据采集与处理 - 袁佳琪的个人页面</title>
+    <title>数据采集与处理练习 - 袁佳琪的个人页面</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
@@ -12,86 +12,657 @@
         body {
             font-family: 'Noto Sans SC', sans-serif;
         }
+        
+        .option-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .option-btn:hover:not(.selected):not(.disabled) {
+            transform: translateX(5px);
+            border-color: #a855f7;
+            background-color: #f3e8ff;
+        }
+        
+        .option-btn.selected {
+            border-color: #a855f7;
+            background-color: #f3e8ff;
+        }
+        
+        .option-btn.correct {
+            border-color: #22c55e !important;
+            background-color: #dcfce7 !important;
+        }
+        
+        .option-btn.wrong {
+            border-color: #ef4444 !important;
+            background-color: #fee2e2 !important;
+        }
+        
+        .option-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
     <!-- 导航栏 -->
-    <nav class="bg-white shadow-md">
+    <nav class="bg-white/80 backdrop-blur-md shadow-md">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
-                <a href="../index.html" class="text-xl font-bold text-blue-600">袁佳琪的个人页面</a>
+                <a href="../index.html" class="text-xl font-bold text-purple-500">袁佳琪的个人页面</a>
                 <div class="hidden md:flex space-x-6">
-                    <a href="../index.html" class="text-gray-700 hover:text-blue-600 transition-colors">首页</a>
-                    <a href="../index.html#courses" class="text-gray-700 hover:text-blue-600 transition-colors">课程</a>
+                    <a href="../index.html" class="text-gray-700 hover:text-purple-500 transition-colors">首页</a>
+                    <a href="../index.html#courses" class="text-gray-700 hover:text-purple-500 transition-colors">课程</a>
+                    <a href="data-collection.html" class="text-purple-500 font-semibold">数据采集与处理</a>
                 </div>
-                <button class="md:hidden text-gray-700">
+                <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
                     <i class="fa fa-bars"></i>
                 </button>
+            </div>
+            <!-- 移动端菜单 -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 space-y-3">
+                <a href="../index.html" class="block text-gray-700 hover:text-purple-500">首页</a>
+                <a href="../index.html#courses" class="block text-gray-700 hover:text-purple-500">课程</a>
+                <a href="data-collection.html" class="block text-purple-500 font-semibold">数据采集与处理</a>
             </div>
         </div>
     </nav>
 
-    <!-- 课程详情 -->
+    <!-- 页面标题 -->
+    <header class="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">数据采集与处理</h1>
+            <p class="text-lg md:text-xl">课程练习题</p>
+        </div>
+    </header>
+
+    <!-- 课程简介 -->
+    <section class="py-8 bg-white border-b border-purple-100">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4 text-purple-700">课程简介</h2>
+                <p class="text-gray-600 mb-4">
+                    数据采集与处理课程主要学习数据采集、清洗和预处理技术，包括网络爬虫、API调用、数据清洗、数据转换等。学生将掌握使用Python进行各种数据采集任务的能力。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 进度条 -->
+    <div class="bg-purple-200 h-2">
+        <div id="progressBar" class="bg-gradient-to-r from-pink-400 to-purple-500 h-2 transition-all duration-500" style="width: 0%"></div>
+    </div>
+
+    <!-- 练习内容 -->
     <section class="py-12">
         <div class="container mx-auto px-4">
-            <div class="bg-white rounded-lg shadow-md p-8">
-                <div class="flex items-center mb-6">
-                    <div class="text-blue-600 text-5xl mr-4">
-                        <i class="fa fa-database"></i>
+            <div class="max-w-3xl mx-auto">
+                <!-- 状态显示 -->
+                <div id="statusBar" class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-blue-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-lg">
+                            <span class="font-semibold text-gray-800">第 <span id="currentQuestionNum" class="text-purple-600">1</span> 题</span>
+                            <span class="text-gray-500">/ 共 <span id="totalQuestionsNum">10</span> 题</span>
+                        </div>
+                        <div id="questionType" class="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold">
+                            单选题
+                        </div>
                     </div>
-                    <h1 class="text-3xl font-bold">数据采集与处理</h1>
+                    <div class="flex items-center justify-between">
+                        <div class="text-gray-600">
+                            <i class="fa fa-check-circle text-green-500 mr-1"></i>
+                            正确: <span id="correctCount" class="font-semibold text-green-600">0</span>
+                        </div>
+                        <div class="text-gray-600">
+                            <i class="fa fa-times-circle text-red-500 mr-1"></i>
+                            错误: <span id="wrongCount" class="font-semibold text-red-600">0</span>
+                        </div>
+                        <div class="text-gray-600">
+                            <i class="fa fa-clock-o text-blue-500 mr-1"></i>
+                            未答: <span id="unansweredCount" class="font-semibold text-gray-600">10</span>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="mb-8">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-800">课程简介</h2>
-                    <p class="text-gray-600 mb-4">
-                        数据采集与处理课程是商务数据分析与应用专业的重要课程，主要介绍数据采集、清洗和预处理技术。
-                    </p>
-                    <p class="text-gray-600">
-                        通过本课程的学习，学生将掌握数据采集的方法和工具，能够从各种数据源获取数据，并进行清洗、转换和预处理，为后续的数据分析做好准备。
-                    </p>
+
+                <!-- 题目容器 -->
+                <div id="questionContainer" class="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-purple-100">
+                    <!-- 题目内容会通过JavaScript动态加载 -->
                 </div>
-                
-                <div class="mb-8">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-800">课程内容</h2>
-                    <ul class="list-disc pl-6 text-gray-600 space-y-2">
-                        <li>数据采集基础概念</li>
-                        <li>网络爬虫技术</li>
-                        <li>API数据获取</li>
-                        <li>数据清洗与转换</li>
-                        <li>数据预处理技术</li>
-                        <li>数据质量评估</li>
-                        <li>数据采集案例实践</li>
-                    </ul>
+
+                <!-- 操作按钮 -->
+                <div class="flex flex-wrap justify-between gap-4">
+                    <button id="prevBtn" onclick="prevQuestion()" class="bg-gray-400 text-white px-6 py-3 rounded-xl hover:bg-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                        <i class="fa fa-arrow-left mr-2"></i>上一题
+                    </button>
+                    
+                    <button id="submitAllBtn" onclick="submitAll()" class="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-3 rounded-xl hover:from-green-500 hover:to-emerald-600 transition-colors hidden flex items-center shadow-md">
+                        <i class="fa fa-paper-plane mr-2"></i>提交全部
+                    </button>
+                    
+                    <button id="nextBtn" onclick="nextQuestion()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-3 rounded-xl hover:from-pink-500 hover:to-purple-600 transition-colors flex items-center shadow-md">
+                        下一题<i class="fa fa-arrow-right ml-2"></i>
+                    </button>
                 </div>
-                
-                <div class="mb-8">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-800">学习目标</h2>
-                    <ul class="list-disc pl-6 text-gray-600 space-y-2">
-                        <li>掌握数据采集的基本方法和工具</li>
-                        <li>能够使用网络爬虫获取数据</li>
-                        <li>学会通过API获取数据</li>
-                        <li>掌握数据清洗和预处理技术</li>
-                        <li>能够处理实际业务中的数据采集问题</li>
-                    </ul>
+
+                <!-- 答题卡 -->
+                <div id="answerSheet" class="mt-8 bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-700">
+                        <i class="fa fa-list-ul mr-2"></i>答题卡
+                    </h3>
+                    <div id="answerCards" class="flex flex-wrap gap-3">
+                        <!-- 答题卡会通过JavaScript动态生成 -->
+                    </div>
                 </div>
-                
-                <div class="flex justify-center">
-                    <a href="../index.html#courses" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                        返回课程列表
-                    </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 结果展示 -->
+    <section id="resultSection" class="py-12 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-purple-100">
+                    <div id="resultIcon" class="text-7xl mb-6"></div>
+                    <h2 class="text-3xl font-bold mb-4 text-purple-700">练习完成！</h2>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-pink-50 rounded-xl p-4 border border-pink-100">
+                            <div class="text-3xl font-bold text-pink-600" id="finalScore">0</div>
+                            <div class="text-gray-600">得分</div>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4 border border-green-100">
+                            <div class="text-3xl font-bold text-green-600" id="finalCorrect">0</div>
+                            <div class="text-gray-600">正确</div>
+                        </div>
+                        <div class="bg-red-50 rounded-xl p-4 border border-red-100">
+                            <div class="text-3xl font-bold text-red-600" id="finalWrong">0</div>
+                            <div class="text-gray-600">错误</div>
+                        </div>
+                        <div class="bg-purple-50 rounded-xl p-4 border border-purple-100">
+                            <div class="text-3xl font-bold text-purple-600" id="finalRate">0%</div>
+                            <div class="text-gray-600">正确率</div>
+                        </div>
+                    </div>
+
+                    <div id="gradeSection" class="mb-8">
+                        <div class="text-xl mb-2">评级：<span id="finalGrade" class="font-bold text-2xl"></span></div>
+                        <p id="gradeMessage" class="text-gray-600"></p>
+                    </div>
+
+                    <!-- 错题列表 -->
+                    <div id="wrongQuestions" class="mt-8 text-left hidden">
+                        <h3 class="text-xl font-bold mb-4 text-red-600">
+                            <i class="fa fa-exclamation-triangle mr-2"></i>错题汇总
+                        </h3>
+                        <div id="wrongQuestionsList" class="space-y-4">
+                            <!-- 错题详情会通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-4 mt-8">
+                        <button onclick="restartQuiz()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-colors shadow-md">
+                            <i class="fa fa-refresh mr-2"></i>重新练习
+                        </button>
+                        <a href="../index.html" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-xl hover:bg-gray-300 transition-colors inline-block">
+                            <i class="fa fa-home mr-2"></i>返回首页
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 页脚 -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
+    <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12">
         <div class="container mx-auto px-4 text-center">
             <p>&copy; 2026 袁佳琪的个人页面</p>
         </div>
     </footer>
 
-    <script src="../js/script.js"></script>
+    <script>
+        const questions = [
+            {
+                id: 1,
+                type: 1,
+                title: 'HTTP请求方法',
+                question: '在网络爬虫中，最常用的HTTP请求方法是？',
+                options: [
+                    { label: 'A', text: 'POST', isCorrect: false },
+                    { label: 'B', text: 'GET', isCorrect: true },
+                    { label: 'C', text: 'PUT', isCorrect: false },
+                    { label: 'D', text: 'DELETE', isCorrect: false }
+                ],
+                explanation: 'GET是最常用的HTTP请求方法，用于获取服务器上的资源，也是爬虫最常用的方法。'
+            },
+            {
+                id: 2,
+                type: 1,
+                title: 'User-Agent',
+                question: '设置User-Agent的主要目的是什么？',
+                options: [
+                    { label: 'A', text: '提高爬取速度', isCorrect: false },
+                    { label: 'B', text: '模拟浏览器访问', isCorrect: true },
+                    { label: 'C', text: '加密数据传输', isCorrect: false },
+                    { label: 'D', text: '压缩响应数据', isCorrect: false }
+                ],
+                explanation: 'User-Agent标识了请求的客户端类型，设置它可以模拟浏览器访问，避免被服务器识别为爬虫而被封禁。'
+            },
+            {
+                id: 3,
+                type: 1,
+                title: '爬虫延迟',
+                question: '为什么爬虫需要设置请求间隔？',
+                options: [
+                    { label: 'A', text: '减少代码复杂度', isCorrect: false },
+                    { label: 'B', text: '避免被服务器封禁', isCorrect: true },
+                    { label: 'C', text: '提高数据准确性', isCorrect: false },
+                    { label: 'D', text: '节省存储空间', isCorrect: false }
+                ],
+                explanation: '设置请求间隔可以降低对目标服务器的压力，模拟人类访问行为，避免被服务器识别为恶意爬虫而封禁IP。'
+            },
+            {
+                id: 4,
+                type: 1,
+                title: 'HTML解析库',
+                question: '以下哪个库常用于解析HTML页面？',
+                options: [
+                    { label: 'A', text: 'numpy', isCorrect: false },
+                    { label: 'B', text: 'pandas', isCorrect: false },
+                    { label: 'C', text: 'BeautifulSoup', isCorrect: true },
+                    { label: 'D', text: 'matplotlib', isCorrect: false }
+                ],
+                explanation: 'BeautifulSoup是Python中专门用于解析HTML和XML文档的库，非常适合网页数据提取。'
+            },
+            {
+                id: 5,
+                type: 1,
+                title: '反爬虫策略',
+                question: '以下哪种方式可以有效应对反爬虫机制？',
+                options: [
+                    { label: 'A', text: '使用单一IP频繁请求', isCorrect: false },
+                    { label: 'B', text: '不设置请求头', isCorrect: false },
+                    { label: 'C', text: '使用代理IP轮换', isCorrect: true },
+                    { label: 'D', text: '忽略robots.txt', isCorrect: false }
+                ],
+                explanation: '使用代理IP轮换可以隐藏真实IP地址，分散请求来源，有效应对基于IP的反爬虫策略。'
+            },
+            {
+                id: 6,
+                type: 2,
+                title: '数据清洗操作（多选）',
+                question: '数据清洗的主要操作包括？（多选）',
+                options: [
+                    { label: 'A', text: '去除重复数据', isCorrect: true },
+                    { label: 'B', text: '处理缺失值', isCorrect: true },
+                    { label: 'C', text: '数据格式统一', isCorrect: true },
+                    { label: 'D', text: '数据加密', isCorrect: false }
+                ],
+                explanation: '数据清洗包括去除重复数据、处理缺失值、数据格式统一等。加密不是清洗操作。'
+            },
+            {
+                id: 7,
+                type: 1,
+                title: 'JSON解析',
+                question: '在Python中，解析JSON数据使用哪个库？',
+                options: [
+                    { label: 'A', text: 'json', isCorrect: true },
+                    { label: 'B', text: 'xml', isCorrect: false },
+                    { label: 'C', text: 'html', isCorrect: false },
+                    { label: 'D', text: 'csv', isCorrect: false }
+                ],
+                explanation: 'Python标准库中的json模块用于解析和生成JSON数据。'
+            },
+            {
+                id: 8,
+                type: 1,
+                title: '正则表达式',
+                question: '在Python中，匹配字符串开头的正则表达式符号是？',
+                options: [
+                    { label: 'A', text: '^', isCorrect: true },
+                    { label: 'B', text: '$', isCorrect: false },
+                    { label: 'C', text: '*', isCorrect: false },
+                    { label: 'D', text: '?', isCorrect: false }
+                ],
+                explanation: '^在正则表达式中表示匹配字符串开头，$表示匹配字符串结尾。'
+            },
+            {
+                id: 9,
+                type: 2,
+                title: '爬虫法律与伦理（多选）',
+                question: '合法的数据爬取应该遵守哪些原则？（多选）',
+                options: [
+                    { label: 'A', text: '遵守robots.txt协议', isCorrect: true },
+                    { label: 'B', text: '不爬取个人隐私数据', isCorrect: true },
+                    { label: 'C', text: '控制请求频率', isCorrect: true },
+                    { label: 'D', text: '爬取所有能访问的数据', isCorrect: false }
+                ],
+                explanation: '合法爬取应遵守robots.txt、不爬取隐私、控制频率等原则，而不是无限制爬取所有数据。'
+            },
+            {
+                id: 10,
+                type: 1,
+                title: 'requests库',
+                question: '在requests库中，设置超时参数的方法是？',
+                options: [
+                    { label: 'A', text: 'requests.get(url, timeout=10)', isCorrect: true },
+                    { label: 'B', text: 'requests.get(url, time=10)', isCorrect: false },
+                    { label: 'C', text: 'requests.get(url, delay=10)', isCorrect: false },
+                    { label: 'D', text: 'requests.get(url, wait=10)', isCorrect: false }
+                ],
+                explanation: 'requests.get()通过timeout参数设置超时时间，单位为秒。'
+            }
+        ];
+
+        let currentIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let correctCount = 0;
+        let wrongCount = 0;
+        let isSubmitted = false;
+
+        function init() {
+            renderQuestion();
+            updateAnswerCards();
+            updateStatus();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            const container = document.getElementById('questionContainer');
+            const typeLabel = document.getElementById('questionType');
+            
+            typeLabel.textContent = q.type === 1 ? '单选题' : '多选题';
+            typeLabel.className = q.type === 1 ? 'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold' : 'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
+            
+            let optionsHtml = '';
+            q.options.forEach((opt, index) => {
+                const isSelected = userAnswers[currentIndex] !== null && 
+                    (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
+                
+                let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                if (isSelected) optionClass += ' selected';
+                if (isSubmitted && opt.isCorrect) optionClass += ' correct';
+                if (isSubmitted && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                if (isSubmitted) optionClass += ' disabled';
+                
+                const checkbox = q.type === 2 ? 
+                    `<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected ? 'bg-purple-500 border-purple-500' : ''}"></span>` : '';
+                
+                optionsHtml += `
+                    <div class="${optionClass}" onclick="selectOption(${index})">
+                        <span class="font-semibold mr-3">${opt.label}.</span>
+                        ${checkbox}
+                        ${opt.text}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = `
+                <h2 class="text-2xl font-semibold mb-6 text-gray-800">
+                    <span class="text-purple-600">${q.id}.</span> ${q.title}
+                </h2>
+                <div class="mb-6">
+                    <p class="text-gray-700 text-lg">${q.question}</p>
+                    ${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}
+                </div>
+                <div class="space-y-2">
+                    ${optionsHtml}
+                </div>
+                ${isSubmitted ? `
+                    <div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                        <p class="text-gray-700">
+                            <strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}
+                        </p>
+                    </div>
+                ` : ''}
+            `;
+            
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            
+            if (currentIndex === questions.length - 1 && userAnswers.every(a => a !== null)) {
+                document.getElementById('nextBtn').classList.add('hidden');
+                document.getElementById('submitAllBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('nextBtn').classList.remove('hidden');
+                document.getElementById('submitAllBtn').classList.add('hidden');
+            }
+        }
+
+        function selectOption(index) {
+            if (isSubmitted) return;
+            
+            const q = questions[currentIndex];
+            
+            if (q.type === 1) {
+                userAnswers[currentIndex] = index;
+            } else {
+                if (userAnswers[currentIndex] === null) {
+                    userAnswers[currentIndex] = [];
+                }
+                const idx = userAnswers[currentIndex].indexOf(index);
+                if (idx > -1) {
+                    userAnswers[currentIndex].splice(idx, 1);
+                } else {
+                    userAnswers[currentIndex].push(index);
+                }
+                userAnswers[currentIndex].sort((a, b) => a - b);
+            }
+            
+            renderQuestion();
+            updateAnswerCards();
+            updateStatus();
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+                updateAnswerCards();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+                updateAnswerCards();
+            }
+        }
+
+        function goToQuestion(index) {
+            currentIndex = index;
+            renderQuestion();
+            updateAnswerCards();
+        }
+
+        function updateAnswerCards() {
+            const container = document.getElementById('answerCards');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                let cardClass = 'w-10 h-10 rounded-xl flex items-center justify-center font-semibold cursor-pointer transition-all';
+                
+                if (userAnswers[index] !== null) {
+                    const isCorrect = isAnswerCorrect(index);
+                    cardClass += isCorrect ? ' bg-green-500 text-white' : ' bg-red-500 text-white';
+                } else {
+                    cardClass += ' bg-gray-200 text-gray-600 hover:bg-gray-300';
+                }
+                
+                if (index === currentIndex) {
+                    cardClass += ' ring-2 ring-purple-500';
+                }
+                
+                container.innerHTML += `
+                    <div class="${cardClass}" onclick="goToQuestion(${index})" title="第${index + 1}题">
+                        ${index + 1}
+                    </div>
+                `;
+            });
+        }
+
+        function updateStatus() {
+            correctCount = 0;
+            wrongCount = 0;
+            
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null) {
+                    if (isAnswerCorrect(index)) {
+                        correctCount++;
+                    } else {
+                        wrongCount++;
+                    }
+                }
+            });
+            
+            document.getElementById('currentQuestionNum').textContent = currentIndex + 1;
+            document.getElementById('totalQuestionsNum').textContent = questions.length;
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+            document.getElementById('unansweredCount').textContent = questions.length - userAnswers.filter(a => a !== null).length;
+            document.getElementById('progressBar').style.width = `${(userAnswers.filter(a => a !== null).length / questions.length) * 100}%`;
+        }
+
+        function isAnswerCorrect(questionIndex) {
+            const q = questions[questionIndex];
+            const userAnswer = userAnswers[questionIndex];
+            
+            if (q.type === 1) {
+                return q.options[userAnswer].isCorrect;
+            } else {
+                const correctIndices = q.options.reduce((acc, opt, idx) => {
+                    if (opt.isCorrect) acc.push(idx);
+                    return acc;
+                }, []);
+                
+                if (userAnswer.length !== correctIndices.length) return false;
+                return userAnswer.every(idx => correctIndices.includes(idx));
+            }
+        }
+
+        function submitAll() {
+            isSubmitted = true;
+            showResults();
+        }
+
+        function showResults() {
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.querySelector('section.py-12').classList.add('hidden');
+            
+            const score = correctCount;
+            const total = questions.length;
+            const rate = Math.round((score / total) * 100);
+            
+            document.getElementById('finalScore').textContent = `${score}/${total}`;
+            document.getElementById('finalCorrect').textContent = correctCount;
+            document.getElementById('finalWrong').textContent = wrongCount;
+            document.getElementById('finalRate').textContent = `${rate}%`;
+            
+            let grade = '';
+            let message = '';
+            let icon = '';
+            
+            if (rate >= 90) {
+                grade = '优秀';
+                message = '太棒了！你对数据采集与处理技术掌握得非常扎实！';
+                icon = '🏆';
+            } else if (rate >= 80) {
+                grade = '良好';
+                message = '非常出色！继续保持！';
+                icon = '🎉';
+            } else if (rate >= 70) {
+                grade = '中等';
+                message = '不错！还有一些细节需要加强。';
+                icon = '👍';
+            } else if (rate >= 60) {
+                grade = '及格';
+                message = '刚好及格，建议复习一下。';
+                icon = '💪';
+            } else {
+                grade = '需努力';
+                message = '加油！多做练习，你会进步的！';
+                icon = '📚';
+            }
+            
+            document.getElementById('resultIcon').textContent = icon;
+            document.getElementById('finalGrade').textContent = grade;
+            document.getElementById('finalGrade').className = `font-bold text-2xl ${
+                rate >= 90 ? 'text-green-600' : 
+                rate >= 70 ? 'text-blue-600' : 
+                rate >= 60 ? 'text-yellow-600' : 'text-red-600'
+            }`;
+            document.getElementById('gradeMessage').textContent = message;
+            
+            const wrongQuestionsContainer = document.getElementById('wrongQuestions');
+            const wrongQuestionsList = document.getElementById('wrongQuestionsList');
+            
+            const wrongIndices = [];
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null && !isAnswerCorrect(index)) {
+                    wrongIndices.push(index);
+                }
+            });
+            
+            if (wrongIndices.length > 0) {
+                wrongQuestionsContainer.classList.remove('hidden');
+                wrongQuestionsList.innerHTML = '';
+                
+                wrongIndices.forEach(index => {
+                    const q = questions[index];
+                    const userAnswer = userAnswers[index];
+                    
+                    let userAnswerText = '';
+                    if (q.type === 1) {
+                        userAnswerText = q.options[userAnswer].text;
+                    } else {
+                        userAnswerText = userAnswer.map(i => q.options[i].text).join('、');
+                    }
+                    
+                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    
+                    wrongQuestionsList.innerHTML += `
+                        <div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500">
+                            <div class="font-semibold text-gray-800 mb-2">
+                                ${index + 1}. ${q.title}
+                            </div>
+                            <div class="text-gray-600 text-sm mb-2">
+                                <strong>你的答案：</strong>${userAnswerText}
+                            </div>
+                            <div class="text-green-600 text-sm mb-2">
+                                <strong>正确答案：</strong>${correctAnswerText}
+                            </div>
+                            <div class="text-purple-600 text-sm">
+                                <strong>解析：</strong>${q.explanation}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                wrongQuestionsContainer.classList.add('hidden');
+            }
+            
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            correctCount = 0;
+            wrongCount = 0;
+            isSubmitted = false;
+            
+            document.getElementById('resultSection').classList.add('hidden');
+            document.querySelector('section.py-12').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '0%';
+            
+            init();
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        init();
+    </script>
 </body>
 </html>

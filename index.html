@@ -22,16 +22,16 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
     <!-- 导航栏 -->
-    <nav class="bg-white shadow-md">
+    <nav class="bg-white/80 backdrop-blur-md shadow-md">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
-                <a href="index.html" class="text-xl font-bold text-blue-600">袁佳琪的个人页面</a>
+                <a href="index.html" class="text-xl font-bold text-purple-500">袁佳琪的个人页面</a>
                 <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-600 transition-colors">首页</a>
-                    <a href="#courses" class="text-gray-700 hover:text-blue-600 transition-colors">课程</a>
-                    <a href="learning-path.html" class="text-gray-700 hover:text-blue-600 transition-colors">学习路径</a>
+                    <a href="index.html" class="text-gray-700 hover:text-purple-500 transition-colors">首页</a>
+                    <a href="#courses" class="text-gray-700 hover:text-purple-500 transition-colors">课程</a>
+                    <a href="learning-path.html" class="text-gray-700 hover:text-purple-500 transition-colors">学习路径</a>
                 </div>
                 <button class="md:hidden text-gray-700">
                     <i class="fa fa-bars"></i>
@@ -41,7 +41,7 @@
     </nav>
 
     <!-- 个人信息横幅 -->
-    <header class="bg-blue-600 text-white py-16">
+    <header class="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-16">
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">袁佳琪</h1>
             <p class="text-xl md:text-2xl mb-6">广东科学技术职业学院</p>
@@ -52,58 +52,73 @@
     <!-- 课程列表 -->
     <section id="courses" class="py-12">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-10 text-gray-800">我的课程</h2>
+            <h2 class="text-3xl font-bold text-center mb-10 text-purple-600">我的课程</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Python基础 -->
-                <a href="courses/python-basics.html" class="course-card bg-white rounded-lg shadow-md p-6">
-                    <div class="text-blue-600 text-4xl mb-4">
+                <div class="course-card bg-white rounded-2xl shadow-lg p-6 border border-pink-100">
+                    <div class="text-pink-400 text-4xl mb-4">
                         <i class="fa fa-code"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Python基础</h3>
-                    <p class="text-gray-600">学习Python编程语言的基础知识和应用</p>
-                </a>
+                    <h3 class="text-xl font-semibold mb-2 text-purple-700">Python基础</h3>
+                    <p class="text-gray-600 mb-4">学习Python编程语言的基础知识和应用</p>
+                    <a href="courses/python-basics.html" class="inline-block bg-gradient-to-r from-pink-400 to-purple-400 text-white px-4 py-2 rounded-xl hover:from-pink-500 hover:to-purple-500 transition-all text-center w-full shadow-md">
+                        <i class="fa fa-pencil mr-2"></i>进入练习
+                    </a>
+                </div>
                 
                 <!-- 数据分析技术 -->
-                <a href="courses/data-analysis.html" class="course-card bg-white rounded-lg shadow-md p-6">
-                    <div class="text-blue-600 text-4xl mb-4">
+                <div class="course-card bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
+                    <div class="text-blue-400 text-4xl mb-4">
                         <i class="fa fa-bar-chart"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">数据分析技术</h3>
-                    <p class="text-gray-600">掌握数据分析的基本方法和工具</p>
-                </a>
+                    <h3 class="text-xl font-semibold mb-2 text-purple-700">数据分析技术</h3>
+                    <p class="text-gray-600 mb-4">掌握数据分析的基本方法和工具</p>
+                    <a href="courses/data-analysis.html" class="inline-block bg-gradient-to-r from-blue-400 to-purple-400 text-white px-4 py-2 rounded-xl hover:from-blue-500 hover:to-purple-500 transition-all text-center w-full shadow-md">
+                        <i class="fa fa-pencil mr-2"></i>进入练习
+                    </a>
+                </div>
                 
                 <!-- 数据采集与处理 -->
-                <a href="courses/data-collection.html" class="course-card bg-white rounded-lg shadow-md p-6">
-                    <div class="text-blue-600 text-4xl mb-4">
+                <div class="course-card bg-white rounded-2xl shadow-lg p-6 border border-green-100">
+                    <div class="text-green-400 text-4xl mb-4">
                         <i class="fa fa-database"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">数据采集与处理</h3>
-                    <p class="text-gray-600">学习数据采集、清洗和预处理技术</p>
-                </a>
+                    <h3 class="text-xl font-semibold mb-2 text-purple-700">数据采集与处理</h3>
+                    <p class="text-gray-600 mb-4">学习数据采集、清洗和预处理技术</p>
+                    <a href="courses/data-collection.html" class="inline-block bg-gradient-to-r from-green-400 to-blue-400 text-white px-4 py-2 rounded-xl hover:from-green-500 hover:to-blue-500 transition-all text-center w-full shadow-md">
+                        <i class="fa fa-pencil mr-2"></i>进入练习
+                    </a>
+                </div>
                 
                 <!-- 供应链数据分析 -->
-                <a href="courses/supply-chain.html" class="course-card bg-white rounded-lg shadow-md p-6">
-                    <div class="text-blue-600 text-4xl mb-4">
+                <div class="course-card bg-white rounded-2xl shadow-lg p-6 border border-yellow-100">
+                    <div class="text-yellow-400 text-4xl mb-4">
                         <i class="fa fa-truck"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">供应链数据分析</h3>
-                    <p class="text-gray-600">分析供应链数据，优化供应链管理</p>
-                </a>
+                    <h3 class="text-xl font-semibold mb-2 text-purple-700">供应链数据分析</h3>
+                    <p class="text-gray-600 mb-4">分析供应链数据，优化供应链管理</p>
+                    <a href="courses/supply-chain.html" class="inline-block bg-gradient-to-r from-yellow-400 to-pink-400 text-white px-4 py-2 rounded-xl hover:from-yellow-500 hover:to-pink-500 transition-all text-center w-full shadow-md">
+                        <i class="fa fa-pencil mr-2"></i>进入练习
+                    </a>
+                </div>
                 
                 <!-- 数据库原理与应用 -->
-                <a href="courses/database.html" class="course-card bg-white rounded-lg shadow-md p-6">
-                    <div class="text-blue-600 text-4xl mb-4">
+                <div class="course-card bg-white rounded-2xl shadow-lg p-6 border border-purple-100">
+                    <div class="text-purple-400 text-4xl mb-4">
                         <i class="fa fa-server"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">数据库原理与应用</h3>
-                    <p class="text-gray-600">学习数据库设计和SQL查询</p>
-                </a>
+                    <h3 class="text-xl font-semibold mb-2 text-purple-700">数据库原理与应用</h3>
+                    <p class="text-gray-600 mb-4">学习数据库设计和SQL查询</p>
+                    <a href="courses/database.html" class="inline-block bg-gradient-to-r from-purple-400 to-pink-400 text-white px-4 py-2 rounded-xl hover:from-purple-500 hover:to-pink-500 transition-all text-center w-full shadow-md">
+                        <i class="fa fa-pencil mr-2"></i>进入练习
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- 页脚 -->
-    <footer class="bg-gray-800 text-white py-8">
+    <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8">
         <div class="container mx-auto px-4 text-center">
             <p>&copy; 2026 袁佳琪的个人页面</p>
         </div>

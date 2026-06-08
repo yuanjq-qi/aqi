@@ -20,18 +20,39 @@
         .question-card:hover {
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
+        
+        .option-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .option-btn:hover:not(.correct):not(.wrong):not(:disabled) {
+            transform: translateX(5px);
+            border-color: #a855f7;
+            background-color: #f3e8ff;
+        }
+        
+        .correct {
+            background-color: #dcfce7 !important;
+            border-color: #22c55e !important;
+        }
+        
+        .wrong {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
     <!-- 导航栏 -->
-    <nav class="bg-white shadow-md">
+    <nav class="bg-white/80 backdrop-blur-md shadow-md">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
-                <a href="../index.html" class="text-xl font-bold text-blue-600">袁佳琪的个人页面</a>
+                <a href="../index.html" class="text-xl font-bold text-purple-500">袁佳琪的个人页面</a>
                 <div class="hidden md:flex space-x-6">
-                    <a href="../index.html" class="text-gray-700 hover:text-blue-600 transition-colors">首页</a>
-                    <a href="../index.html#courses" class="text-gray-700 hover:text-blue-600 transition-colors">课程</a>
-                    <a href="../learning-path.html" class="text-gray-700 hover:text-blue-600 transition-colors">学习路径</a>
+                    <a href="../index.html" class="text-gray-700 hover:text-purple-500 transition-colors">首页</a>
+                    <a href="../index.html#courses" class="text-gray-700 hover:text-purple-500 transition-colors">课程</a>
+                    <a href="../learning-path.html" class="text-gray-700 hover:text-purple-500 transition-colors">学习路径</a>
                 </div>
                 <button class="md:hidden text-gray-700">
                     <i class="fa fa-bars"></i>
@@ -41,54 +62,41 @@
     </nav>
 
     <!-- 练习标题 -->
-    <header class="bg-blue-600 text-white py-12">
+    <header class="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-12">
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-3xl md:text-4xl font-bold mb-4">Python基础练习</h1>
-            <p class="text-lg md:text-xl">第 1 题 / 共 5 题</p>
+            <div class="flex justify-center items-center space-x-4">
+                <span id="currentQuestion" class="text-2xl font-bold">1</span>
+                <span class="text-lg">/</span>
+                <span id="totalQuestions" class="text-lg">5</span>
+                <span class="text-lg ml-4">| 得分: <span id="score">0</span>/5</span>
+            </div>
         </div>
     </header>
+
+    <!-- 进度条 -->
+    <div class="bg-purple-200 h-2">
+        <div id="progressBar" class="bg-gradient-to-r from-pink-400 to-purple-500 h-2 transition-all duration-500" style="width: 20%"></div>
+    </div>
 
     <!-- 练习内容 -->
     <section class="py-12">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto">
                 <!-- 问题卡片 -->
-                <div class="question-card bg-white rounded-lg shadow-md p-8 mb-8">
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">问题 1：Python变量和数据类型</h2>
-                    <div class="mb-8">
-                        <p class="text-gray-700 text-lg mb-4">请编写一个Python程序，完成以下任务：</p>
-                        <ol class="list-decimal pl-6 mb-6 text-gray-700 space-y-2">
-                            <li>定义一个名为 <code class="bg-gray-100 px-2 py-1 rounded">name</code> 的字符串变量，赋值为你的名字</li>
-                            <li>定义一个名为 <code class="bg-gray-100 px-2 py-1 rounded">age</code> 的整数变量，赋值为你的年龄</li>
-                            <li>定义一个名为 <code class="bg-gray-100 px-2 py-1 rounded">is_student</code> 的布尔变量</li>
-                            <li>使用 <code class="bg-gray-100 px-2 py-1 rounded">print()</code> 函数输出这些变量的值</li>
-                        </ol>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-6">
-                        <h3 class="font-semibold text-gray-800 mb-4">示例代码：</h3>
-                        <pre class="bg-gray-900 text-green-400 p-4 rounded text-sm overflow-x-auto">
-# 定义变量
-name = "袁佳琪"
-age = 20
-is_student = True
-
-# 输出变量
-print("姓名:", name)
-print("年龄:", age)
-print("是否学生:", is_student)
-                        </pre>
-                    </div>
+                <div id="questionContainer" class="question-card bg-white rounded-2xl shadow-lg p-8 mb-8 border border-purple-100">
+                    <!-- 问题会通过JavaScript动态加载 -->
                 </div>
 
                 <!-- 导航按钮 -->
-                <div class="flex justify-between">
-                    <button id="prevBtn" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors flex items-center">
+                <div class="flex flex-wrap justify-between gap-4">
+                    <button id="prevBtn" class="bg-gray-400 text-white px-6 py-3 rounded-xl hover:bg-gray-500 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fa fa-arrow-left mr-2"></i>上一题
                     </button>
-                    <a href="../learning-path.html" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors flex items-center">
-                        <i class="fa fa-arrow-left mr-2"></i>返回学习路径
+                    <a href="../learning-path.html" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-300 transition-colors flex items-center">
+                        <i class="fa fa-home mr-2"></i>返回学习路径
                     </a>
-                    <button id="nextBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                    <button id="nextBtn" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-3 rounded-xl hover:from-pink-500 hover:to-purple-600 transition-colors flex items-center shadow-md">
                         下一题<i class="fa fa-arrow-right ml-2"></i>
                     </button>
                 </div>
@@ -97,25 +105,217 @@ print("是否学生:", is_student)
     </section>
 
     <!-- 页脚 -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
+    <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12">
         <div class="container mx-auto px-4 text-center">
             <p>&copy; 2026 袁佳琪的个人页面</p>
         </div>
     </footer>
 
     <script>
-        // 简单的题目导航逻辑
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        
-        // 第一题禁用上一题按钮
-        prevBtn.disabled = true;
-        prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        
-        // 点击下一题
-        nextBtn.addEventListener('click', function() {
-            alert('恭喜你！这是第一题，你可以继续添加更多题目！');
+        // 题目数据
+        const questions = [
+            {
+                id: 1,
+                type: 'choice',
+                title: '问题 1：Python变量命名规则',
+                question: '以下哪个是合法的Python变量名？',
+                options: ['1name', 'my-name', 'my_name', 'my name'],
+                answer: 2,
+                explanation: 'Python变量名不能以数字开头，不能包含连字符，不能包含空格。下划线是允许的。'
+            },
+            {
+                id: 2,
+                type: 'choice',
+                title: '问题 2：Python数据类型',
+                question: '以下哪个不是Python的基本数据类型？',
+                options: ['int', 'float', 'string', 'array'],
+                answer: 3,
+                explanation: 'Python的基本数据类型包括int、float、str、bool等，array不是基本类型，需要导入array模块或使用list。'
+            },
+            {
+                id: 3,
+                type: 'choice',
+                title: '问题 3：Python条件语句',
+                question: '以下哪个关键字用于Python的条件判断？',
+                options: ['if', 'for', 'while', 'def'],
+                answer: 0,
+                explanation: 'if是条件判断关键字，for和while是循环关键字，def是定义函数的关键字。'
+            },
+            {
+                id: 4,
+                type: 'choice',
+                title: '问题 4：Python列表操作',
+                question: '要向列表末尾添加元素，应该使用哪个方法？',
+                options: ['add()', 'append()', 'push()', 'insert()'],
+                answer: 1,
+                explanation: 'append()方法用于向列表末尾添加元素。insert()可以在指定位置插入，Python没有add()和push()方法。'
+            },
+            {
+                id: 5,
+                type: 'choice',
+                title: '问题 5：Python函数定义',
+                question: '定义Python函数的关键字是？',
+                options: ['function', 'func', 'def', 'define'],
+                answer: 2,
+                explanation: '在Python中，使用def关键字来定义函数。'
+            }
+        ];
+
+        let currentIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        function renderQuestion() {
+            const question = questions[currentIndex];
+            const container = document.getElementById('questionContainer');
+            
+            let html = `
+                <h2 class="text-2xl font-semibold mb-6 text-gray-800">${question.title}</h2>
+                <div class="mb-8">
+                    <p class="text-gray-700 text-lg mb-6">${question.question}</p>
+                    <div class="space-y-3">
+            `;
+            
+            question.options.forEach((option, index) => {
+                html += `
+                    <button 
+                        class="option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl transition-all"
+                        onclick="checkAnswer(${index})"
+                        id="option-${index}"
+                    >
+                        <span class="font-semibold mr-3">${['A', 'B', 'C', 'D'][index]}.</span>
+                        ${option}
+                    </button>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    <div id="explanation" class="mt-6 p-4 bg-purple-50 rounded-xl hidden border-l-4 border-purple-500">
+                        <p class="text-gray-700"><strong class="text-purple-600">解析：</strong>${question.explanation}</p>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            
+            // 更新导航按钮状态
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = !answered;
+            
+            // 更新进度
+            document.getElementById('currentQuestion').textContent = currentIndex + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('progressBar').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (answered) return;
+            
+            const question = questions[currentIndex];
+            const optionButtons = document.querySelectorAll('.option-btn');
+            
+            // 禁用所有按钮
+            optionButtons.forEach(btn => btn.disabled = true);
+            
+            // 标记答案
+            optionButtons.forEach((btn, index) => {
+                if (index === question.answer) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.answer) {
+                    btn.classList.add('wrong');
+                }
+            });
+            
+            // 显示解析
+            document.getElementById('explanation').classList.remove('hidden');
+            
+            // 更新得分
+            if (selectedIndex === question.answer) {
+                score++;
+                document.getElementById('score').textContent = score;
+            }
+            
+            answered = true;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                answered = false;
+                renderQuestion();
+            }
         });
+
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            if (!answered) return;
+            
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                answered = false;
+                renderQuestion();
+            } else {
+                // 完成所有题目
+                showResult();
+            }
+        });
+
+        function showResult() {
+            const container = document.getElementById('questionContainer');
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            let grade = '';
+            let message = '';
+            
+            if (percentage >= 90) {
+                grade = '优秀';
+                message = '太棒了！你对Python基础知识掌握得很好！';
+            } else if (percentage >= 70) {
+                grade = '良好';
+                message = '不错！继续加油，巩固一下薄弱环节。';
+            } else if (percentage >= 60) {
+                grade = '及格';
+                message = '及格了！建议复习一下基础知识。';
+            } else {
+                grade = '需努力';
+                message = '加油！多做练习，你会进步的！';
+            }
+            
+            container.innerHTML = `
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-6">${percentage >= 60 ? '🎉' : '💪'}</div>
+                    <h2 class="text-3xl font-bold mb-4 text-purple-700">练习完成！</h2>
+                    <div class="text-xl mb-2">你的得分：<span class="font-bold text-pink-600">${score}/${questions.length}</span></div>
+                    <div class="text-xl mb-4">正确率：<span class="font-bold text-purple-600">${percentage}%</span></div>
+                    <div class="text-xl mb-8">评级：<span class="font-bold text-green-600">${grade}</span></div>
+                    <p class="text-gray-600 mb-8">${message}</p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="restart()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-colors shadow-md">
+                            重新练习
+                        </button>
+                        <a href="../learning-path.html" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-300 transition-colors inline-block">
+                            返回学习路径
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function restart() {
+            currentIndex = 0;
+            score = 0;
+            answered = false;
+            document.getElementById('prevBtn').style.display = 'flex';
+            document.getElementById('nextBtn').style.display = 'flex';
+            renderQuestion();
+        }
+
+        // 初始化
+        renderQuestion();
     </script>
 </body>
 </html>

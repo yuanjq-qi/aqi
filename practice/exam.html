@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>综合考试 - 袁佳琪的个人页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        
+        .question-card {
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .option-btn:hover:not(.correct):not(.wrong):not(:disabled) {
+            transform: translateX(5px);
+            border-color: #a855f7;
+            background-color: #f3e8ff;
+        }
+        
+        .correct {
+            background-color: #dcfce7 !important;
+            border-color: #22c55e !important;
+        }
+        
+        .wrong {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        
+        .timer-warning {
+            color: #ef4444 !important;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-xl font-bold text-purple-500">袁佳琪的个人页面</a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="../index.html" class="text-gray-700 hover:text-purple-500 transition-colors">首页</a>
+                    <a href="../index.html#courses" class="text-gray-700 hover:text-purple-500 transition-colors">课程</a>
+                    <a href="../learning-path.html" class="text-gray-700 hover:text-purple-500 transition-colors">学习路径</a>
+                </div>
+                <button class="md:hidden text-gray-700">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 考试标题 -->
+    <header class="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">综合考试</h1>
+            <div class="flex justify-center items-center space-x-6 flex-wrap gap-4">
+                <span id="currentQuestion" class="text-2xl font-bold">1</span>
+                <span class="text-lg">/</span>
+                <span id="totalQuestions" class="text-lg">10</span>
+                <span class="text-lg ml-4">| 得分: <span id="score">0</span>/10</span>
+                <span class="text-lg ml-4">| <i class="fa fa-clock-o"></i> <span id="timer">30:00</span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 进度条 -->
+    <div class="bg-purple-200 h-2">
+        <div id="progressBar" class="bg-gradient-to-r from-pink-400 to-purple-500 h-2 transition-all duration-500" style="width: 10%"></div>
+    </div>
+
+    <!-- 考试内容 -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <!-- 问题卡片 -->
+                <div id="questionContainer" class="question-card bg-white rounded-2xl shadow-lg p-8 mb-8 border border-purple-100">
+                    <!-- 问题会通过JavaScript动态加载 -->
+                </div>
+
+                <!-- 导航按钮 -->
+                <div class="flex flex-wrap justify-between gap-4">
+                    <button id="prevBtn" class="bg-gray-400 text-white px-6 py-3 rounded-xl hover:bg-gray-500 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa fa-arrow-left mr-2"></i>上一题
+                    </button>
+                    <a href="../learning-path.html" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-300 transition-colors flex items-center">
+                        <i class="fa fa-home mr-2"></i>返回学习路径
+                    </a>
+                    <button id="nextBtn" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-3 rounded-xl hover:from-pink-500 hover:to-purple-600 transition-colors flex items-center shadow-md">
+                        下一题<i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- 答题卡 -->
+                <div class="mt-8 bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-700"><i class="fa fa-list-ul mr-2"></i>答题卡</h3>
+                    <div id="answerCard" class="flex flex-wrap gap-3">
+                        <!-- 答题卡会通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2026 袁佳琪的个人页面</p>
+        </div>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                type: 'choice',
+                title: '问题 1：Python变量',
+                question: '以下哪个是合法的Python变量名？',
+                options: ['1var', 'my-var', '_private', 'class'],
+                answer: 2,
+                explanation: '_private是合法的Python变量名。变量名不能以数字开头，不能包含连字符，class是关键字不能使用。'
+            },
+            {
+                id: 2,
+                type: 'choice',
+                title: '问题 2：数据分析',
+                question: '在Python中，哪个库常用于数据分析和处理？',
+                options: ['requests', 'pandas', 'BeautifulSoup', 'matplotlib'],
+                answer: 1,
+                explanation: 'pandas是Python中最常用的数据分析库，提供强大的数据结构和数据分析工具。'
+            },
+            {
+                id: 3,
+                type: 'choice',
+                title: '问题 3：HTTP状态码',
+                question: 'HTTP状态码200表示什么？',
+                options: ['服务器错误', '请求成功', '未授权', '资源未找到'],
+                answer: 1,
+                explanation: 'HTTP状态码200表示请求成功，服务器成功处理了请求并返回了数据。'
+            },
+            {
+                id: 4,
+                type: 'choice',
+                title: '问题 4：数据库',
+                question: '以下哪个不是常见的关系型数据库？',
+                options: ['MySQL', 'PostgreSQL', 'MongoDB', 'SQLite'],
+                answer: 2,
+                explanation: 'MongoDB是NoSQL数据库，不是关系型数据库。MySQL、PostgreSQL和SQLite都是关系型数据库。'
+            },
+            {
+                id: 5,
+                type: 'choice',
+                title: '问题 5：数据可视化',
+                question: '以下哪个库主要用于数据可视化？',
+                options: ['numpy', 'scipy', 'matplotlib', 'scikit-learn'],
+                answer: 2,
+                explanation: 'matplotlib是Python中最常用的数据可视化库，用于创建各种类型的图表。'
+            },
+            {
+                id: 6,
+                type: 'choice',
+                title: '问题 6：Python循环',
+                question: '在Python中，用于遍历序列的循环语句是？',
+                options: ['while', 'for', 'loop', 'repeat'],
+                answer: 1,
+                explanation: 'for循环用于遍历序列（如列表、元组、字符串等）中的每个元素。'
+            },
+            {
+                id: 7,
+                type: 'choice',
+                title: '问题 7：爬虫',
+                question: '以下哪个库可以发送HTTP请求？',
+                options: ['bs4', 'lxml', 'requests', 're'],
+                answer: 2,
+                explanation: 'requests库是Python中发送HTTP请求最常用的库，支持GET、POST等多种请求方法。'
+            },
+            {
+                id: 8,
+                type: 'choice',
+                title: '问题 8：统计分析',
+                question: '标准差衡量的是什么？',
+                options: ['数据的平均值', '数据的离散程度', '数据的最大值', '数据的中位数'],
+                answer: 1,
+                explanation: '标准差衡量数据的离散程度或变异性，值越大表示数据越分散。'
+            },
+            {
+                id: 9,
+                type: 'choice',
+                title: '问题 9：SQL',
+                question: '用于从数据库中查询数据的SQL语句是？',
+                options: ['INSERT', 'UPDATE', 'SELECT', 'DELETE'],
+                answer: 2,
+                explanation: 'SELECT语句用于从数据库表中查询数据，是最常用的SQL语句之一。'
+            },
+            {
+                id: 10,
+                type: 'choice',
+                title: '问题 10：数据类型',
+                question: 'Python中，以下哪个是不可变数据类型？',
+                options: ['list', 'dict', 'set', 'tuple'],
+                answer: 3,
+                explanation: 'tuple（元组）是不可变数据类型，一旦创建就不能修改。list、dict和set都是可变类型。'
+            }
+        ];
+
+        let currentIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userAnswers = new Array(questions.length).fill(null);
+        let timeLeft = 30 * 60;
+        let timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                const timerDisplay = document.getElementById('timer');
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 300) {
+                    timerDisplay.classList.add('timer-warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function renderQuestion() {
+            const question = questions[currentIndex];
+            const container = document.getElementById('questionContainer');
+            
+            let html = `
+                <h2 class="text-2xl font-semibold mb-6 text-gray-800">${question.title}</h2>
+                <div class="mb-8">
+                    <p class="text-gray-700 text-lg mb-6">${question.question}</p>
+                    <div class="space-y-3">
+            `;
+            
+            question.options.forEach((option, index) => {
+                let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl transition-all';
+                if (userAnswers[currentIndex] !== null) {
+                    optionClass += ' disabled';
+                    if (index === question.answer) {
+                        optionClass += ' correct';
+                    } else if (index === userAnswers[currentIndex] && index !== question.answer) {
+                        optionClass += ' wrong';
+                    }
+                }
+                
+                html += `
+                    <button 
+                        class="${optionClass}"
+                        onclick="checkAnswer(${index})"
+                        id="option-${index}"
+                    >
+                        <span class="font-semibold mr-3">${['A', 'B', 'C', 'D'][index]}.</span>
+                        ${option}
+                    </button>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    <div id="explanation" class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500 ${userAnswers[currentIndex] !== null ? '' : 'hidden'}">
+                        <p class="text-gray-700"><strong class="text-purple-600">解析：</strong>${question.explanation}</p>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            updateAnswerCard();
+            
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            
+            document.getElementById('currentQuestion').textContent = currentIndex + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('progressBar').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (userAnswers[currentIndex] !== null) return;
+            
+            const question = questions[currentIndex];
+            const optionButtons = document.querySelectorAll('.option-btn');
+            
+            optionButtons.forEach(btn => btn.disabled = true);
+            
+            optionButtons.forEach((btn, index) => {
+                if (index === question.answer) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.answer) {
+                    btn.classList.add('wrong');
+                }
+            });
+            
+            document.getElementById('explanation').classList.remove('hidden');
+            
+            userAnswers[currentIndex] = selectedIndex;
+            if (selectedIndex === question.answer) {
+                score++;
+            }
+            document.getElementById('score').textContent = score;
+            
+            updateAnswerCard();
+        }
+
+        function updateAnswerCard() {
+            const answerCard = document.getElementById('answerCard');
+            answerCard.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                let cardClass = 'w-10 h-10 rounded-xl flex items-center justify-center font-semibold cursor-pointer transition-all';
+                if (userAnswers[index] !== null) {
+                    if (userAnswers[index] === q.answer) {
+                        cardClass += ' bg-green-500 text-white';
+                    } else {
+                        cardClass += ' bg-red-500 text-white';
+                    }
+                } else {
+                    cardClass += ' bg-gray-200 text-gray-600 hover:bg-gray-300';
+                }
+                if (index === currentIndex) {
+                    cardClass += ' ring-2 ring-purple-500';
+                }
+                
+                answerCard.innerHTML += `
+                    <div class="${cardClass}" onclick="goToQuestion(${index})">${index + 1}</div>
+                `;
+            });
+        }
+
+        function goToQuestion(index) {
+            currentIndex = index;
+            renderQuestion();
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                submitExam();
+            }
+        });
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            const container = document.getElementById('questionContainer');
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            let grade = '';
+            let message = '';
+            let emoji = '';
+            
+            if (percentage >= 90) {
+                grade = '优秀';
+                message = '太棒了！你是真正的数据高手！';
+                emoji = '🏆';
+            } else if (percentage >= 80) {
+                grade = '良好';
+                message = '非常出色！继续保持！';
+                emoji = '🎉';
+            } else if (percentage >= 70) {
+                grade = '中等';
+                message = '不错！还有提升空间。';
+                emoji = '👍';
+            } else if (percentage >= 60) {
+                grade = '及格';
+                message = '及格了！建议复习一下。';
+                emoji = '💪';
+            } else {
+                grade = '需努力';
+                message = '加油！多做练习，你会进步的！';
+                emoji = '📚';
+            }
+            
+            container.innerHTML = `
+                <div class="text-center py-12">
+                    <div class="text-7xl mb-6">${emoji}</div>
+                    <h2 class="text-3xl font-bold mb-4 text-purple-700">考试完成！</h2>
+                    <div class="text-xl mb-2">你的得分：<span class="font-bold text-pink-600">${score}/${questions.length}</span></div>
+                    <div class="text-xl mb-4">正确率：<span class="font-bold text-purple-600">${percentage}%</span></div>
+                    <div class="text-xl mb-8">评级：<span class="font-bold text-green-600">${grade}</span></div>
+                    <p class="text-gray-600 mb-8">${message}</p>
+                    <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 mb-8 border border-purple-200">
+                        <h3 class="font-semibold text-purple-700 mb-4">答题详情</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+                            ${questions.map((q, i) => `
+                                <div class="text-center p-2">
+                                    <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-white text-sm font-bold ${userAnswers[i] === q.answer ? 'bg-green-500' : userAnswers[i] !== null ? 'bg-red-500' : 'bg-gray-300'}">${i + 1}</div>
+                                    <div class="text-xs text-gray-500 mt-1">${userAnswers[i] === q.answer ? '正确' : userAnswers[i] !== null ? '错误' : '未答'}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="restart()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-colors shadow-md">
+                            重新考试
+                        </button>
+                        <a href="../learning-path.html" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-300 transition-colors inline-block">
+                            返回学习路径
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('answerCard').parentElement.style.display = 'none';
+        }
+
+        function restart() {
+            currentIndex = 0;
+            score = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            timeLeft = 30 * 60;
+            document.getElementById('timer').textContent = '30:00';
+            document.getElementById('timer').classList.remove('timer-warning');
+            document.getElementById('prevBtn').style.display = 'flex';
+            document.getElementById('nextBtn').style.display = 'flex';
+            document.getElementById('answerCard').parentElement.style.display = 'block';
+            startTimer();
+            renderQuestion();
+        }
+
+        startTimer();
+        renderQuestion();
+    </script>
+</body>
+</html>
