@@ -6,6 +6,7 @@
     <title>数据采集与处理练习 - 袁佳琪的个人页面</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="../js/utils.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         
@@ -46,7 +47,6 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
-    <!-- 导航栏 -->
     <nav class="bg-white/80 backdrop-blur-md shadow-md">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
@@ -60,7 +60,6 @@
                     <i class="fa fa-bars"></i>
                 </button>
             </div>
-            <!-- 移动端菜单 -->
             <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 space-y-3">
                 <a href="../index.html" class="block text-gray-700 hover:text-purple-500">首页</a>
                 <a href="../index.html#courses" class="block text-gray-700 hover:text-purple-500">课程</a>
@@ -69,7 +68,6 @@
         </div>
     </nav>
 
-    <!-- 页面标题 -->
     <header class="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-12">
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-3xl md:text-4xl font-bold mb-4">数据采集与处理</h1>
@@ -77,7 +75,6 @@
         </div>
     </header>
 
-    <!-- 课程简介 -->
     <section class="py-8 bg-white border-b border-purple-100">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto">
@@ -89,16 +86,13 @@
         </div>
     </section>
 
-    <!-- 进度条 -->
     <div class="bg-purple-200 h-2">
         <div id="progressBar" class="bg-gradient-to-r from-pink-400 to-purple-500 h-2 transition-all duration-500" style="width: 0%"></div>
     </div>
 
-    <!-- 练习内容 -->
     <section class="py-12">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto">
-                <!-- 状态显示 -->
                 <div id="statusBar" class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-blue-100">
                     <div class="flex justify-between items-center mb-4">
                         <div class="text-lg">
@@ -125,12 +119,9 @@
                     </div>
                 </div>
 
-                <!-- 题目容器 -->
                 <div id="questionContainer" class="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-purple-100">
-                    <!-- 题目内容会通过JavaScript动态加载 -->
                 </div>
 
-                <!-- 操作按钮 -->
                 <div class="flex flex-wrap justify-between gap-4">
                     <button id="prevBtn" onclick="prevQuestion()" class="bg-gray-400 text-white px-6 py-3 rounded-xl hover:bg-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
                         <i class="fa fa-arrow-left mr-2"></i>上一题
@@ -145,20 +136,17 @@
                     </button>
                 </div>
 
-                <!-- 答题卡 -->
                 <div id="answerSheet" class="mt-8 bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
                     <h3 class="text-lg font-semibold mb-4 text-purple-700">
                         <i class="fa fa-list-ul mr-2"></i>答题卡
                     </h3>
                     <div id="answerCards" class="flex flex-wrap gap-3">
-                        <!-- 答题卡会通过JavaScript动态生成 -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 结果展示 -->
     <section id="resultSection" class="py-12 hidden">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto">
@@ -190,13 +178,11 @@
                         <p id="gradeMessage" class="text-gray-600"></p>
                     </div>
 
-                    <!-- 错题列表 -->
                     <div id="wrongQuestions" class="mt-8 text-left hidden">
                         <h3 class="text-xl font-bold mb-4 text-red-600">
                             <i class="fa fa-exclamation-triangle mr-2"></i>错题汇总
                         </h3>
                         <div id="wrongQuestionsList" class="space-y-4">
-                            <!-- 错题详情会通过JavaScript动态加载 -->
                         </div>
                     </div>
 
@@ -213,7 +199,6 @@
         </div>
     </section>
 
-    <!-- 页脚 -->
     <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12">
         <div class="container mx-auto px-4 text-center">
             <p>&copy; 2026 袁佳琪的个人页面</p>
@@ -221,6 +206,7 @@
     </footer>
 
     <script>
+        const COURSE_ID = 'data-collection';
         const questions = [
             {
                 id: 1,
@@ -546,6 +532,23 @@
         }
 
         function showResults() {
+            const wrongQuestions = [];
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null && !isAnswerCorrect(index)) {
+                    const q = questions[index];
+                    const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
+                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    wrongQuestions.push({
+                        questionId: q.id,
+                        question: q.question,
+                        userAnswer: userAnswerText,
+                        correctAnswer: correctAnswerText,
+                        explanation: q.explanation
+                    });
+                }
+            });
+            StorageManager.saveQuizResult(COURSE_ID, { score: correctCount, total: questions.length, wrongQuestions: wrongQuestions });
+
             document.getElementById('resultSection').classList.remove('hidden');
             document.querySelector('section.py-12').classList.add('hidden');
             

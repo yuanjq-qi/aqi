@@ -6,6 +6,7 @@
     <title>数据库原理与应用练习 - 袁佳琪的个人页面</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="../js/utils.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         body { font-family: 'Noto Sans SC', sans-serif; }
@@ -115,6 +116,7 @@
     <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12"><div class="container mx-auto px-4 text-center"><p>&copy; 2026 袁佳琪的个人页面</p></div></footer>
 
     <script>
+        const COURSE_ID = 'database';
         const questions = [
             {id:1,type:1,title:'关系数据库',question:'关系数据库中的"关系"是指？',options:[{label:'A',text:'表与表之间的连接',isCorrect:true},{label:'B',text:'数据的逻辑结构',isCorrect:false},{label:'C',text:'数据的物理存储',isCorrect:false},{label:'D',text:'用户与数据库的连接',isCorrect:false}],explanation:'关系数据库中的"关系"指的是表与表之间的关联,通过主键和外键建立联系。'},
             {id:2,type:1,title:'主键',question:'以下哪个是主键应满足的条件？',options:[{label:'A',text:'可以为空',isCorrect:false},{label:'B',text:'允许重复',isCorrect:false},{label:'C',text:'唯一且非空',isCorrect:true},{label:'D',text:'可以有多列',isCorrect:false}],explanation:'主键是用来唯一标识表中每一条记录的字段,必须唯一且不能为空。'},
@@ -202,6 +204,23 @@
         function submitAll(){isSubmitted=true;showResults();}
 
         function showResults(){
+            const wrongQuestions = [];
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null && !isAnswerCorrect(index)) {
+                    const q = questions[index];
+                    const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
+                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    wrongQuestions.push({
+                        questionId: q.id,
+                        question: q.question,
+                        userAnswer: userAnswerText,
+                        correctAnswer: correctAnswerText,
+                        explanation: q.explanation
+                    });
+                }
+            });
+            StorageManager.saveQuizResult(COURSE_ID, { score: correctCount, total: questions.length, wrongQuestions: wrongQuestions });
+
             document.getElementById('resultSection').classList.remove('hidden');
             document.querySelector('section.py-12').classList.add('hidden');
             const score=correctCount,total=questions.length,rate=Math.round((score/total)*100);

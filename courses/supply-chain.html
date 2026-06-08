@@ -6,6 +6,7 @@
     <title>供应链数据分析练习 - 袁佳琪的个人页面</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="../js/utils.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         body { font-family: 'Noto Sans SC', sans-serif; }
@@ -115,6 +116,7 @@
     <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12"><div class="container mx-auto px-4 text-center"><p>&copy; 2026 袁佳琪的个人页面</p></div></footer>
 
     <script>
+        const COURSE_ID = 'supply-chain';
         const questions = [
             {id:1,type:1,title:'ABC分类法',question:'在库存管理中，ABC分类法将库存物品分为几类？',options:[{label:'A',text:'2类',isCorrect:false},{label:'B',text:'3类',isCorrect:true},{label:'C',text:'4类',isCorrect:false},{label:'D',text:'5类',isCorrect:false}],explanation:'ABC分类法将库存物品分为A、B、C三类：A类物品数量少但价值高，B类物品次之，C类物品数量多但价值低。'},
             {id:2,type:1,title:'安全库存',question:'设置安全库存的主要目的是什么？',options:[{label:'A',text:'降低采购成本',isCorrect:false},{label:'B',text:'应对需求波动和供应不确定性',isCorrect:true},{label:'C',text:'减少仓库空间',isCorrect:false},{label:'D',text:'提高运输效率',isCorrect:false}],explanation:'安全库存是为了应对需求波动、供应延迟等不确定性因素而设置的额外库存。'},
@@ -202,6 +204,23 @@
         function submitAll(){isSubmitted=true;showResults();}
 
         function showResults(){
+            const wrongQuestions = [];
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null && !isAnswerCorrect(index)) {
+                    const q = questions[index];
+                    const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
+                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    wrongQuestions.push({
+                        questionId: q.id,
+                        question: q.question,
+                        userAnswer: userAnswerText,
+                        correctAnswer: correctAnswerText,
+                        explanation: q.explanation
+                    });
+                }
+            });
+            StorageManager.saveQuizResult(COURSE_ID, { score: correctCount, total: questions.length, wrongQuestions: wrongQuestions });
+
             document.getElementById('resultSection').classList.remove('hidden');
             document.querySelector('section.py-12').classList.add('hidden');
             const score=correctCount,total=questions.length,rate=Math.round((score/total)*100);

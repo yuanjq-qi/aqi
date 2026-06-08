@@ -6,11 +6,12 @@
     <title>数据分析练习 - 袁佳琪的个人页面</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="../js/utils.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
         
         body {
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Noto+Sans+SC', sans-serif;
         }
         
         .question-card {
@@ -112,6 +113,7 @@
     </footer>
 
     <script>
+        const COURSE_ID = 'data-analysis';
         const questions = [
             {
                 id: 1,
@@ -163,6 +165,7 @@
         let currentIndex = 0;
         let score = 0;
         let answered = false;
+        let userAnswers = new Array(questions.length).fill(null);
 
         function renderQuestion() {
             const question = questions[currentIndex];
@@ -229,6 +232,7 @@
                 document.getElementById('score').textContent = score;
             }
             
+            userAnswers[currentIndex] = selectedIndex;
             answered = true;
             document.getElementById('nextBtn').disabled = false;
         }
@@ -254,6 +258,23 @@
         });
 
         function showResult() {
+            // 收集错题数据
+            const wrongQuestions = [];
+            userAnswers.forEach((selectedIndex, index) => {
+                if (selectedIndex !== null && selectedIndex !== questions[index].answer) {
+                    const q = questions[index];
+                    wrongQuestions.push({
+                        questionId: q.id,
+                        question: q.question,
+                        userAnswer: q.options[selectedIndex],
+                        correctAnswer: q.options[q.answer],
+                        explanation: q.explanation
+                    });
+                }
+            });
+            // 保存学习进度
+            StorageManager.saveQuizResult(COURSE_ID, { score: score, total: questions.length, wrongQuestions: wrongQuestions });
+
             const container = document.getElementById('questionContainer');
             const percentage = Math.round((score / questions.length) * 100);
             
@@ -301,6 +322,7 @@
             currentIndex = 0;
             score = 0;
             answered = false;
+            userAnswers = new Array(questions.length).fill(null);
             document.getElementById('prevBtn').style.display = 'flex';
             document.getElementById('nextBtn').style.display = 'flex';
             renderQuestion();

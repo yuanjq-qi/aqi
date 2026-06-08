@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错题本 - 袁佳琪的个人页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-bold text-purple-500">袁佳琪的个人页面</a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-500 transition-colors">首页</a>
+                    <a href="index.html#courses" class="text-gray-700 hover:text-purple-500 transition-colors">课程</a>
+                    <a href="learning-path.html" class="text-gray-700 hover:text-purple-500 transition-colors">学习路径</a>
+                    <a href="wrong-questions.html" class="text-purple-500 font-semibold">错题本</a>
+                </div>
+                <button class="md:hidden text-gray-700">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 space-y-3">
+                <a href="index.html" class="block text-gray-700 hover:text-purple-500">首页</a>
+                <a href="index.html#courses" class="block text-gray-700 hover:text-purple-500">课程</a>
+                <a href="learning-path.html" class="block text-gray-700 hover:text-purple-500">学习路径</a>
+                <a href="wrong-questions.html" class="block text-purple-500 font-semibold">错题本</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <header class="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4"><i class="fa fa-book mr-2"></i>错题本</h1>
+            <p class="text-lg md:text-xl">复习错题，快速提升！</p>
+        </div>
+    </header>
+
+    <!-- 内容区 -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-pink-100 text-center">
+                        <div class="text-pink-500 text-4xl mb-3"><i class="fa fa-times-circle"></i></div>
+                        <div class="text-3xl font-bold text-pink-600" id="total-wrong">0</div>
+                        <div class="text-gray-600">总错题数</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 text-center">
+                        <div class="text-purple-500 text-4xl mb-3"><i class="fa fa-folder"></i></div>
+                        <div class="text-3xl font-bold text-purple-600" id="total-courses">0</div>
+                        <div class="text-gray-600">涉及课程</div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-blue-100 text-center">
+                        <div class="text-blue-500 text-4xl mb-3"><i class="fa fa-check-circle"></i></div>
+                        <div class="text-3xl font-bold text-blue-600" id="mastered">0</div>
+                        <div class="text-gray-600">已掌握</div>
+                    </div>
+                </div>
+
+                <!-- 错题列表 -->
+                <div id="wrong-questions-container" class="space-y-6">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100">
+                        <div class="text-gray-400 text-6xl mb-4"><i class="fa fa-smile-o"></i></div>
+                        <h3 class="text-xl font-semibold text-gray-600 mb-2">错题本是空的！</h3>
+                        <p class="text-gray-500">快去做一些练习题吧！</p>
+                        <a href="learning-path.html" class="mt-4 inline-block bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-3 rounded-xl hover:from-pink-500 hover:to-purple-600 transition-all shadow-md">
+                            <i class="fa fa-arrow-right mr-2"></i>开始学习
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2026 袁佳琪的个人页面</p>
+        </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script>
+        const COURSE_NAMES = {
+            'python-basics': 'Python基础',
+            'data-analysis': '数据分析技术',
+            'data-collection': '数据采集与处理',
+            'supply-chain': '供应链数据分析',
+            'database': '数据库原理与应用',
+            'exam': '综合考试'
+        };
+        
+        function renderWrongQuestions() {
+            const allWrong = StorageManager.getAllWrongQuestions();
+            const container = document.getElementById('wrong-questions-container');
+            
+            let totalWrong = 0;
+            let coursesCount = 0;
+            
+            for (let courseId in allWrong) {
+                totalWrong += allWrong[courseId].length;
+                coursesCount++;
+            }
+            
+            document.getElementById('total-wrong').textContent = totalWrong;
+            document.getElementById('total-courses').textContent = coursesCount;
+            
+            if (totalWrong === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100">
+                        <div class="text-gray-400 text-6xl mb-4"><i class="fa fa-smile-o"></i></div>
+                        <h3 class="text-xl font-semibold text-gray-600 mb-2">错题本是空的！</h3>
+                        <p class="text-gray-500">快去做一些练习题吧！</p>
+                        <a href="learning-path.html" class="mt-4 inline-block bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-3 rounded-xl hover:from-pink-500 hover:to-purple-600 transition-all shadow-md">
+                            <i class="fa fa-arrow-right mr-2"></i>开始学习
+                        </a>
+                    </div>`;
+                return;
+            }
+            
+            let html = '';
+            for (let courseId in allWrong) {
+                const questions = allWrong[courseId];
+                const courseName = COURSE_NAMES[courseId] || courseId;
+                
+                html += `
+                    <div class="bg-white rounded-2xl shadow-lg border border-purple-100 overflow-hidden">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                <i class="fa fa-book mr-2"></i>${courseName}
+                                <span class="ml-auto bg-white/30 text-sm px-3 py-1 rounded-full">${questions.length} 题</span>
+                            </h3>
+                        </div>
+                        <div class="p-6 space-y-4">`;
+                
+                questions.forEach((q, idx) => {
+                    html += `
+                        <div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="font-semibold text-gray-800">第 ${q.questionId} 题：${q.title}</div>
+                                <button onclick="removeWrong('${courseId}', ${q.questionId})" class="text-gray-400 hover:text-green-500 transition-colors" title="标记已掌握">
+                                    <i class="fa fa-check-circle"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-700 mb-3">${q.question}</p>
+                            <div class="text-sm mb-2">
+                                <span class="text-red-600"><strong>你的答案：</strong>${q.userAnswer}</span>
+                            </div>
+                            <div class="text-sm mb-3">
+                                <span class="text-green-600"><strong>正确答案：</strong>${q.correctAnswer}</span>
+                            </div>
+                            <div class="bg-white/70 p-3 rounded-lg">
+                                <p class="text-purple-700 text-sm"><i class="fa fa-lightbulb-o mr-1"></i><strong>解析：</strong>${q.explanation}</p>
+                            </div>
+                        </div>`;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function removeWrong(courseId, questionId) {
+            if (confirm('确定标记这道题已掌握？')) {
+                StorageManager.removeWrongQuestion(courseId, questionId);
+                renderWrongQuestions();
+            }
+        }
+        
+        renderWrongQuestions();
+    </script>
+</body>
+</html>
