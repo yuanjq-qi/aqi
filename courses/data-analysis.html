@@ -353,7 +353,13 @@
                     { label: 'D', text: 'np.range(1, 10, 2)', isCorrect: false }
                 ],
                 explanation: 'np.arange()用于创建等差数组，参数为start, stop, step。np.linspace()用于创建等间隔数组。'
-            }
+            },
+            // 填空题部分
+            { id: 11, type: 3, title: 'pandas读取数据（代码补全）', code: 'import pandas as pd\ndf = pd.___(["name", "age", "score"], data=[["Alice", 20, 85], ["Bob", 22, 90]])\nprint(df)', blanks: ['DataFrame'], explanation: 'pandas中使用DataFrame()构造函数创建数据框，参数可以指定列名和数据。' },
+            { id: 12, type: 3, title: 'NumPy数组创建（代码补全）', code: 'import numpy as np\narr = np.___([1, 2, 3, 4, 5])\nprint(arr.mean())', blanks: ['array'], explanation: 'np.array()函数将列表转换为NumPy数组，之后可以调用mean()计算平均值。' },
+            { id: 13, type: 3, title: '数据筛选（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"name": ["Alice", "Bob"], "score": [85, 90]})\nprint(df[df["score"] ___ 85])', blanks: ['>', '>'], explanation: '使用布尔索引筛选数据，df["score"] > 85 返回布尔序列，用于筛选分数大于85的行。' },
+            { id: 14, type: 3, title: 'matplotlib绘图（代码补全）', code: 'import matplotlib.pyplot as plt\nplt.___(df["name"], df["score"])\nplt.show()', blanks: ['bar'], explanation: 'plt.bar()用于绘制柱状图，第一个参数是x轴数据，第二个参数是y轴数据。' },
+            { id: 15, type: 3, title: '数据分组统计（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"category": ["A", "B", "A", "B"], "value": [10, 20, 30, 40]})\nresult = df.___(by="category").sum()\nprint(result)', blanks: ['groupby'], explanation: 'groupby()方法用于按列分组，之后可以调用sum()、mean()等聚合函数进行统计。' }
         ];
 
         let currentIndex = 0;
@@ -373,61 +379,103 @@
             const container = document.getElementById('questionContainer');
             const typeLabel = document.getElementById('questionType');
             
-            typeLabel.textContent = q.type === 1 ? '单选题' : '多选题';
-            typeLabel.className = q.type === 1 ? 'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold' : 'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
+            if (q.type === 1) {
+                typeLabel.textContent = '单选题';
+                typeLabel.className = 'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 2) {
+                typeLabel.textContent = '多选题';
+                typeLabel.className = 'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 3) {
+                typeLabel.textContent = '代码填空题';
+                typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            }
             
             let optionsHtml = '';
-            q.options.forEach((opt, index) => {
-                const isSelected = userAnswers[currentIndex] !== null && 
-                    (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
+            
+            // 选择题渲染
+            if (q.type === 1 || q.type === 2) {
+                q.options.forEach((opt, index) => {
+                    const isSelected = userAnswers[currentIndex] !== null && 
+                        (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
+                    
+                    let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if (isSelected) optionClass += ' selected';
+                    if (isSubmitted && opt.isCorrect) optionClass += ' correct';
+                    if (isSubmitted && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                    if (isSubmitted) optionClass += ' disabled';
+                    
+                    const checkbox = q.type === 2 ? 
+                        `<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected ? 'bg-purple-500 border-purple-500' : ''}"></span>` : '';
+                    
+                    optionsHtml += `
+                        <div class="${optionClass}" onclick="selectOption(${index})">
+                            <span class="font-semibold mr-3">${opt.label}.</span>
+                            ${checkbox}
+                            ${opt.text}
+                        </div>
+                    `;
+                });
                 
-                let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
-                if (isSelected) optionClass += ' selected';
-                if (isSubmitted && opt.isCorrect) optionClass += ' correct';
-                if (isSubmitted && isSelected && !opt.isCorrect) optionClass += ' wrong';
-                if (isSubmitted) optionClass += ' disabled';
-                
-                const checkbox = q.type === 2 ? 
-                    `<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected ? 'bg-purple-500 border-purple-500' : ''}"></span>` : '';
-                
-                optionsHtml += `
-                    <div class="${optionClass}" onclick="selectOption(${index})">
-                        <span class="font-semibold mr-3">${opt.label}.</span>
-                        ${checkbox}
-                        ${opt.text}
+                container.innerHTML = `
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">
+                        <span class="text-purple-600">${q.id}.</span> ${q.title}
+                    </h2>
+                    <div class="mb-6">
+                        <p class="text-gray-700 text-lg">${q.question}</p>
+                        ${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}
+                    </div>
+                    <div class="space-y-2">
+                        ${optionsHtml}
+                    </div>
+                    ${isSubmitted ? `
+                        <div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
+                            <p class="text-gray-700">
+                                <strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}
+                            </p>
+                        </div>
+                    ` : ''}
+                `;
+            }
+            // 填空题渲染
+            else if (q.type === 3) {
+                const userAnswer = userAnswers[currentIndex] || '';
+                const displayCode = q.code.replace('___', isSubmitted ? `<span class="bg-green-200 text-green-800 px-2 py-1 rounded">${userAnswer}</span>` : `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
+                container.innerHTML = `
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">
+                        <span class="text-blue-600">${q.id}.</span> ${q.title}
+                    </h2>
+                    <div class="mb-6">
+                        <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
+                        <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
+                            <pre>${displayCode}</pre>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <input type="text" id="fill-blank-input" class="w-full p-4 border-2 border-blue-300 rounded-xl focus:border-blue-500 focus:outline-none text-lg" placeholder="请输入你的答案..." value="${userAnswer}" ${isSubmitted ? 'disabled' : ''} oninput="handleFillBlankInput(this.value)" />
+                        ${isSubmitted ? `<div class="mt-4 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>` : ''}
                     </div>
                 `;
-            });
-            
-            container.innerHTML = `
-                <h2 class="text-2xl font-semibold mb-6 text-gray-800">
-                    <span class="text-purple-600">${q.id}.</span> ${q.title}
-                </h2>
-                <div class="mb-6">
-                    <p class="text-gray-700 text-lg">${q.question}</p>
-                    ${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}
-                </div>
-                <div class="space-y-2">
-                    ${optionsHtml}
-                </div>
-                ${isSubmitted ? `
-                    <div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500">
-                        <p class="text-gray-700">
-                            <strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}
-                        </p>
-                    </div>
-                ` : ''}
-            `;
+                if (!isSubmitted) {
+                    document.getElementById('fill-blank-input').focus();
+                }
+            }
             
             document.getElementById('prevBtn').disabled = currentIndex === 0;
             
-            if (currentIndex === questions.length - 1 && userAnswers.every(a => a !== null)) {
+            if (currentIndex === questions.length - 1 && userAnswers.every(a => a !== null && a !== '')) {
                 document.getElementById('nextBtn').classList.add('hidden');
                 document.getElementById('submitAllBtn').classList.remove('hidden');
             } else {
                 document.getElementById('nextBtn').classList.remove('hidden');
                 document.getElementById('submitAllBtn').classList.add('hidden');
             }
+        }
+        
+        function handleFillBlankInput(value) {
+            userAnswers[currentIndex] = value;
+            renderQuestion();
+            updateAnswerCards();
+            updateStatus();
         }
 
         function selectOption(index) {
@@ -508,7 +556,7 @@
             wrongCount = 0;
             
             userAnswers.forEach((answer, index) => {
-                if (answer !== null) {
+                if (answer !== null && answer !== '') {
                     if (isAnswerCorrect(index)) {
                         correctCount++;
                     } else {
@@ -521,8 +569,8 @@
             document.getElementById('totalQuestionsNum').textContent = questions.length;
             document.getElementById('correctCount').textContent = correctCount;
             document.getElementById('wrongCount').textContent = wrongCount;
-            document.getElementById('unansweredCount').textContent = questions.length - userAnswers.filter(a => a !== null).length;
-            document.getElementById('progressBar').style.width = `${(userAnswers.filter(a => a !== null).length / questions.length) * 100}%`;
+            document.getElementById('unansweredCount').textContent = questions.length - userAnswers.filter(a => a !== null && a !== '').length;
+            document.getElementById('progressBar').style.width = `${(userAnswers.filter(a => a !== null && a !== '').length / questions.length) * 100}%`;
         }
 
         function isAnswerCorrect(questionIndex) {
@@ -531,7 +579,7 @@
             
             if (q.type === 1) {
                 return q.options[userAnswer].isCorrect;
-            } else {
+            } else if (q.type === 2) {
                 const correctIndices = q.options.reduce((acc, opt, idx) => {
                     if (opt.isCorrect) acc.push(idx);
                     return acc;
@@ -539,6 +587,8 @@
                 
                 if (userAnswer.length !== correctIndices.length) return false;
                 return userAnswer.every(idx => correctIndices.includes(idx));
+            } else if (q.type === 3) {
+                return q.blanks.some(blank => userAnswer.trim().toLowerCase() === String(blank).toLowerCase());
             }
         }
 
@@ -550,16 +600,28 @@
         function showResults() {
             const wrongQuestions = [];
             userAnswers.forEach((answer, index) => {
-                if (answer !== null && !isAnswerCorrect(index)) {
+                if (answer !== null && answer !== '' && !isAnswerCorrect(index)) {
                     const q = questions[index];
-                    const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
-                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    let userAnswerText, correctAnswerText;
+                    
+                    if (q.type === 1) {
+                        userAnswerText = q.options[answer].text;
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 2) {
+                        userAnswerText = answer.map(i => q.options[i].text).join('、');
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 3) {
+                        userAnswerText = answer;
+                        correctAnswerText = q.blanks.join(' 或 ');
+                    }
+                    
                     wrongQuestions.push({
                         questionId: q.id,
-                        question: q.question,
+                        question: q.type === 3 ? q.code : q.question,
                         userAnswer: userAnswerText,
                         correctAnswer: correctAnswerText,
-                        explanation: q.explanation
+                        explanation: q.explanation,
+                        type: q.type
                     });
                 }
             });
@@ -617,7 +679,7 @@
             
             const wrongIndices = [];
             userAnswers.forEach((answer, index) => {
-                if (answer !== null && !isAnswerCorrect(index)) {
+                if (answer !== null && answer !== '' && !isAnswerCorrect(index)) {
                     wrongIndices.push(index);
                 }
             });
@@ -631,19 +693,25 @@
                     const userAnswer = userAnswers[index];
                     
                     let userAnswerText = '';
+                    let correctAnswerText = '';
+                    
                     if (q.type === 1) {
                         userAnswerText = q.options[userAnswer].text;
-                    } else {
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 2) {
                         userAnswerText = userAnswer.map(i => q.options[i].text).join('、');
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 3) {
+                        userAnswerText = userAnswer;
+                        correctAnswerText = q.blanks.join(' 或 ');
                     }
-                    
-                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
                     
                     wrongQuestionsList.innerHTML += `
                         <div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500">
                             <div class="font-semibold text-gray-800 mb-2">
                                 ${index + 1}. ${q.title}
                             </div>
+                            ${q.type === 3 ? `<div class="bg-gray-900 text-green-400 p-3 rounded-xl font-mono text-sm mb-3 overflow-x-auto"><pre>${q.code.replace('___', `<span class="bg-red-200 text-red-800 px-1 rounded">${userAnswer}</span>`)}</pre></div>` : `<div class="text-gray-600 text-sm mb-2"><strong>题目：</strong>${q.question}</div>`}
                             <div class="text-gray-600 text-sm mb-2">
                                 <strong>你的答案：</strong>${userAnswerText}
                             </div>

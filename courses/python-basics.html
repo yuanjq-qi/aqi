@@ -217,7 +217,13 @@
             { id: 7, type: 1, title: '循环结构', question: '以下哪个关键字用于跳出循环？', options: [{ label: 'A', text: 'pass', isCorrect: false }, { label: 'B', text: 'break', isCorrect: true }, { label: 'C', text: 'continue', isCorrect: false }, { label: 'D', text: 'exit()', isCorrect: false }], explanation: 'break用于跳出当前循环。' },
             { id: 8, type: 1, title: '字符串操作', question: 'Python中，字符串切片s[1:4]会获取哪些字符？', options: [{ label: 'A', text: '索引1、2、3的字符', isCorrect: true }, { label: 'B', text: '索引1、2、3、4的字符', isCorrect: false }, { label: 'C', text: '索引1的字符', isCorrect: false }, { label: 'D', text: '索引4的字符', isCorrect: false }], explanation: 'Python切片语法是[start:end]，包含start但不包含end。' },
             { id: 9, type: 2, title: 'Python模块（多选）', question: '以下哪些是常用的数据分析模块？', options: [{ label: 'A', text: 'numpy', isCorrect: true }, { label: 'B', text: 'pandas', isCorrect: true }, { label: 'C', text: 'matplotlib', isCorrect: true }, { label: 'D', text: 'requests', isCorrect: false }], explanation: 'numpy、pandas、matplotlib是数据分析三大基础库。' },
-            { id: 10, type: 1, title: '异常处理', question: 'Python中捕获异常的基本语法是？', options: [{ label: 'A', text: 'try...catch...finally', isCorrect: false }, { label: 'B', text: 'try...except...else', isCorrect: false }, { label: 'C', text: 'try...except...finally', isCorrect: true }, { label: 'D', text: 'catch...finally...try', isCorrect: false }], explanation: 'Python异常处理语法是try...except...finally。' }
+            { id: 10, type: 1, title: '异常处理', question: 'Python中捕获异常的基本语法是？', options: [{ label: 'A', text: 'try...catch...finally', isCorrect: false }, { label: 'B', text: 'try...except...else', isCorrect: false }, { label: 'C', text: 'try...except...finally', isCorrect: true }, { label: 'D', text: 'catch...finally...try', isCorrect: false }], explanation: 'Python异常处理语法是try...except...finally。' },
+            // 填空题部分
+            { id: 11, type: 3, title: '列表推导式（代码补全）', code: 'nums = [1, 2, 3, 4, 5]\nresult = [x ___ for x in nums]\nprint(result)', blanks: ['*', 2], explanation: '列表推导式中，[x * 2 for x in nums]会将列表中每个元素乘以2，得到[2, 4, 6, 8, 10]' },
+            { id: 12, type: 3, title: '字典操作（代码补全）', code: 'student = {"name": "小明", "age": 20}\nprint(student.___("name"))', blanks: ['get'], explanation: '字典的get()方法用于安全地获取值，即使键不存在也不会报错，student.get("name")返回"小明"' },
+            { id: 13, type: 3, title: '字符串格式化（代码补全）', code: 'name = "Alice"\nage = 25\nprint(f"我叫___，今年{age}岁")', blanks: ['name', 'Alice'], explanation: 'Python 3.6+支持f-string格式化字符串，f"我叫{name}，今年{age}岁"可以直接在字符串中插入变量值' },
+            { id: 14, type: 3, title: '集合操作（代码补全）', code: 'set1 = {1, 2, 3}\nset2 = {2, 3, 4}\nprint(set1 ___ set2)', blanks: ['&', 'intersection'], explanation: '&或intersection表示集合的交集操作，{1,2,3} ∩ {2,3,4} = {2,3}' },
+            { id: 15, type: 3, title: '文件操作（代码补全）', code: 'with open("test.txt", ___) as f:\n    content = f.read()', blanks: ['r'], explanation: 'open()函数的第二个参数"r"表示以只读模式打开文件。常用模式还有"w"（写入）、"a"（追加）' }
         ];
 
         let currentIndex = 0;
@@ -231,22 +237,58 @@
             const q = questions[currentIndex];
             const container = document.getElementById('questionContainer');
             const typeLabel = document.getElementById('questionType');
-            typeLabel.textContent = q.type === 1 ? '单选题' : '多选题';
-            typeLabel.className = q.type === 1 ? 'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold' : 'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
+            
+            // 根据题目类型设置标签
+            if (q.type === 1) {
+                typeLabel.textContent = '单选题';
+                typeLabel.className = 'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 2) {
+                typeLabel.textContent = '多选题';
+                typeLabel.className = 'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 3) {
+                typeLabel.textContent = '代码填空题';
+                typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            }
+            
             let optionsHtml = '';
-            q.options.forEach((opt, index) => {
-                const isSelected = userAnswers[currentIndex] !== null && (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
-                let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
-                if (isSelected) optionClass += ' selected';
-                if (isSubmitted && opt.isCorrect) optionClass += ' correct';
-                if (isSubmitted && isSelected && !opt.isCorrect) optionClass += ' wrong';
-                if (isSubmitted) optionClass += ' disabled';
-                const checkbox = q.type === 2 ? `<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected ? 'bg-purple-500 border-purple-500' : ''}"></span>` : '';
-                optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${checkbox}${opt.text}</div>`;
-            });
-            container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${isSubmitted ? `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>` : ''}`;
+            
+            // 选择题渲染
+            if (q.type === 1 || q.type === 2) {
+                q.options.forEach((opt, index) => {
+                    const isSelected = userAnswers[currentIndex] !== null && (q.type === 1 ? userAnswers[currentIndex] === index : userAnswers[currentIndex].includes(index));
+                    let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if (isSelected) optionClass += ' selected';
+                    if (isSubmitted && opt.isCorrect) optionClass += ' correct';
+                    if (isSubmitted && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                    if (isSubmitted) optionClass += ' disabled';
+                    const checkbox = q.type === 2 ? `<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected ? 'bg-purple-500 border-purple-500' : ''}"></span>` : '';
+                    optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${checkbox}${opt.text}</div>`;
+                });
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${isSubmitted ? `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>` : ''}`;
+            } 
+            // 填空题渲染
+            else if (q.type === 3) {
+                const userAnswer = userAnswers[currentIndex] || '';
+                const displayCode = q.code.replace('___', isSubmitted ? `<span class="bg-green-200 text-green-800 px-2 py-1 rounded">${userAnswer}</span>` : `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
+                container.innerHTML = `
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-blue-600">${q.id}.</span> ${q.title}</h2>
+                    <div class="mb-6">
+                        <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
+                        <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
+                            <pre>${displayCode}</pre>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <input type="text" id="fill-blank-input" class="w-full p-4 border-2 border-blue-300 rounded-xl focus:border-blue-500 focus:outline-none text-lg" placeholder="请输入你的答案..." value="${userAnswer}" ${isSubmitted ? 'disabled' : ''} oninput="handleFillBlankInput(this.value)" />
+                        ${isSubmitted ? `<div class="mt-4 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>` : ''}
+                    </div>`;
+                if (!isSubmitted) {
+                    document.getElementById('fill-blank-input').focus();
+                }
+            }
+            
             document.getElementById('prevBtn').disabled = currentIndex === 0;
-            if (currentIndex === questions.length - 1 && userAnswers.every(a => a !== null)) {
+            if (currentIndex === questions.length - 1 && userAnswers.every(a => a !== null && a !== '')) {
                 document.getElementById('nextBtn').classList.add('hidden');
                 document.getElementById('submitAllBtn').classList.remove('hidden');
             } else {
@@ -254,33 +296,83 @@
                 document.getElementById('submitAllBtn').classList.add('hidden');
             }
         }
+        
+        function handleFillBlankInput(value) {
+            userAnswers[currentIndex] = value;
+            renderQuestion();
+            updateAnswerCards();
+            updateStatus();
+        }
         function selectOption(index) { if (isSubmitted) return; const q = questions[currentIndex]; if (q.type === 1) { userAnswers[currentIndex] = index; } else { if (userAnswers[currentIndex] === null) userAnswers[currentIndex] = []; const idx = userAnswers[currentIndex].indexOf(index); if (idx > -1) userAnswers[currentIndex].splice(idx, 1); else userAnswers[currentIndex].push(index); userAnswers[currentIndex].sort((a, b) => a - b); } renderQuestion(); updateAnswerCards(); updateStatus(); }
         function prevQuestion() { if (currentIndex > 0) { currentIndex--; renderQuestion(); updateAnswerCards(); } }
         function nextQuestion() { if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); updateAnswerCards(); } }
         function goToQuestion(index) { currentIndex = index; renderQuestion(); updateAnswerCards(); }
         function updateAnswerCards() { const container = document.getElementById('answerCards'); container.innerHTML = ''; questions.forEach((q, index) => { let cardClass = 'w-10 h-10 rounded-xl flex items-center justify-center font-semibold cursor-pointer transition-all'; if (userAnswers[index] !== null) { const isCorrect = isAnswerCorrect(index); cardClass += isCorrect ? ' bg-green-500 text-white' : ' bg-red-500 text-white'; } else { cardClass += ' bg-gray-200 text-gray-600 hover:bg-gray-300'; } if (index === currentIndex) cardClass += ' ring-2 ring-purple-500'; container.innerHTML += `<div class="${cardClass}" onclick="goToQuestion(${index})" title="第${index + 1}题">${index + 1}</div>`; }); }
-        function updateStatus() { correctCount = 0; wrongCount = 0; userAnswers.forEach((answer, index) => { if (answer !== null) { if (isAnswerCorrect(index)) correctCount++; else wrongCount++; } }); document.getElementById('currentQuestionNum').textContent = currentIndex + 1; document.getElementById('totalQuestionsNum').textContent = questions.length; document.getElementById('correctCount').textContent = correctCount; document.getElementById('wrongCount').textContent = wrongCount; document.getElementById('unansweredCount').textContent = questions.length - userAnswers.filter(a => a !== null).length; document.getElementById('progressBar').style.width = `${(userAnswers.filter(a => a !== null).length / questions.length) * 100}%`; }
-        function isAnswerCorrect(questionIndex) { const q = questions[questionIndex]; const userAnswer = userAnswers[questionIndex]; if (q.type === 1) { return q.options[userAnswer].isCorrect; } else { const correctIndices = q.options.reduce((acc, opt, idx) => { if (opt.isCorrect) acc.push(idx); return acc; }, []); if (userAnswer.length !== correctIndices.length) return false; return userAnswer.every(idx => correctIndices.includes(idx)); } }
+        function updateStatus() {
+            correctCount = 0;
+            wrongCount = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null && answer !== '') {
+                    if (isAnswerCorrect(index)) correctCount++;
+                    else wrongCount++;
+                }
+            });
+            document.getElementById('currentQuestionNum').textContent = currentIndex + 1;
+            document.getElementById('totalQuestionsNum').textContent = questions.length;
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+            document.getElementById('unansweredCount').textContent = questions.length - userAnswers.filter(a => a !== null && a !== '').length;
+            document.getElementById('progressBar').style.width = `${(userAnswers.filter(a => a !== null && a !== '').length / questions.length) * 100}%`;
+        }
+        function isAnswerCorrect(questionIndex) {
+            const q = questions[questionIndex];
+            const userAnswer = userAnswers[questionIndex];
+            
+            // 选择题判断
+            if (q.type === 1) {
+                return q.options[userAnswer].isCorrect;
+            } else if (q.type === 2) {
+                const correctIndices = q.options.reduce((acc, opt, idx) => { if (opt.isCorrect) acc.push(idx); return acc; }, []);
+                if (userAnswer.length !== correctIndices.length) return false;
+                return userAnswer.every(idx => correctIndices.includes(idx));
+            } else if (q.type === 3) {
+                // 填空题判断（支持多个正确答案）
+                return q.blanks.some(blank => userAnswer.trim().toLowerCase() === String(blank).toLowerCase());
+            }
+        }
         function submitAll() { isSubmitted = true; showResults(); }
         function showResults() { 
             const wrongQuestions = [];
             userAnswers.forEach((answer, index) => {
-                if (answer !== null && !isAnswerCorrect(index)) {
+                if (answer !== null && answer !== '' && !isAnswerCorrect(index)) {
                     const q = questions[index];
-                    const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
-                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    let userAnswerText, correctAnswerText;
+                    
+                    // 选择题答案处理
+                    if (q.type === 1) {
+                        userAnswerText = q.options[answer].text;
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 2) {
+                        userAnswerText = answer.map(i => q.options[i].text).join('、');
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 3) {
+                        userAnswerText = answer;
+                        correctAnswerText = q.blanks.join(' 或 ');
+                    }
+                    
                     wrongQuestions.push({
                         questionId: q.id,
-                        question: q.question,
+                        question: q.type === 3 ? q.code : q.question,
                         userAnswer: userAnswerText,
                         correctAnswer: correctAnswerText,
-                        explanation: q.explanation
+                        explanation: q.explanation,
+                        type: q.type
                     });
                 }
             });
             StorageManager.saveQuizResult(COURSE_ID, { score: correctCount, total: questions.length, wrongQuestions: wrongQuestions });
             
-            document.getElementById('resultSection').classList.remove('hidden'); document.querySelector('section.py-12').classList.add('hidden'); const score = correctCount; const total = questions.length; const rate = Math.round((score / total) * 100); document.getElementById('finalScore').textContent = `${score}/${total}`; document.getElementById('finalCorrect').textContent = correctCount; document.getElementById('finalWrong').textContent = wrongCount; document.getElementById('finalRate').textContent = `${rate}%`; let grade = ''; let message = ''; let icon = ''; if (rate >= 90) { grade = '优秀'; message = '太棒了！你对Python基础知识掌握得非常扎实！'; icon = '🏆'; } else if (rate >= 80) { grade = '良好'; message = '非常出色！继续保持！'; icon = '🎉'; } else if (rate >= 70) { grade = '中等'; message = '不错！还有一些细节需要加强。'; icon = '👍'; } else if (rate >= 60) { grade = '及格'; message = '刚好及格，建议复习一下。'; icon = '💪'; } else { grade = '需努力'; message = '加油！多做练习，你会进步的！'; icon = '📚'; } document.getElementById('resultIcon').textContent = icon; document.getElementById('finalGrade').textContent = grade; document.getElementById('finalGrade').className = `font-bold text-2xl ${rate >= 90 ? 'text-green-600' : rate >= 70 ? 'text-blue-600' : rate >= 60 ? 'text-yellow-600' : 'text-red-600'}`; document.getElementById('gradeMessage').textContent = message; const wrongQuestionsContainer = document.getElementById('wrongQuestions'); const wrongQuestionsList = document.getElementById('wrongQuestionsList'); const wrongIndices = []; userAnswers.forEach((answer, index) => { if (answer !== null && !isAnswerCorrect(index)) wrongIndices.push(index); }); if (wrongIndices.length > 0) { wrongQuestionsContainer.classList.remove('hidden'); wrongQuestionsList.innerHTML = ''; wrongIndices.forEach(index => { const q = questions[index]; const userAnswer = userAnswers[index]; let userAnswerText = q.type === 1 ? q.options[userAnswer].text : userAnswer.map(i => q.options[i].text).join('、'); const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、'); wrongQuestionsList.innerHTML += `<div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500"><div class="font-semibold text-gray-800 mb-2">${index + 1}. ${q.title}</div><div class="text-gray-600 text-sm mb-2"><strong>你的答案：</strong>${userAnswerText}</div><div class="text-green-600 text-sm mb-2"><strong>正确答案：</strong>${correctAnswerText}</div><div class="text-purple-600 text-sm"><strong>解析：</strong>${q.explanation}</div></div>`; }); } else { wrongQuestionsContainer.classList.add('hidden'); } document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' }); }
+            document.getElementById('resultSection').classList.remove('hidden'); document.querySelector('section.py-12').classList.add('hidden'); const score = correctCount; const total = questions.length; const rate = Math.round((score / total) * 100); document.getElementById('finalScore').textContent = `${score}/${total}`; document.getElementById('finalCorrect').textContent = correctCount; document.getElementById('finalWrong').textContent = wrongCount; document.getElementById('finalRate').textContent = `${rate}%`; let grade = ''; let message = ''; let icon = ''; if (rate >= 90) { grade = '优秀'; message = '太棒了！你对Python基础知识掌握得非常扎实！'; icon = '🏆'; } else if (rate >= 80) { grade = '良好'; message = '非常出色！继续保持！'; icon = '🎉'; } else if (rate >= 70) { grade = '中等'; message = '不错！还有一些细节需要加强。'; icon = '👍'; } else if (rate >= 60) { grade = '及格'; message = '刚好及格，建议复习一下。'; icon = '💪'; } else { grade = '需努力'; message = '加油！多做练习，你会进步的！'; icon = '📚'; } document.getElementById('resultIcon').textContent = icon; document.getElementById('finalGrade').textContent = grade; document.getElementById('finalGrade').className = `font-bold text-2xl ${rate >= 90 ? 'text-green-600' : rate >= 70 ? 'text-blue-600' : rate >= 60 ? 'text-yellow-600' : 'text-red-600'}`; document.getElementById('gradeMessage').textContent = message; const wrongQuestionsContainer = document.getElementById('wrongQuestions'); const wrongQuestionsList = document.getElementById('wrongQuestionsList'); const wrongIndices = []; userAnswers.forEach((answer, index) => { if (answer !== null && answer !== '' && !isAnswerCorrect(index)) wrongIndices.push(index); }); if (wrongIndices.length > 0) { wrongQuestionsContainer.classList.remove('hidden'); wrongQuestionsList.innerHTML = ''; wrongIndices.forEach(index => { const q = questions[index]; const userAnswer = userAnswers[index]; let userAnswerText, correctAnswerText; if (q.type === 1) { userAnswerText = q.options[userAnswer].text; correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、'); } else if (q.type === 2) { userAnswerText = userAnswer.map(i => q.options[i].text).join('、'); correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、'); } else if (q.type === 3) { userAnswerText = userAnswer; correctAnswerText = q.blanks.join(' 或 '); } const isFillBlank = q.type === 3; wrongQuestionsList.innerHTML += `<div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500 ${isFillBlank ? 'code-question' : ''}"><div class="font-semibold text-gray-800 mb-2">第 ${index + 1} 题${isFillBlank ? '（代码填空）' : ''}：${q.title}</div><div class="text-gray-700 mb-3 ${isFillBlank ? 'code-block' : ''}">${isFillBlank ? `<pre class="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-x-auto">${q.code.replace('___', `<span class="bg-red-200 text-red-800">${userAnswer}</span>`)}</pre>` : q.question}</div><div class="text-sm mb-2"><span class="text-red-600"><strong>你的答案：</strong>${userAnswerText}</span></div><div class="text-sm mb-3"><span class="text-green-600"><strong>正确答案：</strong>${correctAnswerText}</span></div><div class="bg-white/70 p-3 rounded-lg"><p class="text-purple-700 text-sm"><i class="fa fa-lightbulb-o mr-1"></i><strong>解析：</strong>${q.explanation}</p></div></div>`; }); } else { wrongQuestionsContainer.classList.add('hidden'); } document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' }); }
         function restartQuiz() { currentIndex = 0; userAnswers = new Array(questions.length).fill(null); correctCount = 0; wrongCount = 0; isSubmitted = false; document.getElementById('resultSection').classList.add('hidden'); document.querySelector('section.py-12').classList.remove('hidden'); document.getElementById('progressBar').style.width = '0%'; init(); }
         function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
         init();

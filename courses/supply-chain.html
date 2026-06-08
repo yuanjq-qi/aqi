@@ -127,7 +127,13 @@
             {id:7,type:1,title:'准时制生产',question:'JIT（准时制生产）的核心思想是？',options:[{label:'A',text:'大批量生产降低成本',isCorrect:false},{label:'B',text:'只在需要时按量生产',isCorrect:true},{label:'C',text:'保持高库存以应对需求',isCorrect:false},{label:'D',text:'增加生产批量提高效率',isCorrect:false}],explanation:'JIT的核心思想是"只在需要的时候，按需要的量，生产需要的产品"，追求零库存。'},
             {id:8,type:1,title:'需求预测',question:'以下哪种预测方法适用于趋势明显的时间序列？',options:[{label:'A',text:'简单移动平均',isCorrect:false},{label:'B',text:'加权移动平均',isCorrect:false},{label:'C',text:'指数平滑法',isCorrect:true},{label:'D',text:'朴素预测法',isCorrect:false}],explanation:'指数平滑法能够很好地处理趋势，对近期数据给予更大权重，适合趋势明显的序列。'},
             {id:9,type:2,title:'供应链优化（多选）',question:'供应链优化的主要目标包括？（多选）',options:[{label:'A',text:'降低成本',isCorrect:true},{label:'B',text:'提高响应速度',isCorrect:true},{label:'C',text:'增加库存',isCorrect:false},{label:'D',text:'提升客户满意度',isCorrect:true}],explanation:'供应链优化目标包括降低成本、提高响应速度、提升服务质量、增加灵活性等，增加库存不是目标。'},
-            {id:10,type:1,title:'运输优化',question:'在运输路线规划中，使用最短路径算法的目的是？',options:[{label:'A',text:'增加运输时间',isCorrect:false},{label:'B',text:'降低成本和提效率',isCorrect:true},{label:'C',text:'增加车辆数量',isCorrect:false},{label:'D',text:'提高仓库容量',isCorrect:false}],explanation:'最短路径算法用于规划最优运输路线，以降低成本、提高运输效率。'}
+            {id:10,type:1,title:'运输优化',question:'在运输路线规划中，使用最短路径算法的目的是？',options:[{label:'A',text:'增加运输时间',isCorrect:false},{label:'B',text:'降低成本和提效率',isCorrect:true},{label:'C',text:'增加车辆数量',isCorrect:false},{label:'D',text:'提高仓库容量',isCorrect:false}],explanation:'最短路径算法用于规划最优运输路线，以降低成本、提高运输效率。'},
+            // 填空题部分
+            { id: 11, type: 3, title: '库存量计算（代码补全）', code: 'def calculate_reorder_point(safety_stock, lead_time, daily_demand):\n    return safety_stock + lead_time ___ daily_demand\n\nresult = calculate_reorder_point(50, 5, 20)\nprint(result)', blanks: ['*'], explanation: '再订货点 = 安全库存 + 采购周期 × 日均需求量，即 50 + 5 × 20 = 150' },
+            { id: 12, type: 3, title: 'ABC分类（代码补全）', code: 'def classify_ inventory(items):\n    sorted_items = ___(items, key=lambda x: x["value"], reverse=True)\n    # 分类逻辑\n    return result', blanks: ['sorted'], explanation: '使用sorted()函数对库存物品按价值降序排序，以便进行ABC分类。' },
+            { id: 13, type: 3, title: '订单处理（代码补全）', code: 'def process_order(order_id, inventory):\n    if inventory >= order_id["quantity"]:\n        return "订单___"\n    else:\n        return "库存不足"', blanks: ['确认'], explanation: '当库存足够时，订单状态应为"确认"，表示可以执行发货。' },
+            { id: 14, type: 3, title: '运输成本计算（代码补全）', code: 'def calculate_transport_cost(distance, weight, rate_per_km):\n    return distance ___ weight ___ rate_per_km\n\ncost = calculate_transport_cost(100, 50, 0.5)\nprint(cost)', blanks: ['*', '*'], explanation: '运输成本 = 距离 × 重量 × 单价率，即 100 × 50 × 0.5 = 2500' },
+            { id: 15, type: 3, title: '供应商评估（代码补全）', code: 'def evaluate_supplier(delivery_time, quality_score, price):\n    score = (quality_score ___ delivery_time) / price\n    return score\n\nresult = evaluate_supplier(5, 90, 100)', blanks: ['*'], explanation: '供应商评分公式：得分 = (质量分 × 交货准时率) / 价格，这里计算 (90 × 5) / 100 = 4.5' }
         ];
 
         let currentIndex=0,userAnswers=new Array(questions.length).fill(null),correctCount=0,wrongCount=0,isSubmitted=false;
@@ -136,23 +142,68 @@
 
         function renderQuestion(){
             const q=questions[currentIndex],container=document.getElementById('questionContainer'),typeLabel=document.getElementById('questionType');
-            typeLabel.textContent=q.type===1?'单选题':'多选题';
-            typeLabel.className=q.type===1?'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold':'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
+            
+            if (q.type === 1) {
+                typeLabel.textContent = '单选题';
+                typeLabel.className = 'bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 2) {
+                typeLabel.textContent = '多选题';
+                typeLabel.className = 'bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 3) {
+                typeLabel.textContent = '代码填空题';
+                typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            }
+            
             let optionsHtml='';
-            q.options.forEach((opt,index)=>{
-                const isSelected=userAnswers[currentIndex]!==null&&(q.type===1?userAnswers[currentIndex]===index:userAnswers[currentIndex].includes(index));
-                let optionClass='option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
-                if(isSelected)optionClass+=' selected';
-                if(isSubmitted&&opt.isCorrect)optionClass+=' correct';
-                if(isSubmitted&&isSelected&&!opt.isCorrect)optionClass+=' wrong';
-                if(isSubmitted)optionClass+=' disabled';
-                const checkbox=q.type===2?`<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected?'bg-purple-500 border-purple-500':''}"></span>`:'';
-                optionsHtml+=`<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${checkbox}${opt.text}</div>`;
-            });
-            container.innerHTML=`<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type===2?'<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>':''}</div><div class="space-y-2">${optionsHtml}</div>${isSubmitted?`<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`:''}`;
+            
+            // 选择题渲染
+            if (q.type === 1 || q.type === 2) {
+                q.options.forEach((opt,index)=>{
+                    const isSelected=userAnswers[currentIndex]!==null&&(q.type===1?userAnswers[currentIndex]===index:userAnswers[currentIndex].includes(index));
+                    let optionClass='option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if(isSelected)optionClass+=' selected';
+                    if(isSubmitted&&opt.isCorrect)optionClass+=' correct';
+                    if(isSubmitted&&isSelected&&!opt.isCorrect)optionClass+=' wrong';
+                    if(isSubmitted)optionClass+=' disabled';
+                    const checkbox=q.type===2?`<span class="inline-block w-5 h-5 border-2 border-gray-300 rounded mr-3 ${isSelected?'bg-purple-500 border-purple-500':''}"></span>`:'';
+                    optionsHtml+=`<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${checkbox}${opt.text}</div>`;
+                });
+                container.innerHTML=`<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type===2?'<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>':''}</div><div class="space-y-2">${optionsHtml}</div>${isSubmitted?`<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`:''}`;
+            }
+            // 填空题渲染
+            else if (q.type === 3) {
+                const userAnswer = userAnswers[currentIndex] || '';
+                const displayCode = q.code.replace('___', isSubmitted ? `<span class="bg-green-200 text-green-800 px-2 py-1 rounded">${userAnswer}</span>` : `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
+                container.innerHTML = `
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">
+                        <span class="text-blue-600">${q.id}.</span> ${q.title}
+                    </h2>
+                    <div class="mb-6">
+                        <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
+                        <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
+                            <pre>${displayCode}</pre>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <input type="text" id="fill-blank-input" class="w-full p-4 border-2 border-blue-300 rounded-xl focus:border-blue-500 focus:outline-none text-lg" placeholder="请输入你的答案..." value="${userAnswer}" ${isSubmitted ? 'disabled' : ''} oninput="handleFillBlankInput(this.value)" />
+                        ${isSubmitted ? `<div class="mt-4 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>` : ''}
+                    </div>
+                `;
+                if (!isSubmitted) {
+                    document.getElementById('fill-blank-input').focus();
+                }
+            }
+            
             document.getElementById('prevBtn').disabled=currentIndex===0;
-            if(currentIndex===questions.length-1&&userAnswers.every(a=>a!==null)){document.getElementById('nextBtn').classList.add('hidden');document.getElementById('submitAllBtn').classList.remove('hidden');}
+            if(currentIndex===questions.length-1&&userAnswers.every(a=>a!==null&&a!=='')){document.getElementById('nextBtn').classList.add('hidden');document.getElementById('submitAllBtn').classList.remove('hidden');}
             else{document.getElementById('nextBtn').classList.remove('hidden');document.getElementById('submitAllBtn').classList.add('hidden');}
+        }
+        
+        function handleFillBlankInput(value) {
+            userAnswers[currentIndex] = value;
+            renderQuestion();
+            updateAnswerCards();
+            updateStatus();
         }
 
         function selectOption(index){
@@ -186,19 +237,20 @@
 
         function updateStatus(){
             correctCount=0;wrongCount=0;
-            userAnswers.forEach((answer,index)=>{if(answer!==null){if(isAnswerCorrect(index))correctCount++;else wrongCount++;}});
+            userAnswers.forEach((answer,index)=>{if(answer!==null&&answer!==''){if(isAnswerCorrect(index))correctCount++;else wrongCount++;}});
             document.getElementById('currentQuestionNum').textContent=currentIndex+1;
             document.getElementById('totalQuestionsNum').textContent=questions.length;
             document.getElementById('correctCount').textContent=correctCount;
             document.getElementById('wrongCount').textContent=wrongCount;
-            document.getElementById('unansweredCount').textContent=questions.length-userAnswers.filter(a=>a!==null).length;
-            document.getElementById('progressBar').style.width=`${(userAnswers.filter(a=>a!==null).length/questions.length)*100}%`;
+            document.getElementById('unansweredCount').textContent=questions.length-userAnswers.filter(a=>a!==null&&a!=='').length;
+            document.getElementById('progressBar').style.width=`${(userAnswers.filter(a=>a!==null&&a!=='').length/questions.length)*100}%`;
         }
 
         function isAnswerCorrect(questionIndex){
             const q=questions[questionIndex],userAnswer=userAnswers[questionIndex];
             if(q.type===1)return q.options[userAnswer].isCorrect;
-            else{const correctIndices=q.options.reduce((acc,opt,idx)=>{if(opt.isCorrect)acc.push(idx);return acc;},[]);if(userAnswer.length!==correctIndices.length)return false;return userAnswer.every(idx=>correctIndices.includes(idx));}
+            else if(q.type===2){const correctIndices=q.options.reduce((acc,opt,idx)=>{if(opt.isCorrect)acc.push(idx);return acc;},[]);if(userAnswer.length!==correctIndices.length)return false;return userAnswer.every(idx=>correctIndices.includes(idx));}
+            else if(q.type===3){return q.blanks.some(blank=>userAnswer.trim().toLowerCase()===String(blank).toLowerCase());}
         }
 
         function submitAll(){isSubmitted=true;showResults();}
@@ -206,16 +258,28 @@
         function showResults(){
             const wrongQuestions = [];
             userAnswers.forEach((answer, index) => {
-                if (answer !== null && !isAnswerCorrect(index)) {
+                if (answer !== null && answer !== '' && !isAnswerCorrect(index)) {
                     const q = questions[index];
-                    const userAnswerText = q.type === 1 ? q.options[answer].text : answer.map(i => q.options[i].text).join('、');
-                    const correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    let userAnswerText, correctAnswerText;
+                    
+                    if (q.type === 1) {
+                        userAnswerText = q.options[answer].text;
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 2) {
+                        userAnswerText = answer.map(i => q.options[i].text).join('、');
+                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                    } else if (q.type === 3) {
+                        userAnswerText = answer;
+                        correctAnswerText = q.blanks.join(' 或 ');
+                    }
+                    
                     wrongQuestions.push({
                         questionId: q.id,
-                        question: q.question,
+                        question: q.type === 3 ? q.code : q.question,
                         userAnswer: userAnswerText,
                         correctAnswer: correctAnswerText,
-                        explanation: q.explanation
+                        explanation: q.explanation,
+                        type: q.type
                     });
                 }
             });
@@ -239,8 +303,8 @@
             document.getElementById('finalGrade').className=`font-bold text-2xl ${rate>=90?'text-green-600':rate>=70?'text-purple-600':rate>=60?'text-yellow-600':'text-red-600'}`;
             document.getElementById('gradeMessage').textContent=message;
             const wrongQuestionsContainer=document.getElementById('wrongQuestions'),wrongQuestionsList=document.getElementById('wrongQuestionsList');
-            const wrongIndices=[];userAnswers.forEach((answer,index)=>{if(answer!==null&&!isAnswerCorrect(index))wrongIndices.push(index);});
-            if(wrongIndices.length>0){wrongQuestionsContainer.classList.remove('hidden');wrongQuestionsList.innerHTML='';wrongIndices.forEach(index=>{const q=questions[index],userAnswer=userAnswers[index];let userAnswerText=q.type===1?q.options[userAnswer].text:userAnswer.map(i=>q.options[i].text).join('、');const correctAnswerText=q.options.filter(o=>o.isCorrect).map(o=>o.text).join('、');wrongQuestionsList.innerHTML+=`<div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500"><div class="font-semibold text-gray-800 mb-2">${index+1}. ${q.title}</div><div class="text-gray-600 text-sm mb-2"><strong>你的答案：</strong>${userAnswerText}</div><div class="text-green-600 text-sm mb-2"><strong>正确答案：</strong>${correctAnswerText}</div><div class="text-purple-600 text-sm"><strong>解析：</strong>${q.explanation}</div></div>`;});}
+            const wrongIndices=[];userAnswers.forEach((answer,index)=>{if(answer!==null&&answer!==''&&!isAnswerCorrect(index))wrongIndices.push(index);});
+            if(wrongIndices.length>0){wrongQuestionsContainer.classList.remove('hidden');wrongQuestionsList.innerHTML='';wrongIndices.forEach(index=>{const q=questions[index],userAnswer=userAnswers[index];let userAnswerText='',correctAnswerText='';if(q.type===1){userAnswerText=q.options[userAnswer].text;correctAnswerText=q.options.filter(o=>o.isCorrect).map(o=>o.text).join('、');}else if(q.type===2){userAnswerText=userAnswer.map(i=>q.options[i].text).join('、');correctAnswerText=q.options.filter(o=>o.isCorrect).map(o=>o.text).join('、');}else if(q.type===3){userAnswerText=userAnswer;correctAnswerText=q.blanks.join(' 或 ');}wrongQuestionsList.innerHTML+=`<div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500"><div class="font-semibold text-gray-800 mb-2">${index+1}. ${q.title}</div>${q.type===3?`<div class="bg-gray-900 text-green-400 p-3 rounded-xl font-mono text-sm mb-3 overflow-x-auto"><pre>${q.code.replace('___',`<span class="bg-red-200 text-red-800 px-1 rounded">${userAnswer}</span>`)}</pre></div>`:`<div class="text-gray-600 text-sm mb-2"><strong>题目：</strong>${q.question}</div>`}<div class="text-gray-600 text-sm mb-2"><strong>你的答案：</strong>${userAnswerText}</div><div class="text-green-600 text-sm mb-2"><strong>正确答案：</strong>${correctAnswerText}</div><div class="text-purple-600 text-sm"><strong>解析：</strong>${q.explanation}</div></div>`;});}
             else wrongQuestionsContainer.classList.add('hidden');
             document.getElementById('resultSection').scrollIntoView({behavior:'smooth'});
         }
