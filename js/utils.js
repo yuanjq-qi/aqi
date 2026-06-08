@@ -12,6 +12,32 @@ const StorageManager = {
         history.push(result);
         localStorage.setItem(key, JSON.stringify(history));
         this.saveWrongQuestions(courseId, result.wrongQuestions);
+        this.updateStudyStreak(); // 记录学习天数
+    },
+    
+    // 更新连续学习天数
+    updateStudyStreak: function() {
+        const today = new Date().toDateString();
+        const lastDate = localStorage.getItem(this.PREFIX + 'last_study_date');
+        let streak = parseInt(localStorage.getItem(this.PREFIX + 'study_streak') || '0');
+        
+        if (lastDate !== today) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (lastDate === yesterday.toDateString()) {
+                streak++;
+            } else {
+                streak = 1;
+            }
+            localStorage.setItem(this.PREFIX + 'study_streak', streak.toString());
+            localStorage.setItem(this.PREFIX + 'last_study_date', today);
+        }
+    },
+    
+    // 获取连续学习天数
+    getStudyStreak: function() {
+        return parseInt(localStorage.getItem(this.PREFIX + 'study_streak') || '0');
     },
     
     // 获取答题历史
@@ -57,6 +83,61 @@ const StorageManager = {
         const wrong = this.getWrongQuestions(courseId);
         const filtered = wrong.filter(q => q.questionId !== questionId);
         localStorage.setItem(key, JSON.stringify(filtered));
+    },
+    
+    // 保存笔记
+    saveNote: function(courseId, questionId, note) {
+        const key = this.PREFIX + 'notes_' + courseId;
+        const notes = this.getNotes(courseId);
+        notes[questionId] = { content: note, timestamp: new Date().toISOString() };
+        localStorage.setItem(key, JSON.stringify(notes));
+    },
+    
+    // 获取笔记
+    getNotes: function(courseId) {
+        const key = this.PREFIX + 'notes_' + courseId;
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : {};
+    },
+    
+    // 获取单题笔记
+    getNote: function(courseId, questionId) {
+        const notes = this.getNotes(courseId);
+        return notes[questionId] || null;
+    },
+    
+    // 获取总体学习统计
+    getOverallStats: function() {
+        const courseIds = ['python-basics', 'data-analysis', 'data-collection', 'supply-chain', 'database', 'exam'];
+        let totalQuizzes = 0;
+        let totalCorrect = 0;
+        let totalWrong = 0;
+        let historyByDate = {};
+        
+        courseIds.forEach(courseId => {
+            const history = this.getQuizHistory(courseId);
+            history.forEach(result => {
+                totalQuizzes++;
+                totalCorrect += result.correct || 0;
+                totalWrong += result.wrong || 0;
+                
+                const date = new Date(result.timestamp).toDateString();
+                if (!historyByDate[date]) {
+                    historyByDate[date] = { correct: 0, wrong: 0, quizzes: 0 };
+                }
+                historyByDate[date].correct += result.correct || 0;
+                historyByDate[date].wrong += result.wrong || 0;
+                historyByDate[date].quizzes++;
+            });
+        });
+        
+        return {
+            totalQuizzes,
+            totalCorrect,
+            totalWrong,
+            historyByDate,
+            streak: this.getStudyStreak()
+        };
     }
 };
 

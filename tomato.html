@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄钟 - 专注学习</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .timer-circle {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-bold text-purple-500">袁佳琪的个人页面</a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-500 transition-colors">首页</a>
+                    <a href="learning-path.html" class="text-gray-700 hover:text-purple-500 transition-colors">学习路径</a>
+                    <a href="wrong-questions.html" class="text-gray-700 hover:text-purple-500 transition-colors">错题本</a>
+                    <a href="tomato.html" class="text-purple-500 font-semibold">番茄钟</a>
+                </div>
+                <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 space-y-3">
+                <a href="index.html" class="block text-gray-700 hover:text-purple-500">首页</a>
+                <a href="learning-path.html" class="block text-gray-700 hover:text-purple-500">学习路径</a>
+                <a href="wrong-questions.html" class="block text-gray-700 hover:text-purple-500">错题本</a>
+                <a href="tomato.html" class="block text-purple-500 font-semibold">番茄钟</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto text-center">
+                <h1 class="text-4xl font-bold text-purple-700 mb-2">
+                    <i class="fa fa-clock-o mr-3"></i>番茄专注钟
+                </h1>
+                <p class="text-gray-600 mb-10">每25分钟专注学习，5分钟休息，保持高效！</p>
+                
+                <!-- 模式选择 -->
+                <div class="flex justify-center gap-4 mb-10">
+                    <button onclick="setMode('focus')" id="btn-focus" class="mode-btn px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold shadow-md">
+                        <i class="fa fa-book mr-2"></i>专注模式 25'
+                    </button>
+                    <button onclick="setMode('short')" id="btn-short" class="mode-btn px-6 py-2 rounded-full bg-white text-purple-600 border-2 border-purple-200 hover:border-purple-400 font-semibold">
+                        <i class="fa fa-coffee mr-2"></i>短休息 5'
+                    </button>
+                    <button onclick="setMode('long')" id="btn-long" class="mode-btn px-6 py-2 rounded-full bg-white text-purple-600 border-2 border-purple-200 hover:border-purple-400 font-semibold">
+                        <i class="fa fa-star mr-2"></i>长休息 15'
+                    </button>
+                </div>
+                
+                <!-- 计时器 -->
+                <div class="bg-white rounded-3xl shadow-xl p-10 mb-8 border border-purple-100">
+                    <div class="relative">
+                        <svg class="w-64 h-64 mx-auto mb-6" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#f3e8ff" stroke-width="8"/>
+                            <circle id="timer-progress" cx="50" cy="50" r="45" fill="none" stroke="url(#grad)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 50 50)" class="timer-circle"/>
+                            <defs>
+                                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#f472b6"/>
+                                    <stop offset="100%" stop-color="#a855f7"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                            <div id="timer-display" class="text-6xl font-bold text-purple-700">25:00</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 控制按钮 -->
+                    <div class="flex justify-center gap-4 mt-8">
+                        <button onclick="toggleTimer()" id="btn-toggle" class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-10 py-4 rounded-2xl text-xl font-semibold hover:from-pink-600 hover:to-purple-600 shadow-lg transition-all">
+                            <i class="fa fa-play mr-2" id="icon-play"></i>
+                            <span id="label-toggle">开始专注</span>
+                        </button>
+                        <button onclick="resetTimer()" class="bg-gray-200 text-gray-700 px-8 py-4 rounded-2xl text-xl font-semibold hover:bg-gray-300 transition-all">
+                            <i class="fa fa-refresh mr-2"></i>重置
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 今日统计 -->
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white rounded-2xl p-5 shadow-lg border border-pink-100">
+                        <div class="text-pink-500 text-3xl mb-2"><i class="fa fa-check-circle"></i></div>
+                        <div class="text-3xl font-bold text-pink-600" id="today-focus">0</div>
+                        <div class="text-gray-500 text-sm">今日专注次数</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-lg border border-purple-100">
+                        <div class="text-purple-500 text-3xl mb-2"><i class="fa fa-clock-o"></i></div>
+                        <div class="text-3xl font-bold text-purple-600" id="today-minutes">0</div>
+                        <div class="text-gray-500 text-sm">今日专注分钟</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-5 shadow-lg border border-blue-100">
+                        <div class="text-blue-500 text-3xl mb-2"><i class="fa fa-trophy"></i></div>
+                        <div class="text-3xl font-bold text-blue-600" id="total-focus">0</div>
+                        <div class="text-gray-500 text-sm">历史总次数</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gradient-to-r from-purple-500 to-pink-500 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2026 袁佳琪的个人页面</p>
+        </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script>
+        // 计时器状态
+        let currentMode = 'focus'; // focus, short, long
+        let isRunning = false;
+        let timeLeft = 25 * 60; // 秒
+        let totalDuration = 25 * 60;
+        let timerInterval = null;
+        
+        // 配置
+        const modeConfig = {
+            'focus': { minutes: 25, label: '专注模式' },
+            'short': { minutes: 5, label: '短休息' },
+            'long': { minutes: 15, label: '长休息' }
+        };
+        
+        function setMode(mode) {
+            if (isRunning) {
+                if (!confirm('切换模式会停止当前计时，确定吗？')) return;
+                stopTimer();
+            }
+            currentMode = mode;
+            totalDuration = modeConfig[mode].minutes * 60;
+            timeLeft = totalDuration;
+            
+            // 更新按钮样式
+            ['focus', 'short', 'long'].forEach(m => {
+                const btn = document.getElementById(`btn-${m}`);
+                if (m === mode) {
+                    btn.className = 'mode-btn px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold shadow-md';
+                } else {
+                    btn.className = 'mode-btn px-6 py-2 rounded-full bg-white text-purple-600 border-2 border-purple-200 hover:border-purple-400 font-semibold';
+                }
+            });
+            
+            updateDisplay();
+        }
+        
+        function toggleTimer() {
+            if (isRunning) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        }
+        
+        function startTimer() {
+            isRunning = true;
+            document.getElementById('icon-play').className = 'fa fa-pause mr-2';
+            document.getElementById('label-toggle').textContent = '暂停';
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                if (timeLeft <= 0) {
+                    finishTimer();
+                }
+            }, 1000);
+        }
+        
+        function stopTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('icon-play').className = 'fa fa-play mr-2';
+            document.getElementById('label-toggle').textContent = '继续';
+        }
+        
+        function resetTimer() {
+            if (isRunning) {
+                stopTimer();
+            }
+            timeLeft = totalDuration;
+            document.getElementById('icon-play').className = 'fa fa-play mr-2';
+            document.getElementById('label-toggle').textContent = currentMode === 'focus' ? '开始专注' : '开始休息';
+            updateDisplay();
+        }
+        
+        function finishTimer() {
+            stopTimer();
+            
+            // 播放提示音（可选）
+            try {
+                new Audio('data:audio/wav;base64,UklGRigBAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQoAAAAA').play();
+            } catch(e) {}
+            
+            alert('🎉 ' + (currentMode === 'focus' ? '专注结束！' : '休息结束！'));
+            
+            // 记录专注次数
+            if (currentMode === 'focus') {
+                recordFocus();
+            }
+            
+            // 自动切换模式
+            if (currentMode === 'focus') {
+                const todayFocus = parseInt(localStorage.getItem('aqi_tomato_today_focus') || '0');
+                if (todayFocus % 4 === 0 && todayFocus > 0) {
+                    setMode('long');
+                } else {
+                    setMode('short');
+                }
+            } else {
+                setMode('focus');
+            }
+        }
+        
+        function recordFocus() {
+            // 今日专注
+            const today = new Date().toDateString();
+            if (localStorage.getItem('aqi_tomato_last_date') !== today) {
+                localStorage.setItem('aqi_tomato_today_focus', '0');
+                localStorage.setItem('aqi_tomato_today_minutes', '0');
+                localStorage.setItem('aqi_tomato_last_date', today);
+            }
+            
+            let todayFocus = parseInt(localStorage.getItem('aqi_tomato_today_focus') || '0');
+            let todayMinutes = parseInt(localStorage.getItem('aqi_tomato_today_minutes') || '0');
+            let totalFocus = parseInt(localStorage.getItem('aqi_tomato_total_focus') || '0');
+            
+            localStorage.setItem('aqi_tomato_today_focus', (todayFocus + 1).toString());
+            localStorage.setItem('aqi_tomato_today_minutes', (todayMinutes + 25).toString());
+            localStorage.setItem('aqi_tomato_total_focus', (totalFocus + 1).toString());
+            
+            updateStats();
+        }
+        
+        function updateStats() {
+            const today = new Date().toDateString();
+            if (localStorage.getItem('aqi_tomato_last_date') !== today) {
+                document.getElementById('today-focus').textContent = '0';
+                document.getElementById('today-minutes').textContent = '0';
+            } else {
+                document.getElementById('today-focus').textContent = localStorage.getItem('aqi_tomato_today_focus') || '0';
+                document.getElementById('today-minutes').textContent = localStorage.getItem('aqi_tomato_today_minutes') || '0';
+            }
+            document.getElementById('total-focus').textContent = localStorage.getItem('aqi_tomato_total_focus') || '0';
+        }
+        
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const seconds = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer-display').textContent = `${minutes}:${seconds}`;
+            
+            // 更新进度环
+            const progress = document.getElementById('timer-progress');
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference * (1 - timeLeft / totalDuration);
+            progress.style.strokeDashoffset = offset;
+        }
+        
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+        
+        // 初始化
+        updateDisplay();
+        updateStats();
+    </script>
+</body>
+</html>
