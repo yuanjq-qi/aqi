@@ -133,7 +133,24 @@
             { id: 12, type: 3, title: 'INSERT语句（代码补全）', code: '___ INTO users (name, age) VALUES ("Alice", 20);', blanks: ['INSERT'], explanation: 'INSERT INTO用于向表中插入新记录。' },
             { id: 13, type: 3, title: 'UPDATE语句（代码补全）', code: '___ users SET age = 21 WHERE name = "Alice";', blanks: ['UPDATE'], explanation: 'UPDATE用于修改表中已存在的记录,SET子句指定新值。' },
             { id: 14, type: 3, title: '聚合函数（代码补全）', code: 'SELECT ___(price) FROM products;', blanks: ['AVG', 'SUM', 'MAX', 'MIN', 'COUNT'], explanation: '聚合函数包括AVG(平均值)、SUM(求和)、MAX(最大值)、MIN(最小值)、COUNT(计数)。' },
-            { id: 15, type: 3, title: 'JOIN连接（代码补全）', code: 'SELECT * FROM orders ___ users ON orders.user_id = users.id;', blanks: ['INNER JOIN', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN'], explanation: 'INNER JOIN或JOIN用于连接两个表,ON子句指定连接条件。' }
+            { id: 15, type: 3, title: 'JOIN连接（代码补全）', code: 'SELECT * FROM orders ___ users ON orders.user_id = users.id;', blanks: ['INNER JOIN', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN'], explanation: 'INNER JOIN或JOIN用于连接两个表,ON子句指定连接条件。' },
+            // 新增选择题 16-25
+            { id: 16, type: 1, title: 'SQL约束', question: '以下哪个不是SQL的约束类型？', options: [{ label: 'A', text: 'PRIMARY KEY', isCorrect: false }, { label: 'B', text: 'FOREIGN KEY', isCorrect: false }, { label: 'C', text: 'SEQUENCE', isCorrect: true }, { label: 'D', text: 'UNIQUE', isCorrect: false }], explanation: 'SQL约束包括PRIMARY KEY、FOREIGN KEY、UNIQUE、CHECK等，SEQUENCE不是约束类型。' },
+            { id: 17, type: 1, title: 'HAVING子句', question: 'HAVING子句和WHERE子句的区别是？', options: [{ label: 'A', text: 'HAVING可以用于分组后过滤', isCorrect: true }, { label: 'B', text: 'WHERE可以用于分组后过滤', isCorrect: false }, { label: 'C', text: '两者完全相同', isCorrect: false }, { label: 'D', text: 'HAVING只能用于单表', isCorrect: false }], explanation: 'WHERE在分组前过滤原始数据，HAVING在分组后过滤聚合结果。' },
+            { id: 18, type: 1, title: '数据库事务', question: '事务的ACID特性不包括？', options: [{ label: 'A', text: '原子性', isCorrect: false }, { label: 'B', text: '一致性', isCorrect: false }, { label: 'C', text: '隔离性', isCorrect: false }, { label: 'D', text: '异步性', isCorrect: true }], explanation: 'ACID表示原子性、一致性、隔离性、持久性，不包括异步性。' },
+            { id: 19, type: 1, title: 'SQL删除', question: '要删除表中所有数据但保留表结构，应该使用？', options: [{ label: 'A', text: 'DROP TABLE', isCorrect: false }, { label: 'B', text: 'DELETE FROM', isCorrect: true }, { label: 'C', text: 'REMOVE', isCorrect: false }, { label: 'D', text: 'TRUNCATE', isCorrect: false }], explanation: 'DELETE FROM可以删除表中的数据，TRUNCATE更高效但不支持回滚。' },
+            { id: 20, type: 1, title: '视图', question: '数据库视图的主要作用是？', options: [{ label: 'A', text: '提高查询速度', isCorrect: false }, { label: 'B', text: '简化复杂查询和保护数据', isCorrect: true }, { label: 'C', text: '存储数据', isCorrect: false }, { label: 'D', text: '建立表之间的关联', isCorrect: false }], explanation: '视图是虚拟表，可以简化复杂查询、控制数据访问、保护数据安全。' },
+            { id: 21, type: 1, title: '外键', question: '外键约束的作用是？', options: [{ label: 'A', text: '加快查询速度', isCorrect: false }, { label: 'B', text: '保证参照完整性', isCorrect: true }, { label: 'C', text: '加密数据', isCorrect: false }, { label: 'D', text: '自动备份数据', isCorrect: false }], explanation: '外键约束确保子表中的外键值必须在父表的主键中存在，保证参照完整性。' },
+            { id: 22, type: 1, title: 'NULL值', question: '在SQL中，NULL表示什么？', options: [{ label: 'A', text: '零', isCorrect: false }, { label: 'B', text: '空字符串', isCorrect: false }, { label: 'C', text: '未知或缺失的值', isCorrect: true }, { label: 'D', text: '空格', isCorrect: false }], explanation: 'NULL表示未知、缺失或不适用的值，不是零或空字符串。' },
+            { id: 23, type: 1, title: 'DISTINCT', question: 'SELECT DISTINCT的作用是？', options: [{ label: 'A', text: '排序结果', isCorrect: false }, { label: 'B', text: '去重', isCorrect: true }, { label: 'C', text: '限制返回行数', isCorrect: false }, { label: 'D', text: '分组', isCorrect: false }], explanation: 'DISTINCT关键字用于去除查询结果中的重复记录。' },
+            { id: 24, type: 1, title: '子查询', question: '以下哪个不是子查询的类型？', options: [{ label: 'A', text: '标量子查询', isCorrect: false }, { label: 'B', text: '列子查询', isCorrect: false }, { label: 'C', text: '行子查询', isCorrect: false }, { label: 'D', text: '表子查询', isCorrect: false }], explanation: '以上都是子查询的类型，包括标量、列、行、表子查询。' },
+            { id: 25, type: 1, title: '事务隔离级别', question: '以下哪个事务隔离级别最高？', options: [{ label: 'A', text: 'READ UNCOMMITTED', isCorrect: false }, { label: 'B', text: 'READ COMMITTED', isCorrect: false }, { label: 'C', text: 'REPEATABLE READ', isCorrect: false }, { label: 'D', text: 'SERIALIZABLE', isCorrect: true }], explanation: 'SERIALIZABLE是最高隔离级别，完全串行化执行，避免所有并发问题。' },
+            // 新增判断题 26-30
+            { id: 26, type: 4, title: '主键', question: '一个表只能有一个主键。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '一个表只能有一个主键，但主键可以由多个列组成（复合主键）。' },
+            { id: 27, type: 4, title: '索引', question: '索引越多查询越快，所以应该给所有列都建索引。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '索引会占用额外存储空间，降低写入性能，需要根据实际情况选择建立索引的列。' },
+            { id: 28, type: 4, title: '事务', question: 'ROLLBACK可以撤销已经提交的事务。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'ROLLBACK只能撤销未提交的事务，已经提交的事务无法通过ROLLBACK撤销。' },
+            { id: 29, type: 4, title: 'SQL函数', question: 'COUNT(*)和COUNT(列名)结果一定相同。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'COUNT(*)统计所有行，COUNT(列名)忽略NULL值，结果可能不同。' },
+            { id: 30, type: 4, title: '数据库连接', question: 'LEFT JOIN和RIGHT JOIN是等价的。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'LEFT JOIN保留左表所有记录，RIGHT JOIN保留右表所有记录，两者方向不同。' }
         ];
 
         let currentIndex=0,userAnswers=new Array(questions.length).fill(null),correctCount=0,wrongCount=0,isSubmitted=false,questionAnswered=new Array(questions.length).fill(false);
@@ -153,6 +170,9 @@
             } else if (q.type === 3) {
                 typeLabel.textContent = '代码填空题';
                 typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 4) {
+                typeLabel.textContent = '判断题';
+                typeLabel.className = 'bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold';
             }
 
             let optionsHtml='';
@@ -172,7 +192,25 @@
                 if (answered || isSubmitted) {
                     explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
                 }
-                container.innerHTML=`<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type===2?'<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>':''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML=`<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type===2?'<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>':''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+            }
+            // 判断题渲染 (type 4)
+            else if (q.type === 4) {
+                q.options.forEach((opt, index) => {
+                    const isSelected = userAnswers[currentIndex] !== null && userAnswers[currentIndex] === index;
+                    let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if (isSelected) optionClass += ' selected';
+                    if ((answered || isSubmitted) && opt.isCorrect) optionClass += ' correct';
+                    if ((answered || isSubmitted) && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                    if (answered || isSubmitted) optionClass += ' disabled';
+                    optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${opt.text}</div>`;
+                });
+                if (answered || isSubmitted) {
+                    explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
+                }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-orange-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p></div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
             }
             else if (q.type === 3) {
                 const userAnswer = userAnswers[currentIndex] || '';
@@ -184,8 +222,9 @@
                 } else {
                     displayCode = q.code.replace('___', `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
                 }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="absolute top-6 right-6 text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
                 container.innerHTML = `
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-blue-600">${q.id}.</span> ${q.title}</h2>
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 relative"><span class="text-blue-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2>
                     <div class="mb-6">
                         <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
                         <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
@@ -262,6 +301,7 @@
             if(q.type===1)return q.options[userAnswer].isCorrect;
             else if(q.type===2){const correctIndices=q.options.reduce((acc,opt,idx)=>{if(opt.isCorrect)acc.push(idx);return acc;},[]);if(userAnswer.length!==correctIndices.length)return false;return userAnswer.every(idx=>correctIndices.includes(idx));}
             else if(q.type===3){return q.blanks.some(blank=>userAnswer.trim().toLowerCase()===String(blank).toLowerCase());}
+            else if(q.type===4){return q.options[userAnswer].isCorrect;}
         }
 
         function submitAll(){isSubmitted=true;showResults();}
@@ -286,6 +326,9 @@
                 } else if (q.type === 3) {
                     userAnswerText = answer || '未作答';
                     correctAnswerText = q.blanks.join(' 或 ');
+                } else if (q.type === 4) {
+                    userAnswerText = q.options[answer] ? q.options[answer].text : '未作答';
+                    correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
                 }
                 
                 // 收集错题
@@ -401,6 +444,64 @@
 
         function restartQuiz(){currentIndex=0;userAnswers=new Array(questions.length).fill(null);correctCount=0;wrongCount=0;isSubmitted=false;questionAnswered=new Array(questions.length).fill(false);document.getElementById('resultSection').classList.add('hidden');document.querySelector('section.py-12').classList.remove('hidden');document.getElementById('progressBar').style.width='0%';init();}
         function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('hidden');}
+        
+        // 收藏功能
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem('favorites_' + COURSE_ID) || '[]');
+        }
+        
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites_' + COURSE_ID, JSON.stringify(favorites));
+        }
+        
+        function isFavorite(questionIndex) {
+            return getFavorites().includes(questionIndex);
+        }
+        
+        function toggleFavorite(questionIndex) {
+            let favorites = getFavorites();
+            const idx = favorites.indexOf(questionIndex);
+            if (idx > -1) {
+                favorites.splice(idx, 1);
+            } else {
+                favorites.push(questionIndex);
+            }
+            saveFavorites(favorites);
+            renderQuestion();
+        }
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (isSubmitted) return;
+            const q = questions[currentIndex];
+            
+            // 1-4选择选项
+            if (e.key >= '1' && e.key <= '4') {
+                const optionIndex = parseInt(e.key) - 1;
+                if (q && (q.type === 1 || q.type === 4) && !questionAnswered[currentIndex]) {
+                    selectOption(optionIndex);
+                }
+            }
+            
+            // Enter提交填空题
+            if (e.key === 'Enter' && q.type === 3 && !questionAnswered[currentIndex]) {
+                submitFillBlankAnswer();
+            }
+            
+            // 左右箭头切换题目
+            if (e.key === 'ArrowLeft') {
+                prevQuestion();
+            }
+            if (e.key === 'ArrowRight') {
+                nextQuestion();
+            }
+            
+            // Escape标记当前题（类似收藏）
+            if (e.key === 'Escape') {
+                toggleFavorite(currentIndex);
+            }
+        });
+        
         init();
     </script>
 </body>

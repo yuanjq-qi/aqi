@@ -133,7 +133,24 @@
             { id: 12, type: 3, title: 'ABC分类（代码补全）', code: 'def classify_ inventory(items):\n    sorted_items = ___(items, key=lambda x: x["value"], reverse=True)\n    # 分类逻辑\n    return result', blanks: ['sorted'], explanation: '使用sorted()函数对库存物品按价值降序排序，以便进行ABC分类。' },
             { id: 13, type: 3, title: '订单处理（代码补全）', code: 'def process_order(order_id, inventory):\n    if inventory >= order_id["quantity"]:\n        return "订单___"\n    else:\n        return "库存不足"', blanks: ['确认'], explanation: '当库存足够时，订单状态应为"确认"，表示可以执行发货。' },
             { id: 14, type: 3, title: '运输成本计算（代码补全）', code: 'def calculate_transport_cost(distance, weight, rate_per_km):\n    return distance ___ weight ___ rate_per_km\n\ncost = calculate_transport_cost(100, 50, 0.5)\nprint(cost)', blanks: ['*', '*'], explanation: '运输成本 = 距离 × 重量 × 单价率，即 100 × 50 × 0.5 = 2500' },
-            { id: 15, type: 3, title: '供应商评估（代码补全）', code: 'def evaluate_supplier(delivery_time, quality_score, price):\n    score = (quality_score ___ delivery_time) / price\n    return score\n\nresult = evaluate_supplier(5, 90, 100)', blanks: ['*'], explanation: '供应商评分公式：得分 = (质量分 × 交货准时率) / 价格，这里计算 (90 × 5) / 100 = 4.5' }
+            { id: 15, type: 3, title: '供应商评估（代码补全）', code: 'def evaluate_supplier(delivery_time, quality_score, price):\n    score = (quality_score ___ delivery_time) / price\n    return score\n\nresult = evaluate_supplier(5, 90, 100)', blanks: ['*'], explanation: '供应商评分公式：得分 = (质量分 × 交货准时率) / 价格，这里计算 (90 × 5) / 100 = 4.5' },
+            // 新增选择题 16-25
+            { id: 16, type: 1, title: '供应链网络', question: '供应链网络设计的主要考虑因素是？', options: [{ label: 'A', text: '成本最小化', isCorrect: false }, { label: 'B', text: '响应能力与成本平衡', isCorrect: true }, { label: 'C', text: '最大化库存', isCorrect: false }, { label: 'D', text: '最小化运输距离', isCorrect: false }], explanation: '供应链网络设计需要在成本、服务水平和响应能力之间找到平衡。' },
+            { id: 17, type: 1, title: '需求预测方法', question: '以下哪种预测方法适用于季节性需求？', options: [{ label: 'A', text: '朴素预测法', isCorrect: false }, { label: 'B', text: '移动平均法', isCorrect: false }, { label: 'C', text: '季节性指数法', isCorrect: true }, { label: 'D', text: '线性回归', isCorrect: false }], explanation: '季节性指数法可以捕捉数据中的季节性波动模式，适用于季节性需求预测。' },
+            { id: 18, type: 1, title: '库存分类', question: '在ABC分类中，A类物品的特点是？', options: [{ label: 'A', text: '数量多，价值低', isCorrect: false }, { label: 'B', text: '数量少，价值高', isCorrect: true }, { label: 'C', text: '数量多，价值高', isCorrect: false }, { label: 'D', text: '数量少，价值低', isCorrect: false }], explanation: 'A类物品虽然数量只占10-20%，但价值占60-80%，需要重点管理。' },
+            { id: 19, type: 1, title: '供应链敏捷性', question: '供应链敏捷性是指？', options: [{ label: 'A', text: '快速响应市场变化的能力', isCorrect: true }, { label: 'B', text: '降低运营成本的能力', isCorrect: false }, { label: 'C', text: '提高产品质量的能力', isCorrect: false }, { label: 'D', text: '增加产能的能力', isCorrect: false }], explanation: '敏捷性是指供应链能够快速响应市场需求变化和不确定性的能力。' },
+            { id: 20, type: 1, title: '订单满足率', question: '订单满足率的计算公式是？', options: [{ label: 'A', text: '已交付订单数/总订单数', isCorrect: true }, { label: 'B', text: '库存数量/订单数量', isCorrect: false }, { label: 'C', text: '缺货次数/总需求次数', isCorrect: false }, { label: 'D', text: '生产数量/销售数量', isCorrect: false }], explanation: '订单满足率 = 按时按量完成的订单数 / 总订单数 × 100%。' },
+            { id: 21, type: 1, title: '供应商选择', question: '选择供应商时不应考虑以下哪个因素？', options: [{ label: 'A', text: '价格和质量', isCorrect: false }, { label: 'B', text: '交货可靠性', isCorrect: false }, { label: 'C', text: '供应商的办公室装修', isCorrect: true }, { label: 'D', text: '生产能力和灵活性', isCorrect: false }], explanation: '供应商选择应考虑价格、质量、交货可靠性等商业因素，办公室装修与供应链无关。' },
+            { id: 22, type: 1, title: '运输模式', question: '以下哪种运输方式适合高价值、低体积的货物？', options: [{ label: 'A', text: '海运', isCorrect: false }, { label: 'B', text: '空运', isCorrect: true }, { label: 'C', text: '铁路', isCorrect: false }, { label: 'D', text: '公路', isCorrect: false }], explanation: '空运速度快、安全性高，适合高价值、低体积或时效性强的货物。' },
+            { id: 23, type: 1, title: '牛鞭效应缓解', question: '以下哪个方法可以缓解牛鞭效应？', options: [{ label: 'A', text: '信息共享', isCorrect: true }, { label: 'B', text: '增加安全库存', isCorrect: false }, { label: 'C', text: '减少供应商数量', isCorrect: false }, { label: 'D', text: '提高批量大小', isCorrect: false }], explanation: '信息共享可以让各环节获得更准确的需求信息，从而减少需求波动放大。' },
+            { id: 24, type: 1, title: '逆向物流', question: '逆向物流的主要目的是？', options: [{ label: 'A', text: '降低运输成本', isCorrect: false }, { label: 'B', text: '退货处理和回收利用', isCorrect: true }, { label: 'C', text: '提高配送速度', isCorrect: false }, { label: 'D', text: '增加产品库存', isCorrect: false }], explanation: '逆向物流处理产品退货、回收和废弃物的处理，实现资源的循环利用。' },
+            { id: 25, type: 1, title: '仓储管理', question: '仓储管理中，ABC分类的目的主要是？', options: [{ label: 'A', text: '确定销售策略', isCorrect: false }, { label: 'B', text: '优化库存管理和人力分配', isCorrect: true }, { label: 'C', text: '提高运输效率', isCorrect: false }, { label: 'D', text: '增加仓库容量', isCorrect: false }], explanation: '通过ABC分类，将管理精力集中在高价值物品上，优化库存控制和盘点策略。' },
+            // 新增判断题 26-30
+            { id: 26, type: 4, title: '供应链集成', question: '供应链管理的目标就是最大化单个企业的利润。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '供应链管理追求的是整个供应链的优化和共赢，而非单企业利润最大化。' },
+            { id: 27, type: 4, title: '库存周转', question: '库存周转率越高说明库存管理越好。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '库存周转率需要与客户服务水平平衡，过高可能意味着库存不足，影响销售。' },
+            { id: 28, type: 4, title: '供应商关系', question: '与供应商建立长期合作关系不利于供应链优化。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '长期合作可以建立信任，促进信息共享，有利于供应链整体优化。' },
+            { id: 29, type: 4, title: '准时制', question: 'JIT生产方式可以实现零库存。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'JIT追求低库存而非绝对零库存，仍需要保持一定的安全库存来应对不确定性。' },
+            { id: 30, type: 4, title: '信息流', question: '在供应链中，信息流和物流方向相反。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '信息流从下游向上游传递（需求信息），物流从上游向下游传递（实际货物）。' }
         ];
 
         let currentIndex=0,userAnswers=new Array(questions.length).fill(null),correctCount=0,wrongCount=0,isSubmitted=false,questionAnswered=new Array(questions.length).fill(false);
@@ -153,6 +170,9 @@
             } else if (q.type === 3) {
                 typeLabel.textContent = '代码填空题';
                 typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 4) {
+                typeLabel.textContent = '判断题';
+                typeLabel.className = 'bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold';
             }
 
             let optionsHtml='';
@@ -172,7 +192,25 @@
                 if (answered || isSubmitted) {
                     explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
                 }
-                container.innerHTML=`<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type===2?'<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>':''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML=`<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type===2?'<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>':''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+            }
+            // 判断题渲染 (type 4)
+            else if (q.type === 4) {
+                q.options.forEach((opt, index) => {
+                    const isSelected = userAnswers[currentIndex] !== null && userAnswers[currentIndex] === index;
+                    let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if (isSelected) optionClass += ' selected';
+                    if ((answered || isSubmitted) && opt.isCorrect) optionClass += ' correct';
+                    if ((answered || isSubmitted) && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                    if (answered || isSubmitted) optionClass += ' disabled';
+                    optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${opt.text}</div>`;
+                });
+                if (answered || isSubmitted) {
+                    explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
+                }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-orange-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p></div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
             }
             else if (q.type === 3) {
                 const userAnswer = userAnswers[currentIndex] || '';
@@ -184,8 +222,9 @@
                 } else {
                     displayCode = q.code.replace('___', `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
                 }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="absolute top-6 right-6 text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
                 container.innerHTML = `
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-blue-600">${q.id}.</span> ${q.title}</h2>
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 relative"><span class="text-blue-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2>
                     <div class="mb-6">
                         <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
                         <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
@@ -262,6 +301,7 @@
             if(q.type===1)return q.options[userAnswer].isCorrect;
             else if(q.type===2){const correctIndices=q.options.reduce((acc,opt,idx)=>{if(opt.isCorrect)acc.push(idx);return acc;},[]);if(userAnswer.length!==correctIndices.length)return false;return userAnswer.every(idx=>correctIndices.includes(idx));}
             else if(q.type===3){return q.blanks.some(blank=>userAnswer.trim().toLowerCase()===String(blank).toLowerCase());}
+            else if(q.type===4){return q.options[userAnswer].isCorrect;}
         }
 
         function submitAll(){isSubmitted=true;showResults();}
@@ -286,6 +326,9 @@
                 } else if (q.type === 3) {
                     userAnswerText = answer || '未作答';
                     correctAnswerText = q.blanks.join(' 或 ');
+                } else if (q.type === 4) {
+                    userAnswerText = q.options[answer] ? q.options[answer].text : '未作答';
+                    correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
                 }
                 
                 // 收集错题
@@ -401,6 +444,64 @@
 
         function restartQuiz(){currentIndex=0;userAnswers=new Array(questions.length).fill(null);correctCount=0;wrongCount=0;isSubmitted=false;questionAnswered=new Array(questions.length).fill(false);document.getElementById('resultSection').classList.add('hidden');document.querySelector('section.py-12').classList.remove('hidden');document.getElementById('progressBar').style.width='0%';init();}
         function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('hidden');}
+        
+        // 收藏功能
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem('favorites_' + COURSE_ID) || '[]');
+        }
+        
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites_' + COURSE_ID, JSON.stringify(favorites));
+        }
+        
+        function isFavorite(questionIndex) {
+            return getFavorites().includes(questionIndex);
+        }
+        
+        function toggleFavorite(questionIndex) {
+            let favorites = getFavorites();
+            const idx = favorites.indexOf(questionIndex);
+            if (idx > -1) {
+                favorites.splice(idx, 1);
+            } else {
+                favorites.push(questionIndex);
+            }
+            saveFavorites(favorites);
+            renderQuestion();
+        }
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (isSubmitted) return;
+            const q = questions[currentIndex];
+            
+            // 1-4选择选项
+            if (e.key >= '1' && e.key <= '4') {
+                const optionIndex = parseInt(e.key) - 1;
+                if (q && (q.type === 1 || q.type === 4) && !questionAnswered[currentIndex]) {
+                    selectOption(optionIndex);
+                }
+            }
+            
+            // Enter提交填空题
+            if (e.key === 'Enter' && q.type === 3 && !questionAnswered[currentIndex]) {
+                submitFillBlankAnswer();
+            }
+            
+            // 左右箭头切换题目
+            if (e.key === 'ArrowLeft') {
+                prevQuestion();
+            }
+            if (e.key === 'ArrowRight') {
+                nextQuestion();
+            }
+            
+            // Escape标记当前题（类似收藏）
+            if (e.key === 'Escape') {
+                toggleFavorite(currentIndex);
+            }
+        });
+        
         init();
     </script>
 </body>

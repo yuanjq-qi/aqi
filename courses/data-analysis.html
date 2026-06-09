@@ -359,7 +359,24 @@
             { id: 12, type: 3, title: 'NumPy数组创建（代码补全）', code: 'import numpy as np\narr = np.___([1, 2, 3, 4, 5])\nprint(arr.mean())', blanks: ['array'], explanation: 'np.array()函数将列表转换为NumPy数组，之后可以调用mean()计算平均值。' },
             { id: 13, type: 3, title: '数据筛选（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"name": ["Alice", "Bob"], "score": [85, 90]})\nprint(df[df["score"] ___ 85])', blanks: ['>', '>'], explanation: '使用布尔索引筛选数据，df["score"] > 85 返回布尔序列，用于筛选分数大于85的行。' },
             { id: 14, type: 3, title: 'matplotlib绘图（代码补全）', code: 'import matplotlib.pyplot as plt\nplt.___(df["name"], df["score"])\nplt.show()', blanks: ['bar'], explanation: 'plt.bar()用于绘制柱状图，第一个参数是x轴数据，第二个参数是y轴数据。' },
-            { id: 15, type: 3, title: '数据分组统计（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"category": ["A", "B", "A", "B"], "value": [10, 20, 30, 40]})\nresult = df.___(by="category").sum()\nprint(result)', blanks: ['groupby'], explanation: 'groupby()方法用于按列分组，之后可以调用sum()、mean()等聚合函数进行统计。' }
+            { id: 15, type: 3, title: '数据分组统计（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"category": ["A", "B", "A", "B"], "value": [10, 20, 30, 40]})\nresult = df.___(by="category").sum()\nprint(result)', blanks: ['groupby'], explanation: 'groupby()方法用于按列分组，之后可以调用sum()、mean()等聚合函数进行统计。' },
+            // 新增选择题 16-25
+            { id: 16, type: 1, title: 'pandas合并', question: '在pandas中，concat()函数用于什么操作？', options: [{ label: 'A', text: '筛选数据', isCorrect: false }, { label: 'B', text: '合并数据集', isCorrect: true }, { label: 'C', text: '分组统计', isCorrect: false }, { label: 'D', text: '排序数据', isCorrect: false }], explanation: 'concat()用于沿着轴合并多个数据集，可以纵向或横向合并。' },
+            { id: 17, type: 1, title: 'matplotlib样式', question: '以下哪个方法可以设置matplotlib的图形尺寸？', options: [{ label: 'A', text: 'plt.figure(figsize=(10, 6))', isCorrect: true }, { label: 'B', text: 'plt.size(10, 6)', isCorrect: false }, { label: 'C', text: 'plt.graph(10, 6)', isCorrect: false }, { label: 'D', text: 'plt.plot(size=(10, 6))', isCorrect: false }], explanation: 'plt.figure()的figsize参数用于设置图形尺寸，单位为英寸。' },
+            { id: 18, type: 1, title: 'pandas去重', question: 'pandas中用于去除重复数据的方法是？', options: [{ label: 'A', text: 'drop()', isCorrect: false }, { label: 'B', text: 'drop_duplicate()', isCorrect: false }, { label: 'C', text: 'drop_duplicates()', isCorrect: true }, { label: 'D', text: 'remove_duplicate()', isCorrect: false }], explanation: 'drop_duplicates()方法用于去除重复行，返回去重后的DataFrame。' },
+            { id: 19, type: 1, title: 'numpy广播', question: 'numpy的广播机制是指？', options: [{ label: 'A', text: '数据加密', isCorrect: false }, { label: 'B', text: '不同形状数组进行运算', isCorrect: true }, { label: 'C', text: '数组排序', isCorrect: false }, { label: 'D', text: '数据复制', isCorrect: false }], explanation: '广播是numpy的重要特性，允许不同形状的数组进行算术运算。' },
+            { id: 20, type: 1, title: 'pandas索引', question: 'pandas中使用loc访问数据的特点是？', options: [{ label: 'A', text: '使用整数索引', isCorrect: false }, { label: 'B', text: '使用标签索引', isCorrect: true }, { label: 'C', text: '使用布尔条件', isCorrect: false }, { label: 'D', text: '使用位置索引', isCorrect: false }], explanation: 'loc使用轴标签（行名、列名）进行索引，iloc使用整数位置索引。' },
+            { id: 21, type: 1, title: 'numpy数组重塑', question: '将一维数组转换为二维数组使用哪个方法？', options: [{ label: 'A', text: 'reshape()', isCorrect: true }, { label: 'B', text: 'resize()', isCorrect: false }, { label: 'C', text: 'reshape()', isCorrect: false }, { label: 'D', text: 'transform()', isCorrect: false }], explanation: 'reshape()方法可以改变数组的形状，不改变数据本身。' },
+            { id: 22, type: 1, title: 'pandas缺失值检测', question: '检测pandas中缺失值（NaN）的方法是？', options: [{ label: 'A', text: 'isnull()', isCorrect: true }, { label: 'B', text: 'notnull()', isCorrect: false }, { label: 'C', text: 'hasnull()', isCorrect: false }, { label: 'D', text: 'missing()', isCorrect: false }], explanation: 'isnull()返回布尔DataFrame，标识每个位置是否为缺失值。' },
+            { id: 23, type: 1, title: 'matplotlib子图', question: '创建子图应该使用哪个函数？', options: [{ label: 'A', text: 'plt.subplots()', isCorrect: true }, { label: 'B', text: 'plt.subplot()', isCorrect: false }, { label: 'C', text: 'plt.graph()', isCorrect: false }, { label: 'D', text: 'plt.figure()', isCorrect: false }], explanation: 'plt.subplots()可以创建包含多个子图的图形窗口。' },
+            { id: 24, type: 1, title: 'numpy数组拼接', question: '沿垂直方向拼接两个数组应该使用？', options: [{ label: 'A', text: 'np.concatenate()', isCorrect: false }, { label: 'B', text: 'np.vstack()', isCorrect: true }, { label: 'C', text: 'np.hstack()', isCorrect: false }, { label: 'D', text: 'np.stack()', isCorrect: false }], explanation: 'vstack()垂直堆叠数组，hstack()水平堆叠数组。' },
+            { id: 25, type: 1, title: 'pandas排序', question: 'pandas中按指定列降序排序的方法是？', options: [{ label: 'A', text: 'sort(columns="col", ascending=True)', isCorrect: false }, { label: 'B', text: 'sort_values("col", ascending=False)', isCorrect: true }, { label: 'C', text: 'order("col", desc=True)', isCorrect: false }, { label: 'D', text: 'sortby("col", reverse=True)', isCorrect: false }], explanation: 'sort_values()的ascending参数控制升序或降序，False为降序。' },
+            // 新增判断题 26-30
+            { id: 26, type: 4, title: 'pandas索引', question: 'pandas的DataFrame可以使用整数作为行索引。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'DataFrame默认使用整数索引（0, 1, 2...），但也可以设置为其他类型的索引。' },
+            { id: 27, type: 4, title: 'numpy数组', question: 'numpy数组的元素类型必须相同。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'numpy数组是同质的，所有元素必须是相同的数据类型，这使其存储和计算更高效。' },
+            { id: 28, type: 4, title: 'matplotlib绑定', question: 'matplotlib只能绑定numpy数组作为数据源。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'matplotlib可以接受list、pandas Series等多种数据类型，不仅限于numpy数组。' },
+            { id: 29, type: 4, title: 'pandas合并', question: 'merge()和join()在pandas中功能完全相同。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'merge()基于列值合并，join()基于索引合并，功能有区别。' },
+            { id: 30, type: 4, title: 'numpy拷贝', question: 'numpy中直接赋值不会创建数据的拷贝。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '直接赋值（如b = a）只是创建了引用，修改b会影响a，需要使用copy()创建真正的拷贝。' }
         ];
 
         let currentIndex = 0;
@@ -390,6 +407,9 @@
             } else if (q.type === 3) {
                 typeLabel.textContent = '代码填空题';
                 typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 4) {
+                typeLabel.textContent = '判断题';
+                typeLabel.className = 'bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold';
             }
 
             let optionsHtml = '';
@@ -410,7 +430,25 @@
                 if (answered || isSubmitted) {
                     explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
                 }
-                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+            }
+            // 判断题渲染 (type 4)
+            else if (q.type === 4) {
+                q.options.forEach((opt, index) => {
+                    const isSelected = userAnswers[currentIndex] !== null && userAnswers[currentIndex] === index;
+                    let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if (isSelected) optionClass += ' selected';
+                    if ((answered || isSubmitted) && opt.isCorrect) optionClass += ' correct';
+                    if ((answered || isSubmitted) && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                    if (answered || isSubmitted) optionClass += ' disabled';
+                    optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${opt.text}</div>`;
+                });
+                if (answered || isSubmitted) {
+                    explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
+                }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-orange-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p></div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
             }
             else if (q.type === 3) {
                 const userAnswer = userAnswers[currentIndex] || '';
@@ -422,8 +460,9 @@
                 } else {
                     displayCode = q.code.replace('___', `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
                 }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="absolute top-6 right-6 text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
                 container.innerHTML = `
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-blue-600">${q.id}.</span> ${q.title}</h2>
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 relative"><span class="text-blue-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2>
                     <div class="mb-6">
                         <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
                         <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
@@ -570,6 +609,8 @@
                 return userAnswer.every(idx => correctIndices.includes(idx));
             } else if (q.type === 3) {
                 return q.blanks.some(blank => userAnswer.trim().toLowerCase() === String(blank).toLowerCase());
+            } else if (q.type === 4) {
+                return q.options[userAnswer].isCorrect;
             }
         }
 
@@ -598,6 +639,9 @@
                 } else if (q.type === 3) {
                     userAnswerText = answer || '未作答';
                     correctAnswerText = q.blanks.join(' 或 ');
+                } else if (q.type === 4) {
+                    userAnswerText = q.options[answer] ? q.options[answer].text : '未作答';
+                    correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
                 }
                 
                 // 收集错题
@@ -728,6 +772,63 @@
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('hidden');
         }
+        
+        // 收藏功能
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem('favorites_' + COURSE_ID) || '[]');
+        }
+        
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites_' + COURSE_ID, JSON.stringify(favorites));
+        }
+        
+        function isFavorite(questionIndex) {
+            return getFavorites().includes(questionIndex);
+        }
+        
+        function toggleFavorite(questionIndex) {
+            let favorites = getFavorites();
+            const idx = favorites.indexOf(questionIndex);
+            if (idx > -1) {
+                favorites.splice(idx, 1);
+            } else {
+                favorites.push(questionIndex);
+            }
+            saveFavorites(favorites);
+            renderQuestion();
+        }
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (isSubmitted) return;
+            const q = questions[currentIndex];
+            
+            // 1-4选择选项
+            if (e.key >= '1' && e.key <= '4') {
+                const optionIndex = parseInt(e.key) - 1;
+                if (q && (q.type === 1 || q.type === 4) && !questionAnswered[currentIndex]) {
+                    selectOption(optionIndex);
+                }
+            }
+            
+            // Enter提交填空题
+            if (e.key === 'Enter' && q.type === 3 && !questionAnswered[currentIndex]) {
+                submitFillBlankAnswer();
+            }
+            
+            // 左右箭头切换题目
+            if (e.key === 'ArrowLeft') {
+                prevQuestion();
+            }
+            if (e.key === 'ArrowRight') {
+                nextQuestion();
+            }
+            
+            // Escape标记当前题（类似收藏）
+            if (e.key === 'Escape') {
+                toggleFavorite(currentIndex);
+            }
+        });
 
         init();
     </script>

@@ -343,7 +343,24 @@
             { id: 12, type: 3, title: 'BeautifulSoup解析（代码补全）', code: 'from bs4 import BeautifulSoup\nhtml = "<html><body><h1>标题</h1></body></html>"\nsoup = BeautifulSoup(html, "___")\nprint(soup.h1.text)', blanks: ['html.parser'], explanation: 'BeautifulSoup的第二个参数指定解析器，"html.parser"是Python内置的HTML解析器。' },
             { id: 13, type: 3, title: 'JSON数据解析（代码补全）', code: 'import json\ndata = \'{"name": "Alice", "age": 20}\'\nresult = json.___(data)\nprint(result["name"])', blanks: ['loads'], explanation: 'json.loads()用于解析JSON字符串，返回Python字典对象。' },
             { id: 14, type: 3, title: '设置请求头（代码补全）', code: 'import requests\nheaders = {"User-Agent": "Mozilla/5.0"}\nresponse = requests.get(url, ___=headers)\nprint(response.text)', blanks: ['headers'], explanation: 'requests.get()通过headers参数传递请求头字典，用于模拟浏览器访问。' },
-            { id: 15, type: 3, title: '正则表达式匹配（代码补全）', code: 'import re\ntext = "邮箱: example@email.com"\npattern = r"\\w+@\\w+\\.\\w+"\nresult = re.___(pattern, text)\nprint(result.group())', blanks: ['search'], explanation: 're.search()在文本中搜索匹配正则表达式的第一个位置，返回Match对象。' }
+            { id: 15, type: 3, title: '正则表达式匹配（代码补全）', code: 'import re\ntext = "邮箱: example@email.com"\npattern = r"\\w+@\\w+\\.\\w+"\nresult = re.___(pattern, text)\nprint(result.group())', blanks: ['search'], explanation: 're.search()在文本中搜索匹配正则表达式的第一个位置，返回Match对象。' },
+            // 新增选择题 16-25
+            { id: 16, type: 1, title: 'XPath', question: '以下哪个是XPath选择器的基本语法？', options: [{ label: 'A', text: '//div[@class="content"]', isCorrect: true }, { label: 'B', text: 'div.content', isCorrect: false }, { label: 'C', text: './/div', isCorrect: false }, { label: 'D', text: '@class="content"', isCorrect: false }], explanation: 'XPath使用//选择节点，@选择属性。//div[@class="content"]选择class为content的div元素。' },
+            { id: 17, type: 1, title: 'CSS选择器', question: '以下哪个CSS选择器可以选取所有class为"item"的元素？', options: [{ label: 'A', text: '#item', isCorrect: false }, { label: 'B', text: '.item', isCorrect: true }, { label: 'C', text: 'item', isCorrect: false }, { label: 'D', text: '*item', isCorrect: false }], explanation: 'CSS中点号(.)用于选取class，井号(#)用于选取id。' },
+            { id: 18, type: 1, title: 'API认证', question: '在调用需要API Key的接口时，通常如何传递这个密钥？', options: [{ label: 'A', text: '直接写在URL中', isCorrect: false }, { label: 'B', text: '放在请求头中', isCorrect: true }, { label: 'C', text: '放在请求体中', isCorrect: false }, { label: 'D', text: '放在Cookie中', isCorrect: false }], explanation: 'API Key通常放在请求头的Authorization或X-API-Key字段中传递。' },
+            { id: 19, type: 1, title: 'requests会话', question: '在requests库中，使用Session对象的目的是？', options: [{ label: 'A', text: '创建异步请求', isCorrect: false }, { label: 'B', text: '保持请求之间的参数和cookies', isCorrect: true }, { label: 'C', text: '并发执行多个请求', isCorrect: false }, { label: 'D', text: '重试失败的请求', isCorrect: false }], explanation: 'Session对象可以在多个请求之间保持cookies和headers，常用于需要登录的场景。' },
+            { id: 20, type: 1, title: 'Selenium等待', question: '在Selenium中，等待页面元素加载应该使用哪种方式？', options: [{ label: 'A', text: 'time.sleep()', isCorrect: false }, { label: 'B', text: 'WebDriverWait', isCorrect: true }, { label: 'C', text: 'implicitly_wait()', isCorrect: false }, { label: 'D', text: 'wait_for_element()', isCorrect: false }], explanation: 'WebDriverWait配合expected_conditions可以智能等待元素出现，比固定sleep更可靠。' },
+            { id: 21, type: 1, title: 'JSON数据转换', question: '将Python字典转换为JSON字符串应该使用？', options: [{ label: 'A', text: 'json.loads()', isCorrect: false }, { label: 'B', text: 'json.dumps()', isCorrect: true }, { label: 'C', text: 'json.load()', isCorrect: false }, { label: 'D', text: 'json.parse()', isCorrect: false }], explanation: 'json.dumps()将Python对象序列化为JSON字符串，json.loads()相反。' },
+            { id: 22, type: 1, title: 'Scrapy', question: 'Scrapy中用于定义爬取项目的文件是？', options: [{ label: 'A', text: 'items.py', isCorrect: true }, { label: 'B', text: 'settings.py', isCorrect: false }, { label: 'C', text: 'pipelines.py', isCorrect: false }, { label: 'D', text: 'spiders.py', isCorrect: false }], explanation: 'items.py用于定义要爬取的数据字段结构，pipelines.py用于处理数据，settings.py是配置文件。' },
+            { id: 23, type: 1, title: '正则量词', question: '在正则表达式中，+表示什么？', options: [{ label: 'A', text: '零个或一个', isCorrect: false }, { label: 'B', text: '一个或多个', isCorrect: true }, { label: 'C', text: '零个或多个', isCorrect: false }, { label: 'D', text: '恰好一个', isCorrect: false }], explanation: '+是正则表达式量词，表示前面的字符出现一次或多次。' },
+            { id: 24, type: 1, title: '数据清洗', question: '以下哪个不是数据清洗的常用操作？', options: [{ label: 'A', text: '去除HTML标签', isCorrect: false }, { label: 'B', text: '替换非法字符', isCorrect: false }, { label: 'C', text: '建立数据模型', isCorrect: true }, { label: 'D', text: '处理缺失值', isCorrect: false }], explanation: '建立数据模型属于数据分析阶段，不是数据清洗的范畴。' },
+            { id: 25, type: 1, title: '异步请求', question: '以下哪个库用于Python异步HTTP请求？', options: [{ label: 'A', text: 'aiohttp', isCorrect: true }, { label: 'B', text: 'requests', isCorrect: false }, { label: 'C', text: 'urllib', isCorrect: false }, { label: 'D', text: 'httplib', isCorrect: false }], explanation: 'aiohttp是Python的异步HTTP客户端/服务器框架，适合高并发场景。' },
+            // 新增判断题 26-30
+            { id: 26, type: 4, title: 'robots.txt', question: '网站必须遵守robots.txt文件的规则。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'robots.txt只是建议性的文件，技术上可以绕过，但遵守是网络爬虫的职业道德。' },
+            { id: 27, type: 4, title: 'IP封禁', question: 'IP封禁是反爬虫的唯一手段。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '反爬虫手段包括验证码、User-Agent检测、请求频率限制、IP封禁等多种方式。' },
+            { id: 28, type: 4, title: 'BeautifulSoup解析器', question: 'lxml是Python内置的HTML解析器。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'lxml需要单独安装，Python内置的解析器是html.parser。' },
+            { id: 29, type: 4, title: 'API限流', question: 'API调用次数限制只是建议性的，可以随意突破。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'API限流是强制性的，突破限制可能导致账户被封禁或IP地址被封。' },
+            { id: 30, type: 4, title: '数据采集', question: '只要能访问到的数据都可以采集。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '数据采集需要遵守法律法规和网站规则，不得采集个人隐私数据和受版权保护的内容。' }
         ];
 
         let currentIndex = 0;
@@ -374,6 +391,9 @@
             } else if (q.type === 3) {
                 typeLabel.textContent = '代码填空题';
                 typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 4) {
+                typeLabel.textContent = '判断题';
+                typeLabel.className = 'bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold';
             }
 
             let optionsHtml = '';
@@ -394,7 +414,25 @@
                 if (answered || isSubmitted) {
                     explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
                 }
-                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+            }
+            // 判断题渲染 (type 4)
+            else if (q.type === 4) {
+                q.options.forEach((opt, index) => {
+                    const isSelected = userAnswers[currentIndex] !== null && userAnswers[currentIndex] === index;
+                    let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if (isSelected) optionClass += ' selected';
+                    if ((answered || isSubmitted) && opt.isCorrect) optionClass += ' correct';
+                    if ((answered || isSubmitted) && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                    if (answered || isSubmitted) optionClass += ' disabled';
+                    optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${opt.text}</div>`;
+                });
+                if (answered || isSubmitted) {
+                    explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
+                }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-orange-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p></div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
             }
             else if (q.type === 3) {
                 const userAnswer = userAnswers[currentIndex] || '';
@@ -406,8 +444,9 @@
                 } else {
                     displayCode = q.code.replace('___', `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
                 }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="absolute top-6 right-6 text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
                 container.innerHTML = `
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-blue-600">${q.id}.</span> ${q.title}</h2>
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 relative"><span class="text-blue-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2>
                     <div class="mb-6">
                         <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
                         <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
@@ -554,6 +593,8 @@
                 return userAnswer.every(idx => correctIndices.includes(idx));
             } else if (q.type === 3) {
                 return q.blanks.some(blank => userAnswer.trim().toLowerCase() === String(blank).toLowerCase());
+            } else if (q.type === 4) {
+                return q.options[userAnswer].isCorrect;
             }
         }
 
@@ -582,6 +623,9 @@
                 } else if (q.type === 3) {
                     userAnswerText = answer || '未作答';
                     correctAnswerText = q.blanks.join(' 或 ');
+                } else if (q.type === 4) {
+                    userAnswerText = q.options[answer] ? q.options[answer].text : '未作答';
+                    correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
                 }
                 
                 // 收集错题
@@ -712,6 +756,63 @@
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('hidden');
         }
+        
+        // 收藏功能
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem('favorites_' + COURSE_ID) || '[]');
+        }
+        
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites_' + COURSE_ID, JSON.stringify(favorites));
+        }
+        
+        function isFavorite(questionIndex) {
+            return getFavorites().includes(questionIndex);
+        }
+        
+        function toggleFavorite(questionIndex) {
+            let favorites = getFavorites();
+            const idx = favorites.indexOf(questionIndex);
+            if (idx > -1) {
+                favorites.splice(idx, 1);
+            } else {
+                favorites.push(questionIndex);
+            }
+            saveFavorites(favorites);
+            renderQuestion();
+        }
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (isSubmitted) return;
+            const q = questions[currentIndex];
+            
+            // 1-4选择选项
+            if (e.key >= '1' && e.key <= '4') {
+                const optionIndex = parseInt(e.key) - 1;
+                if (q && (q.type === 1 || q.type === 4) && !questionAnswered[currentIndex]) {
+                    selectOption(optionIndex);
+                }
+            }
+            
+            // Enter提交填空题
+            if (e.key === 'Enter' && q.type === 3 && !questionAnswered[currentIndex]) {
+                submitFillBlankAnswer();
+            }
+            
+            // 左右箭头切换题目
+            if (e.key === 'ArrowLeft') {
+                prevQuestion();
+            }
+            if (e.key === 'ArrowRight') {
+                nextQuestion();
+            }
+            
+            // Escape标记当前题（类似收藏）
+            if (e.key === 'Escape') {
+                toggleFavorite(currentIndex);
+            }
+        });
 
         init();
     </script>

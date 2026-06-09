@@ -223,7 +223,24 @@
             { id: 12, type: 3, title: '字典操作（代码补全）', code: 'student = {"name": "小明", "age": 20}\nprint(student.___("name"))', blanks: ['get'], explanation: '字典的get()方法用于安全地获取值，即使键不存在也不会报错，student.get("name")返回"小明"' },
             { id: 13, type: 3, title: '字符串格式化（代码补全）', code: 'name = "Alice"\nage = 25\nprint(f"我叫___，今年{age}岁")', blanks: ['name', 'Alice'], explanation: 'Python 3.6+支持f-string格式化字符串，f"我叫{name}，今年{age}岁"可以直接在字符串中插入变量值' },
             { id: 14, type: 3, title: '集合操作（代码补全）', code: 'set1 = {1, 2, 3}\nset2 = {2, 3, 4}\nprint(set1 ___ set2)', blanks: ['&', 'intersection'], explanation: '&或intersection表示集合的交集操作，{1,2,3} ∩ {2,3,4} = {2,3}' },
-            { id: 15, type: 3, title: '文件操作（代码补全）', code: 'with open("test.txt", ___) as f:\n    content = f.read()', blanks: ['r'], explanation: 'open()函数的第二个参数"r"表示以只读模式打开文件。常用模式还有"w"（写入）、"a"（追加）' }
+            { id: 15, type: 3, title: '文件操作（代码补全）', code: 'with open("test.txt", ___) as f:\n    content = f.read()', blanks: ['r'], explanation: 'open()函数的第二个参数"r"表示以只读模式打开文件。常用模式还有"w"（写入）、"a"（追加）' },
+            // 新增选择题 16-25
+            { id: 16, type: 1, title: 'Python类继承', question: '在Python中，以下哪个关键字用于定义类的继承？', options: [{ label: 'A', text: 'inherit', isCorrect: false }, { label: 'B', text: 'extends', isCorrect: false }, { label: 'C', text: 'class Child(Parent)', isCorrect: true }, { label: 'D', text: 'base', isCorrect: false }], explanation: 'Python中使用class Child(Parent)语法来表示Child类继承Parent类。' },
+            { id: 17, type: 1, title: 'Python装饰器', question: 'Python装饰器的基本原理是什么？', options: [{ label: 'A', text: '一种设计模式', isCorrect: false }, { label: 'B', text: '接受函数作为参数并返回新函数的函数', isCorrect: true }, { label: 'C', text: '用于内存管理的机制', isCorrect: false }, { label: 'D', text: '一种特殊的注释', isCorrect: false }], explanation: '装饰器是一个接受函数作为参数并返回新函数的函数，可以用来增强原函数的功能。' },
+            { id: 18, type: 1, title: 'Python生成器', question: '以下哪个是Python生成器的特点？', options: [{ label: 'A', text: '返回一个列表', isCorrect: false }, { label: 'B', text: '使用return返回值', isCorrect: false }, { label: 'C', text: '使用yield返回值', isCorrect: true }, { label: 'D', text: '必须使用list()转换', isCorrect: false }], explanation: '生成器使用yield关键字返回值，每次调用时从上次暂停的地方继续执行。' },
+            { id: 19, type: 1, title: 'Python lambda', question: '以下哪个是lambda表达式的正确用法？', options: [{ label: 'A', text: 'lambda x, y: x + y', isCorrect: true }, { label: 'B', text: 'lambda x, y { x + y }', isCorrect: false }, { label: 'C', text: 'lambda (x, y): x + y', isCorrect: false }, { label: 'D', text: 'lambda x, y = x + y', isCorrect: false }], explanation: 'lambda表达式语法：lambda 参数列表: 表达式。' },
+            { id: 20, type: 1, title: 'Python模块导入', question: '要导入模块中的特定函数，应该使用哪个语法？', options: [{ label: 'A', text: 'import module::function', isCorrect: false }, { label: 'B', text: 'from module import function', isCorrect: true }, { label: 'C', text: 'import.module.function', isCorrect: false }, { label: 'D', text: 'using module.function', isCorrect: false }], explanation: '使用from...import语句可以从模块中导入特定函数或变量。' },
+            { id: 21, type: 1, title: 'Python文件操作', question: '以下哪个模式用于追加写入文件？', options: [{ label: 'A', text: 'r+', isCorrect: false }, { label: 'B', text: 'w', isCorrect: false }, { label: 'C', text: 'a', isCorrect: true }, { label: 'D', text: 'x', isCorrect: false }], explanation: '"a"模式以追加方式打开文件，写入的内容会添加到文件末尾。' },
+            { id: 22, type: 1, title: 'Python深拷贝', question: '在Python中，如何实现列表的深拷贝？', options: [{ label: 'A', text: 'list.copy()', isCorrect: false }, { label: 'B', text: 'copy.deepcopy()', isCorrect: true }, { label: 'C', text: 'list[:]', isCorrect: false }, { label: 'D', text: '直接赋值', isCorrect: false }], explanation: 'copy.deepcopy()可以递归拷贝所有嵌套对象，实现真正的深拷贝。' },
+            { id: 23, type: 1, title: 'Python迭代器', question: '以下哪个协议用于实现迭代器？', options: [{ label: 'A', text: '__iter__和__next__', isCorrect: true }, { label: 'B', text: '__enter__和__exit__', isCorrect: false }, { label: 'C', text: '__get__和__set__', isCorrect: false }, { label: 'D', text: '__init__和__del__', isCorrect: false }], explanation: '迭代器协议要求对象实现__iter__()返回迭代器对象，__next__()返回下一个元素。' },
+            { id: 24, type: 1, title: 'Python闭包', question: '以下哪个是Python闭包的条件？', options: [{ label: 'A', text: '函数内部定义函数', isCorrect: false }, { label: 'B', text: '内层函数引用了外层函数的变量', isCorrect: true }, { label: 'C', text: '使用lambda表达式', isCorrect: false }, { label: 'D', text: '使用装饰器', isCorrect: false }], explanation: '闭包是指内层函数引用了外层函数的自由变量，即使外层函数执行完毕，该变量仍然被内层函数引用。' },
+            { id: 25, type: 1, title: 'Python异常类型', question: '以下哪个异常用于处理除数为零的情况？', options: [{ label: 'A', text: 'TypeError', isCorrect: false }, { label: 'B', text: 'ValueError', isCorrect: false }, { label: 'C', text: 'ZeroDivisionError', isCorrect: true }, { label: 'D', text: 'OverflowError', isCorrect: false }], explanation: '当除法或取模操作的第二个参数为零时，会抛出ZeroDivisionError。' },
+            // 新增判断题 26-30
+            { id: 26, type: 4, title: 'Python可变默认参数', question: 'Python中可以使用列表作为函数的默认参数。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'Python中应避免使用可变对象（如列表、字典）作为函数默认参数，因为默认参数在函数定义时只会被评估一次，可能导致意外行为。' },
+            { id: 27, type: 4, title: 'Python GIL', question: 'Python的多线程可以真正实现多核并行计算。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '由于Python的GIL（全局解释器锁），多线程无法真正利用多核CPU实现并行计算，需要使用多进程才能充分利用多核。' },
+            { id: 28, type: 4, title: 'Python元组', question: 'Python中的元组是不可变的数据类型。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '元组是Python中的不可变类型，一旦创建就不能修改其元素值。' },
+            { id: 29, type: 4, title: 'Python编码', question: 'Python 3中字符串默认使用UTF-8编码。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'Python 3默认使用Unicode编码（UTF-8），可以处理世界上任何语言的字符。' },
+            { id: 30, type: 4, title: 'Python包', question: '在Python中，只要目录下有__init__.py文件就是包。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '__init__.py文件的存在使一个目录成为Python包，该文件可以为空，也可以包含包的初始化代码。' }
         ];
 
         let currentIndex = 0;
@@ -250,6 +267,9 @@
             } else if (q.type === 3) {
                 typeLabel.textContent = '代码填空题';
                 typeLabel.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold';
+            } else if (q.type === 4) {
+                typeLabel.textContent = '判断题';
+                typeLabel.className = 'bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold';
             }
             
             let optionsHtml = '';
@@ -272,7 +292,26 @@
                 if (answered || isSubmitted) {
                     explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
                 }
-                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-purple-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p>${q.type === 2 ? '<p class="text-sm text-gray-500 mt-2">（多选题，至少选择一个答案）</p>' : ''}</div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
+            }
+            // 判断题渲染 (type 4)
+            else if (q.type === 4) {
+                q.options.forEach((opt, index) => {
+                    const isSelected = userAnswers[currentIndex] !== null && userAnswers[currentIndex] === index;
+                    let optionClass = 'option-btn w-full text-left p-4 border-2 border-gray-200 rounded-xl mb-3';
+                    if (isSelected) optionClass += ' selected';
+                    if ((answered || isSubmitted) && opt.isCorrect) optionClass += ' correct';
+                    if ((answered || isSubmitted) && isSelected && !opt.isCorrect) optionClass += ' wrong';
+                    if (answered || isSubmitted) optionClass += ' disabled';
+                    optionsHtml += `<div class="${optionClass}" onclick="selectOption(${index})"><span class="font-semibold mr-3">${opt.label}.</span>${opt.text}</div>`;
+                });
+                
+                if (answered || isSubmitted) {
+                    explanationHtml = `<div class="mt-6 p-4 bg-purple-50 rounded-xl border-l-4 border-purple-500"><p class="text-gray-700"><strong class="text-purple-600"><i class="fa fa-lightbulb-o mr-1"></i>解析：</strong>${q.explanation}</p></div>`;
+                }
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="mt-4 float-right text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
+                container.innerHTML = `<h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-orange-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2><div class="mb-6"><p class="text-gray-700 text-lg">${q.question}</p></div><div class="space-y-2">${optionsHtml}</div>${explanationHtml}`;
             } 
             // 填空题渲染
             else if (q.type === 3) {
@@ -288,9 +327,9 @@
                     // 未作答，显示提示
                     displayCode = q.code.replace('___', `<span class="bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400 px-2 py-1">${userAnswer || '____'}</span>`);
                 }
-                
+                const favoriteBtn = `<button onclick="toggleFavorite(${currentIndex})" class="absolute top-6 right-6 text-xl ${isFavorite(currentIndex) ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors" title="收藏本题"><i class="fa fa-star"></i></button>`;
                 container.innerHTML = `
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800"><span class="text-blue-600">${q.id}.</span> ${q.title}</h2>
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 relative"><span class="text-blue-600">${q.id}.</span> ${q.title}${favoriteBtn}</h2>
                     <div class="mb-6">
                         <p class="text-gray-700 text-lg mb-4">请在代码的空白处填入正确的内容：</p>
                         <div class="bg-gray-900 text-green-400 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto">
@@ -359,6 +398,9 @@
             } else if (q.type === 3) {
                 // 填空题判断（支持多个正确答案）
                 return q.blanks.some(blank => userAnswer.trim().toLowerCase() === String(blank).toLowerCase());
+            } else if (q.type === 4) {
+                // 判断题判断
+                return q.options[userAnswer].isCorrect;
             }
         }
         function submitAll() { isSubmitted = true; showResults(); }
@@ -382,6 +424,9 @@
                 } else if (q.type === 3) {
                     userAnswerText = answer || '未作答';
                     correctAnswerText = q.blanks.join(' 或 ');
+                } else if (q.type === 4) {
+                    userAnswerText = q.options[answer] ? q.options[answer].text : '未作答';
+                    correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
                 }
                 
                 // 收集错题
@@ -496,6 +541,64 @@
         }
         function restartQuiz() { currentIndex = 0; userAnswers = new Array(questions.length).fill(null); correctCount = 0; wrongCount = 0; isSubmitted = false; questionAnswered = new Array(questions.length).fill(false); document.getElementById('resultSection').classList.add('hidden'); document.querySelector('section.py-12').classList.remove('hidden'); document.getElementById('progressBar').style.width = '0%'; init(); }
         function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
+        
+        // 收藏功能
+        function getFavorites() {
+            return JSON.parse(localStorage.getItem('favorites_' + COURSE_ID) || '[]');
+        }
+        
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites_' + COURSE_ID, JSON.stringify(favorites));
+        }
+        
+        function isFavorite(questionIndex) {
+            return getFavorites().includes(questionIndex);
+        }
+        
+        function toggleFavorite(questionIndex) {
+            let favorites = getFavorites();
+            const idx = favorites.indexOf(questionIndex);
+            if (idx > -1) {
+                favorites.splice(idx, 1);
+            } else {
+                favorites.push(questionIndex);
+            }
+            saveFavorites(favorites);
+            renderQuestion();
+        }
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (isSubmitted) return;
+            const q = questions[currentIndex];
+            
+            // 1-4选择选项
+            if (e.key >= '1' && e.key <= '4') {
+                const optionIndex = parseInt(e.key) - 1;
+                if (q && (q.type === 1 || q.type === 4) && !questionAnswered[currentIndex]) {
+                    selectOption(optionIndex);
+                }
+            }
+            
+            // Enter提交填空题
+            if (e.key === 'Enter' && q.type === 3 && !questionAnswered[currentIndex]) {
+                submitFillBlankAnswer();
+            }
+            
+            // 左右箭头切换题目
+            if (e.key === 'ArrowLeft') {
+                prevQuestion();
+            }
+            if (e.key === 'ArrowRight') {
+                nextQuestion();
+            }
+            
+            // Escape标记当前题（类似收藏）
+            if (e.key === 'Escape') {
+                toggleFavorite(currentIndex);
+            }
+        });
+        
         init();
     </script>
 </body>

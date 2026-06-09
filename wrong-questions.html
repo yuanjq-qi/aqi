@@ -69,6 +69,16 @@
                     </div>
                 </div>
 
+                <!-- 收藏题目区域 -->
+                <div class="mb-10">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fa fa-star text-yellow-500 mr-2"></i>收藏题目
+                    </h2>
+                    <div id="favorite-questions-container" class="space-y-4">
+                        <!-- 收藏题目列表将在这里渲染 -->
+                    </div>
+                </div>
+
                 <!-- 错题列表 -->
                 <div id="wrong-questions-container" class="space-y-6">
                     <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100">
@@ -101,6 +111,80 @@
             'database': '数据库原理与应用',
             'exam': '综合考试'
         };
+        
+        // 收藏题目相关
+        function getAllFavorites() {
+            const favorites = {};
+            const courseIds = ['python-basics', 'data-analysis', 'data-collection', 'supply-chain', 'database'];
+            courseIds.forEach(courseId => {
+                const courseFavorites = JSON.parse(localStorage.getItem('favorites_' + courseId) || '[]');
+                if (courseFavorites.length > 0) {
+                    favorites[courseId] = courseFavorites;
+                }
+            });
+            return favorites;
+        }
+        
+        function renderFavoriteQuestions() {
+            const container = document.getElementById('favorite-questions-container');
+            const allFavorites = getAllFavorites();
+            const courseIds = Object.keys(allFavorites);
+            
+            if (courseIds.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100">
+                        <div class="text-gray-400 text-5xl mb-4"><i class="fa fa-star-o"></i></div>
+                        <h3 class="text-lg font-semibold text-gray-600 mb-2">暂无收藏题目</h3>
+                        <p class="text-gray-500">在做题时点击⭐收藏感兴趣的题目</p>
+                    </div>`;
+                return;
+            }
+            
+            let html = '';
+            courseIds.forEach(courseId => {
+                const favoriteIndices = allFavorites[courseId];
+                const courseName = COURSE_NAMES[courseId] || courseId;
+                
+                html += `
+                    <div class="bg-white rounded-2xl shadow-lg border border-yellow-100 overflow-hidden">
+                        <div class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white p-4">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                <i class="fa fa-star mr-2"></i>${courseName}
+                                <span class="ml-auto bg-white/30 text-sm px-3 py-1 rounded-full">${favoriteIndices.length} 题</span>
+                            </h3>
+                        </div>
+                        <div class="p-4 space-y-3">`;
+                
+                favoriteIndices.forEach(questionIndex => {
+                    html += `
+                        <div class="bg-yellow-50 rounded-xl p-4 border-l-4 border-yellow-500">
+                            <div class="flex justify-between items-start">
+                                <div class="font-semibold text-gray-800">第 ${questionIndex + 1} 题</div>
+                                <button onclick="removeFavorite('${courseId}', ${questionIndex})" class="text-yellow-500 hover:text-gray-400 transition-colors" title="取消收藏">
+                                    <i class="fa fa-star"></i>
+                                </button>
+                            </div>
+                            <a href="courses/${courseId}.html" class="mt-2 inline-block text-blue-500 hover:text-blue-700 text-sm">
+                                <i class="fa fa-external-link mr-1"></i>去练习
+                            </a>
+                        </div>`;
+                });
+                
+                html += `</div></div>`;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function removeFavorite(courseId, questionIndex) {
+            const favorites = JSON.parse(localStorage.getItem('favorites_' + courseId) || '[]');
+            const idx = favorites.indexOf(questionIndex);
+            if (idx > -1) {
+                favorites.splice(idx, 1);
+                localStorage.setItem('favorites_' + courseId, JSON.stringify(favorites));
+                renderFavoriteQuestions();
+            }
+        }
         
         function renderWrongQuestions() {
             const allWrong = StorageManager.getAllWrongQuestions();
@@ -180,6 +264,7 @@
             }
         }
         
+        renderFavoriteQuestions();
         renderWrongQuestions();
     </script>
 </body>
