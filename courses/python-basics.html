@@ -343,23 +343,28 @@
         function submitAll() { isSubmitted = true; showResults(); }
         function showResults() { 
             const wrongQuestions = [];
+            const allQuestionsAnalysis = [];
+            
+            // 遍历所有题目
             userAnswers.forEach((answer, index) => {
-                if (answer !== null && answer !== '' && !isAnswerCorrect(index)) {
-                    const q = questions[index];
-                    let userAnswerText, correctAnswerText;
-                    
-                    // 选择题答案处理
-                    if (q.type === 1) {
-                        userAnswerText = q.options[answer].text;
-                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
-                    } else if (q.type === 2) {
-                        userAnswerText = answer.map(i => q.options[i].text).join('、');
-                        correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
-                    } else if (q.type === 3) {
-                        userAnswerText = answer;
-                        correctAnswerText = q.blanks.join(' 或 ');
-                    }
-                    
+                const q = questions[index];
+                const isCorrect = isAnswerCorrect(index);
+                let userAnswerText, correctAnswerText;
+                
+                // 选择题答案处理
+                if (q.type === 1) {
+                    userAnswerText = q.options[answer] ? q.options[answer].text : '未作答';
+                    correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                } else if (q.type === 2) {
+                    userAnswerText = answer && answer.length > 0 ? answer.map(i => q.options[i].text).join('、') : '未作答';
+                    correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、');
+                } else if (q.type === 3) {
+                    userAnswerText = answer || '未作答';
+                    correctAnswerText = q.blanks.join(' 或 ');
+                }
+                
+                // 收集错题
+                if (answer !== null && answer !== '' && !isCorrect) {
                     wrongQuestions.push({
                         questionId: q.id,
                         question: q.type === 3 ? q.code : q.question,
@@ -369,10 +374,105 @@
                         type: q.type
                     });
                 }
+                
+                // 收集所有题目的解析
+                allQuestionsAnalysis.push({
+                    index: index,
+                    id: q.id,
+                    title: q.title,
+                    type: q.type,
+                    question: q.type === 3 ? q.code : q.question,
+                    userAnswer: userAnswerText,
+                    correctAnswer: correctAnswerText,
+                    explanation: q.explanation,
+                    isCorrect: isCorrect && answer !== null && answer !== ''
+                });
             });
+            
             StorageManager.saveQuizResult(COURSE_ID, { score: correctCount, total: questions.length, wrongQuestions: wrongQuestions });
             
-            document.getElementById('resultSection').classList.remove('hidden'); document.querySelector('section.py-12').classList.add('hidden'); const score = correctCount; const total = questions.length; const rate = Math.round((score / total) * 100); document.getElementById('finalScore').textContent = `${score}/${total}`; document.getElementById('finalCorrect').textContent = correctCount; document.getElementById('finalWrong').textContent = wrongCount; document.getElementById('finalRate').textContent = `${rate}%`; let grade = ''; let message = ''; let icon = ''; if (rate >= 90) { grade = '优秀'; message = '太棒了！你对Python基础知识掌握得非常扎实！'; icon = '🏆'; } else if (rate >= 80) { grade = '良好'; message = '非常出色！继续保持！'; icon = '🎉'; } else if (rate >= 70) { grade = '中等'; message = '不错！还有一些细节需要加强。'; icon = '👍'; } else if (rate >= 60) { grade = '及格'; message = '刚好及格，建议复习一下。'; icon = '💪'; } else { grade = '需努力'; message = '加油！多做练习，你会进步的！'; icon = '📚'; } document.getElementById('resultIcon').textContent = icon; document.getElementById('finalGrade').textContent = grade; document.getElementById('finalGrade').className = `font-bold text-2xl ${rate >= 90 ? 'text-green-600' : rate >= 70 ? 'text-blue-600' : rate >= 60 ? 'text-yellow-600' : 'text-red-600'}`; document.getElementById('gradeMessage').textContent = message; const wrongQuestionsContainer = document.getElementById('wrongQuestions'); const wrongQuestionsList = document.getElementById('wrongQuestionsList'); const wrongIndices = []; userAnswers.forEach((answer, index) => { if (answer !== null && answer !== '' && !isAnswerCorrect(index)) wrongIndices.push(index); }); if (wrongIndices.length > 0) { wrongQuestionsContainer.classList.remove('hidden'); wrongQuestionsList.innerHTML = ''; wrongIndices.forEach(index => { const q = questions[index]; const userAnswer = userAnswers[index]; let userAnswerText, correctAnswerText; if (q.type === 1) { userAnswerText = q.options[userAnswer].text; correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、'); } else if (q.type === 2) { userAnswerText = userAnswer.map(i => q.options[i].text).join('、'); correctAnswerText = q.options.filter(o => o.isCorrect).map(o => o.text).join('、'); } else if (q.type === 3) { userAnswerText = userAnswer; correctAnswerText = q.blanks.join(' 或 '); } const isFillBlank = q.type === 3; wrongQuestionsList.innerHTML += `<div class="bg-red-50 rounded-xl p-4 border-l-4 border-red-500 ${isFillBlank ? 'code-question' : ''}"><div class="font-semibold text-gray-800 mb-2">第 ${index + 1} 题${isFillBlank ? '（代码填空）' : ''}：${q.title}</div><div class="text-gray-700 mb-3 ${isFillBlank ? 'code-block' : ''}">${isFillBlank ? `<pre class="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-x-auto">${q.code.replace('___', `<span class="bg-red-200 text-red-800">${userAnswer}</span>`)}</pre>` : q.question}</div><div class="text-sm mb-2"><span class="text-red-600"><strong>你的答案：</strong>${userAnswerText}</span></div><div class="text-sm mb-3"><span class="text-green-600"><strong>正确答案：</strong>${correctAnswerText}</span></div><div class="bg-white/70 p-3 rounded-lg"><p class="text-purple-700 text-sm"><i class="fa fa-lightbulb-o mr-1"></i><strong>解析：</strong>${q.explanation}</p></div></div>`; }); } else { wrongQuestionsContainer.classList.add('hidden'); } document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' }); }
+            // 显示结果统计
+            document.getElementById('resultSection').classList.remove('hidden'); 
+            document.querySelector('section.py-12').classList.add('hidden'); 
+            const score = correctCount; 
+            const total = questions.length; 
+            const rate = Math.round((score / total) * 100); 
+            document.getElementById('finalScore').textContent = `${score}/${total}`; 
+            document.getElementById('finalCorrect').textContent = correctCount; 
+            document.getElementById('finalWrong').textContent = wrongCount; 
+            document.getElementById('finalRate').textContent = `${rate}%`; 
+            let grade = ''; let message = ''; let icon = ''; 
+            if (rate >= 90) { grade = '优秀'; message = '太棒了！你对Python基础知识掌握得非常扎实！'; icon = '🏆'; } 
+            else if (rate >= 80) { grade = '良好'; message = '非常出色！继续保持！'; icon = '🎉'; } 
+            else if (rate >= 70) { grade = '中等'; message = '不错！还有一些细节需要加强。'; icon = '👍'; } 
+            else if (rate >= 60) { grade = '及格'; message = '刚好及格，建议复习一下。'; icon = '💪'; } 
+            else { grade = '需努力'; message = '加油！多做练习，你会进步的！'; icon = '📚'; } 
+            document.getElementById('resultIcon').textContent = icon; 
+            document.getElementById('finalGrade').textContent = grade; 
+            document.getElementById('finalGrade').className = `font-bold text-2xl ${rate >= 90 ? 'text-green-600' : rate >= 70 ? 'text-blue-600' : rate >= 60 ? 'text-yellow-600' : 'text-red-600'}`; 
+            document.getElementById('gradeMessage').textContent = message; 
+            
+            // 显示所有题目解析（无论对错都显示）
+            const allAnalysisContainer = document.getElementById('allQuestionsAnalysis') || createAllAnalysisSection();
+            const allAnalysisList = document.getElementById('allAnalysisList');
+            allAnalysisList.innerHTML = '';
+            
+            allQuestionsAnalysis.forEach(item => {
+                const isCorrect = item.isCorrect;
+                const isFillBlank = item.type === 3;
+                const bgColor = isCorrect ? 'bg-green-50' : 'bg-red-50';
+                const borderColor = isCorrect ? 'border-green-500' : 'border-red-500';
+                const iconSymbol = isCorrect ? '✓' : '✗';
+                const iconColor = isCorrect ? 'text-green-500' : 'text-red-500';
+                
+                let html = `
+                    <div class="${bgColor} rounded-xl p-5 border-l-4 ${borderColor} mb-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center">
+                                <span class="${iconColor} text-2xl font-bold mr-3">${iconSymbol}</span>
+                                <span class="font-semibold text-gray-800">第 ${item.index + 1} 题</span>
+                                ${isFillBlank ? '<span class="ml-2 bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">代码填空</span>' : ''}
+                            </div>
+                            <span class="text-sm font-medium ${isCorrect ? 'text-green-600' : 'text-red-600'}">${isCorrect ? '正确' : '错误'}</span>
+                        </div>
+                        <div class="font-semibold text-gray-800 mb-2">${item.title}</div>
+                        <div class="mb-3 ${isFillBlank ? '' : 'text-gray-700'}">${isFillBlank ? `<pre class="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-x-auto">${item.question}</pre>` : item.question}</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-3">
+                            <div>
+                                <span class="text-red-600"><strong>你的答案：</strong></span>
+                                <span class="text-gray-700">${item.userAnswer}</span>
+                            </div>
+                            <div>
+                                <span class="text-green-600"><strong>正确答案：</strong></span>
+                                <span class="text-gray-700">${item.correctAnswer}</span>
+                            </div>
+                        </div>
+                        <div class="bg-white/70 p-3 rounded-lg border border-gray-200">
+                            <p class="text-purple-700 text-sm"><i class="fa fa-lightbulb-o mr-1"></i><strong>解析：</strong>${item.explanation}</p>
+                        </div>
+                    </div>`;
+                allAnalysisList.innerHTML += html;
+            });
+            
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' }); 
+        }
+        
+        function createAllAnalysisSection() {
+            const container = document.getElementById('resultSection');
+            const section = document.createElement('div');
+            section.id = 'allQuestionsAnalysis';
+            section.className = 'container mx-auto px-4 py-12';
+            section.innerHTML = `
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-6 text-purple-700 text-center">
+                        <i class="fa fa-list-alt mr-2"></i>所有题目解析
+                    </h2>
+                    <div id="allAnalysisList"></div>
+                </div>
+            `;
+            container.appendChild(section);
+            return section;
+        }
         function restartQuiz() { currentIndex = 0; userAnswers = new Array(questions.length).fill(null); correctCount = 0; wrongCount = 0; isSubmitted = false; document.getElementById('resultSection').classList.add('hidden'); document.querySelector('section.py-12').classList.remove('hidden'); document.getElementById('progressBar').style.width = '0%'; init(); }
         function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
         init();
