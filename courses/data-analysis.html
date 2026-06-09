@@ -223,161 +223,38 @@
     <script src="../js/utils.js"></script>
     <script>
         const COURSE_ID = 'data-analysis';
-        const questions = [
-            {
-                id: 1,
-                type: 1,
-                title: '描述性统计',
-                question: '给定数据 [85, 92, 78, 88, 95, 72, 89, 90, 82, 87]，其平均值是多少？',
-                options: [
-                    { label: 'A', text: '84.8', isCorrect: false },
-                    { label: 'B', text: '85.8', isCorrect: true },
-                    { label: 'C', text: '86.8', isCorrect: false },
-                    { label: 'D', text: '87.8', isCorrect: false }
-                ],
-                explanation: '计算过程：(85+92+78+88+95+72+89+90+82+87) ÷ 10 = 858 ÷ 10 = 85.8'
-            },
-            {
-                id: 2,
-                type: 1,
-                title: '中位数计算',
-                question: '给定数据 [12, 15, 18, 20, 25, 30]，其中位数是？',
-                options: [
-                    { label: 'A', text: '18', isCorrect: false },
-                    { label: 'B', text: '19', isCorrect: true },
-                    { label: 'C', text: '20', isCorrect: false },
-                    { label: 'D', text: '22.5', isCorrect: false }
-                ],
-                explanation: '中位数是排序后中间两个数的平均值：(18+20) ÷ 2 = 19'
-            },
-            {
-                id: 3,
-                type: 1,
-                title: '标准差含义',
-                question: '在数据分析中，标准差主要用来衡量什么？',
-                options: [
-                    { label: 'A', text: '数据的平均值', isCorrect: false },
-                    { label: 'B', text: '数据的离散程度', isCorrect: true },
-                    { label: 'C', text: '数据的最大值', isCorrect: false },
-                    { label: 'D', text: '数据的中位数', isCorrect: false }
-                ],
-                explanation: '标准差是衡量数据离散程度或变异性的统计量，值越大表示数据越分散。'
-            },
-            {
-                id: 4,
-                type: 1,
-                title: '相关分析',
-                question: '当两个变量的相关系数为0.8时，表示两者之间存在？',
-                options: [
-                    { label: 'A', text: '弱正相关', isCorrect: false },
-                    { label: 'B', text: '强正相关', isCorrect: true },
-                    { label: 'C', text: '弱负相关', isCorrect: false },
-                    { label: 'D', text: '强负相关', isCorrect: false }
-                ],
-                explanation: '相关系数范围为[-1, 1]，0.8接近1，表示存在强正相关关系。'
-            },
-            {
-                id: 5,
-                type: 1,
-                title: '数据可视化',
-                question: '以下哪种图表最适合展示数据的分布情况？',
-                options: [
-                    { label: 'A', text: '折线图', isCorrect: false },
-                    { label: 'B', text: '柱状图', isCorrect: false },
-                    { label: 'C', text: '直方图', isCorrect: true },
-                    { label: 'D', text: '散点图', isCorrect: false }
-                ],
-                explanation: '直方图专门用于展示数据的分布情况，通过分组显示数据的频率分布。'
-            },
-            {
-                id: 6,
-                type: 2,
-                title: 'pandas功能（多选）',
-                question: 'pandas库的主要数据结构包括？（多选）',
-                options: [
-                    { label: 'A', text: 'Series（一维）', isCorrect: true },
-                    { label: 'B', text: 'DataFrame（二维）', isCorrect: true },
-                    { label: 'C', text: 'Array', isCorrect: false },
-                    { label: 'D', text: 'Panel', isCorrect: false }
-                ],
-                explanation: 'pandas主要数据结构是Series（一维）和DataFrame（二维），Panel在新版本中已弃用。'
-            },
-            {
-                id: 7,
-                type: 1,
-                title: '缺失值处理',
-                question: '在pandas中，处理缺失值的常用方法不包括？',
-                options: [
-                    { label: 'A', text: 'dropna()删除缺失值', isCorrect: false },
-                    { label: 'B', text: 'fillna()填充缺失值', isCorrect: false },
-                    { label: 'C', text: 'replace()替换缺失值', isCorrect: false },
-                    { label: 'D', text: 'ignore()忽略缺失值', isCorrect: true }
-                ],
-                explanation: 'pandas没有ignore()方法处理缺失值，常用的是dropna()、fillna()和replace()。'
-            },
-            {
-                id: 8,
-                type: 1,
-                title: '数据透视表',
-                question: '在pandas中，创建数据透视表的方法是？',
-                options: [
-                    { label: 'A', text: 'groupby()', isCorrect: false },
-                    { label: 'B', text: 'pivot_table()', isCorrect: true },
-                    { label: 'C', text: 'crosstab()', isCorrect: false },
-                    { label: 'D', text: 'merge()', isCorrect: false }
-                ],
-                explanation: 'pivot_table()是pandas中创建数据透视表的方法，groupby()用于分组，crosstab()用于交叉表。'
-            },
-            {
-                id: 9,
-                type: 2,
-                title: '数据清洗步骤（多选）',
-                question: '数据清洗的主要步骤包括？（多选）',
-                options: [
-                    { label: 'A', text: '处理缺失值', isCorrect: true },
-                    { label: 'B', text: '去除重复数据', isCorrect: true },
-                    { label: 'C', text: '数据类型转换', isCorrect: true },
-                    { label: 'D', text: '数据加密', isCorrect: false }
-                ],
-                explanation: '数据清洗主要包括处理缺失值、去除重复数据、数据类型转换等，加密不是清洗步骤。'
-            },
-            {
-                id: 10,
-                type: 1,
-                title: 'NumPy数组',
-                question: '创建一个1到10的NumPy数组，步长为2，应该使用？',
-                options: [
-                    { label: 'A', text: 'np.array([1,2,3,4,5,6,7,8,9,10])', isCorrect: false },
-                    { label: 'B', text: 'np.arange(1, 10, 2)', isCorrect: true },
-                    { label: 'C', text: 'np.linspace(1, 10, 2)', isCorrect: false },
-                    { label: 'D', text: 'np.range(1, 10, 2)', isCorrect: false }
-                ],
-                explanation: 'np.arange()用于创建等差数组，参数为start, stop, step。np.linspace()用于创建等间隔数组。'
-            },
-            // 填空题部分
-            { id: 11, type: 3, title: 'pandas读取数据（代码补全）', code: 'import pandas as pd\ndf = pd.___(["name", "age", "score"], data=[["Alice", 20, 85], ["Bob", 22, 90]])\nprint(df)', blanks: ['DataFrame'], explanation: 'pandas中使用DataFrame()构造函数创建数据框，参数可以指定列名和数据。' },
-            { id: 12, type: 3, title: 'NumPy数组创建（代码补全）', code: 'import numpy as np\narr = np.___([1, 2, 3, 4, 5])\nprint(arr.mean())', blanks: ['array'], explanation: 'np.array()函数将列表转换为NumPy数组，之后可以调用mean()计算平均值。' },
-            { id: 13, type: 3, title: '数据筛选（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"name": ["Alice", "Bob"], "score": [85, 90]})\nprint(df[df["score"] ___ 85])', blanks: ['>', '>'], explanation: '使用布尔索引筛选数据，df["score"] > 85 返回布尔序列，用于筛选分数大于85的行。' },
-            { id: 14, type: 3, title: 'matplotlib绘图（代码补全）', code: 'import matplotlib.pyplot as plt\nplt.___(df["name"], df["score"])\nplt.show()', blanks: ['bar'], explanation: 'plt.bar()用于绘制柱状图，第一个参数是x轴数据，第二个参数是y轴数据。' },
-            { id: 15, type: 3, title: '数据分组统计（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"category": ["A", "B", "A", "B"], "value": [10, 20, 30, 40]})\nresult = df.___(by="category").sum()\nprint(result)', blanks: ['groupby'], explanation: 'groupby()方法用于按列分组，之后可以调用sum()、mean()等聚合函数进行统计。' },
-            // 新增选择题 16-25
-            { id: 16, type: 1, title: 'pandas合并', question: '在pandas中，concat()函数用于什么操作？', options: [{ label: 'A', text: '筛选数据', isCorrect: false }, { label: 'B', text: '合并数据集', isCorrect: true }, { label: 'C', text: '分组统计', isCorrect: false }, { label: 'D', text: '排序数据', isCorrect: false }], explanation: 'concat()用于沿着轴合并多个数据集，可以纵向或横向合并。' },
-            { id: 17, type: 1, title: 'matplotlib样式', question: '以下哪个方法可以设置matplotlib的图形尺寸？', options: [{ label: 'A', text: 'plt.figure(figsize=(10, 6))', isCorrect: true }, { label: 'B', text: 'plt.size(10, 6)', isCorrect: false }, { label: 'C', text: 'plt.graph(10, 6)', isCorrect: false }, { label: 'D', text: 'plt.plot(size=(10, 6))', isCorrect: false }], explanation: 'plt.figure()的figsize参数用于设置图形尺寸，单位为英寸。' },
-            { id: 18, type: 1, title: 'pandas去重', question: 'pandas中用于去除重复数据的方法是？', options: [{ label: 'A', text: 'drop()', isCorrect: false }, { label: 'B', text: 'drop_duplicate()', isCorrect: false }, { label: 'C', text: 'drop_duplicates()', isCorrect: true }, { label: 'D', text: 'remove_duplicate()', isCorrect: false }], explanation: 'drop_duplicates()方法用于去除重复行，返回去重后的DataFrame。' },
-            { id: 19, type: 1, title: 'numpy广播', question: 'numpy的广播机制是指？', options: [{ label: 'A', text: '数据加密', isCorrect: false }, { label: 'B', text: '不同形状数组进行运算', isCorrect: true }, { label: 'C', text: '数组排序', isCorrect: false }, { label: 'D', text: '数据复制', isCorrect: false }], explanation: '广播是numpy的重要特性，允许不同形状的数组进行算术运算。' },
-            { id: 20, type: 1, title: 'pandas索引', question: 'pandas中使用loc访问数据的特点是？', options: [{ label: 'A', text: '使用整数索引', isCorrect: false }, { label: 'B', text: '使用标签索引', isCorrect: true }, { label: 'C', text: '使用布尔条件', isCorrect: false }, { label: 'D', text: '使用位置索引', isCorrect: false }], explanation: 'loc使用轴标签（行名、列名）进行索引，iloc使用整数位置索引。' },
-            { id: 21, type: 1, title: 'numpy数组重塑', question: '将一维数组转换为二维数组使用哪个方法？', options: [{ label: 'A', text: 'reshape()', isCorrect: true }, { label: 'B', text: 'resize()', isCorrect: false }, { label: 'C', text: 'reshape()', isCorrect: false }, { label: 'D', text: 'transform()', isCorrect: false }], explanation: 'reshape()方法可以改变数组的形状，不改变数据本身。' },
-            { id: 22, type: 1, title: 'pandas缺失值检测', question: '检测pandas中缺失值（NaN）的方法是？', options: [{ label: 'A', text: 'isnull()', isCorrect: true }, { label: 'B', text: 'notnull()', isCorrect: false }, { label: 'C', text: 'hasnull()', isCorrect: false }, { label: 'D', text: 'missing()', isCorrect: false }], explanation: 'isnull()返回布尔DataFrame，标识每个位置是否为缺失值。' },
-            { id: 23, type: 1, title: 'matplotlib子图', question: '创建子图应该使用哪个函数？', options: [{ label: 'A', text: 'plt.subplots()', isCorrect: true }, { label: 'B', text: 'plt.subplot()', isCorrect: false }, { label: 'C', text: 'plt.graph()', isCorrect: false }, { label: 'D', text: 'plt.figure()', isCorrect: false }], explanation: 'plt.subplots()可以创建包含多个子图的图形窗口。' },
-            { id: 24, type: 1, title: 'numpy数组拼接', question: '沿垂直方向拼接两个数组应该使用？', options: [{ label: 'A', text: 'np.concatenate()', isCorrect: false }, { label: 'B', text: 'np.vstack()', isCorrect: true }, { label: 'C', text: 'np.hstack()', isCorrect: false }, { label: 'D', text: 'np.stack()', isCorrect: false }], explanation: 'vstack()垂直堆叠数组，hstack()水平堆叠数组。' },
-            { id: 25, type: 1, title: 'pandas排序', question: 'pandas中按指定列降序排序的方法是？', options: [{ label: 'A', text: 'sort(columns="col", ascending=True)', isCorrect: false }, { label: 'B', text: 'sort_values("col", ascending=False)', isCorrect: true }, { label: 'C', text: 'order("col", desc=True)', isCorrect: false }, { label: 'D', text: 'sortby("col", reverse=True)', isCorrect: false }], explanation: 'sort_values()的ascending参数控制升序或降序，False为降序。' },
-            // 新增判断题 26-30
-            { id: 26, type: 4, title: 'pandas索引', question: 'pandas的DataFrame可以使用整数作为行索引。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'DataFrame默认使用整数索引（0, 1, 2...），但也可以设置为其他类型的索引。' },
-            { id: 27, type: 4, title: 'numpy数组', question: 'numpy数组的元素类型必须相同。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'numpy数组是同质的，所有元素必须是相同的数据类型，这使其存储和计算更高效。' },
-            { id: 28, type: 4, title: 'matplotlib绑定', question: 'matplotlib只能绑定numpy数组作为数据源。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'matplotlib可以接受list、pandas Series等多种数据类型，不仅限于numpy数组。' },
-            { id: 29, type: 4, title: 'pandas合并', question: 'merge()和join()在pandas中功能完全相同。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'merge()基于列值合并，join()基于索引合并，功能有区别。' },
-            { id: 30, type: 4, title: 'numpy拷贝', question: 'numpy中直接赋值不会创建数据的拷贝。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '直接赋值（如b = a）只是创建了引用，修改b会影响a，需要使用copy()创建真正的拷贝。' }
-        ];
+                const questions = [
+            { id: 1, type: 1, title: 'pandas基础', question: 'pandas中用于表示二维表格数据的数据结构是？', options: [{ label: 'A', text: 'Series', isCorrect: false }, { label: 'B', text: 'DataFrame', isCorrect: true }, { label: 'C', text: 'Array', isCorrect: false }, { label: 'D', text: 'Matrix', isCorrect: false }], explanation: 'DataFrame是pandas中表示二维表格数据的核心数据结构，Series用于一维数据。' },
+            { id: 2, type: 1, title: 'numpy数组', question: '在numpy中，创建一个全为0的数组应该使用哪个函数？', options: [{ label: 'A', text: 'np.zeros()', isCorrect: true }, { label: 'B', text: 'np.ones()', isCorrect: false }, { label: 'C', text: 'np.empty()', isCorrect: false }, { label: 'D', text: 'np.eye()', isCorrect: false }], explanation: 'np.zeros()创建全0数组，np.ones()创建全1数组，np.eye()创建单位矩阵。' },
+            { id: 3, type: 1, title: '基本统计', question: '在pandas中，获取DataFrame描述性统计信息的方法是？', options: [{ label: 'A', text: 'df.describe()', isCorrect: true }, { label: 'B', text: 'df.summary()', isCorrect: false }, { label: 'C', text: 'df.stats()', isCorrect: false }, { label: 'D', text: 'df.info()', isCorrect: false }], explanation: 'describe()方法提供计数、均值、标准差、分位数等描述性统计信息。' },
+            { id: 4, type: 1, title: '数据读取', question: '使用pandas读取CSV文件应该使用哪个函数？', options: [{ label: 'A', text: 'pd.read_csv()', isCorrect: true }, { label: 'B', text: 'pd.load_csv()', isCorrect: false }, { label: 'C', text: 'pd.open_csv()', isCorrect: false }, { label: 'D', text: 'pd.read_excel()', isCorrect: false }], explanation: 'pd.read_csv()用于读取CSV文件，pd.read_excel()用于读取Excel文件。' },
+            { id: 5, type: 1, title: '数据筛选', question: '在pandas中，筛选满足条件的行应该使用哪种方式？', options: [{ label: 'A', text: 'df[df["col"] > value]', isCorrect: true }, { label: 'B', text: 'df.filter(col > value)', isCorrect: false }, { label: 'C', text: 'df.search(col > value)', isCorrect: false }, { label: 'D', text: 'df.find(col > value)', isCorrect: false }], explanation: '使用布尔索引df[条件表达式]可以筛选满足条件的行。' },
+            { id: 6, type: 1, title: 'numpy运算', question: 'numpy中计算数组元素的平均值应该使用？', options: [{ label: 'A', text: 'np.mean(arr)', isCorrect: true }, { label: 'B', text: 'np.average(arr)', isCorrect: false }, { label: 'C', text: 'np.sum(arr) / len(arr)', isCorrect: false }, { label: 'D', text: 'np.median(arr)', isCorrect: false }], explanation: 'np.mean()用于计算数组元素的平均值，np.median()计算中位数。' },
+            { id: 7, type: 1, title: '缺失值处理', question: 'pandas中检测缺失值的方法是？', options: [{ label: 'A', text: 'df.isnull()', isCorrect: true }, { label: 'B', text: 'df.isna()', isCorrect: false }, { label: 'C', text: 'df.nan()', isCorrect: false }, { label: 'D', text: 'df.missing()', isCorrect: false }], explanation: 'isnull()用于检测缺失值（NaN），返回布尔型DataFrame。' },
+            { id: 8, type: 1, title: '数据排序', question: '在pandas中按指定列排序的方法是？', options: [{ label: 'A', text: 'df.sort_values("col")', isCorrect: true }, { label: 'B', text: 'df.sort("col")', isCorrect: false }, { label: 'C', text: 'df.order("col")', isCorrect: false }, { label: 'D', text: 'df.arrange("col")', isCorrect: false }], explanation: 'sort_values()按指定列的值排序，可以通过ascending参数控制升降序。' },
+            { id: 9, type: 1, title: 'matplotlib基础', question: '使用matplotlib绘制折线图应该使用哪个函数？', options: [{ label: 'A', text: 'plt.plot()', isCorrect: true }, { label: 'B', text: 'plt.line()', isCorrect: false }, { label: 'C', text: 'plt.scatter()', isCorrect: false }, { label: 'D', text: 'plt.bar()', isCorrect: false }], explanation: 'plt.plot()用于绘制折线图，plt.scatter()绘制散点图，plt.bar()绘制柱状图。' },
+            { id: 10, type: 1, title: '分组统计', question: 'pandas中按列分组并进行聚合操作的方法是？', options: [{ label: 'A', text: 'df.groupby("col").mean()', isCorrect: true }, { label: 'B', text: 'df.group("col").mean()', isCorrect: false }, { label: 'C', text: 'df.split("col").mean()', isCorrect: false }, { label: 'D', text: 'df.aggregate("col")', isCorrect: false }], explanation: 'groupby()方法进行分组，之后可以链式调用mean()、sum()等聚合函数。' },
+            { id: 11, type: 2, title: '数据处理方法（多选）', question: '以下哪些是pandas中常用的数据处理方法？（多选）', options: [{ label: 'A', text: 'dropna()', isCorrect: true }, { label: 'B', text: 'fillna()', isCorrect: true }, { label: 'C', text: 'drop_duplicates()', isCorrect: true }, { label: 'D', text: 'normalize()', isCorrect: false }], explanation: 'dropna()删除缺失值，fillna()填充缺失值，drop_duplicates()去重，这些都是pandas常用的数据处理方法。' },
+            { id: 12, type: 2, title: '可视化类型（多选）', question: 'matplotlib可以绘制以下哪些图形？（多选）', options: [{ label: 'A', text: '柱状图', isCorrect: true }, { label: 'B', text: '散点图', isCorrect: true }, { label: 'C', text: '热力图', isCorrect: true }, { label: 'D', text: '箱线图', isCorrect: true }], explanation: 'matplotlib功能全面，可以绘制柱状图、散点图、热力图、箱线图等多种统计图表。' },
+            { id: 13, type: 2, title: 'pandas方法（多选）', question: '以下哪些是pandas DataFrame的常用方法？（多选）', options: [{ label: 'A', text: 'head()', isCorrect: true }, { label: 'B', text: 'tail()', isCorrect: true }, { label: 'C', text: 'info()', isCorrect: true }, { label: 'D', text: 'plot()', isCorrect: true }], explanation: 'head()查看前几行，tail()查看后几行，info()查看数据信息，plot()可以快速绘图，都是pandas常用方法。' },
+            { id: 14, type: 2, title: 'numpy功能（多选）', question: 'numpy的主要功能包括？（多选）', options: [{ label: 'A', text: '高性能数组运算', isCorrect: true }, { label: 'B', text: '线性代数运算', isCorrect: true }, { label: 'C', text: '随机数生成', isCorrect: true }, { label: 'D', text: 'Web爬虫', isCorrect: false }], explanation: 'numpy提供高性能数组运算、线性代数、随机数生成等科学计算功能，Web爬虫不是numpy的功能。' },
+            { id: 15, type: 2, title: '数据可视化（多选）', question: '以下哪些是常用的Python可视化库？（多选）', options: [{ label: 'A', text: 'matplotlib', isCorrect: true }, { label: 'B', text: 'seaborn', isCorrect: true }, { label: 'C', text: 'plotly', isCorrect: true }, { label: 'D', text: 'scikit-learn', isCorrect: false }], explanation: 'matplotlib、seaborn、plotly都是常用的Python可视化库，scikit-learn是机器学习库。' },
+            { id: 16, type: 3, title: 'DataFrame创建（代码补全）', code: 'import pandas as pd\ndata = {"name": ["A", "B"], "age": [20, 25]}\ndf = pd.___(data)\nprint(df)', blanks: ['DataFrame'], explanation: 'pd.DataFrame()用于创建DataFrame对象，可以接收字典、列表等多种数据格式。' },
+            { id: 17, type: 3, title: 'numpy数组创建（代码补全）', code: 'import numpy as np\narr = np.___([1, 2, 3, 4, 5])\nprint(arr.mean())', blanks: ['array'], explanation: 'np.array()函数将列表转换为numpy数组，之后可以调用mean()等方法进行统计计算。' },
+            { id: 18, type: 3, title: '数据筛选（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"score": [85, 90, 78]})\nresult = df[df["score"] ___ 80]\nprint(result)', blanks: ['>'], explanation: '使用布尔索引筛选数据，df["score"] > 80 返回布尔序列，用于筛选分数大于80的行。' },
+            { id: 19, type: 3, title: 'matplotlib绘图（代码补全）', code: 'import matplotlib.pyplot as plt\nx = [1, 2, 3]\ny = [4, 5, 6]\nplt.___(x, y)\nplt.show()', blanks: ['plot'], explanation: 'plt.plot()用于绘制折线图，接受x和y坐标数据，之后需要调用plt.show()显示图形。' },
+            { id: 20, type: 3, title: '分组统计（代码补全）', code: 'import pandas as pd\ndf = pd.DataFrame({"category": ["A", "A", "B"], "value": [10, 20, 30]})\nresult = df.___("category").sum()\nprint(result)', blanks: ['groupby'], explanation: 'groupby()方法按指定列进行分组，之后可以调用sum()、mean()等聚合函数进行统计。' },
+            { id: 21, type: 4, title: 'pandas索引', question: 'pandas的DataFrame可以使用整数作为行索引。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'DataFrame默认使用0到n-1的整数作为行索引，也可以通过set_index()设置自定义索引。' },
+            { id: 22, type: 4, title: 'numpy数组', question: 'numpy数组的元素类型必须相同。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'numpy数组是同质的，所有元素必须是相同数据类型，这样可以提高运算效率和节省存储空间。' },
+            { id: 23, type: 4, title: 'matplotlib', question: 'matplotlib只能绑定numpy数组作为数据源。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'matplotlib可以接受Python list、pandas Series、numpy数组等多种数据类型作为数据源。' },
+            { id: 24, type: 4, title: 'pandas合并', question: 'merge()函数可以基于公共列合并两个DataFrame。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'merge()基于列值进行合并，类似于SQL的JOIN操作，支持inner、left、right、outer等连接方式。' },
+            { id: 25, type: 4, title: '数据预处理', question: '数据标准化会改变数据的分布形状。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '数据标准化（如z-score标准化）只改变数据的尺度，不改变数据的分布形状。' },
+            { id: 26, type: 4, title: '相关性分析', question: '相关系数为0表示两个变量之间没有任何关系。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '相关系数为0只表示两个变量之间没有线性关系，但可能存在非线性关系。' },
+            { id: 27, type: 4, title: '缺失值填充', question: '填充缺失值时，使用均值填充适用于所有类型的数据。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: '均值填充只适用于数值型数据，分类数据通常使用众数填充，不能使用均值。' },
+            { id: 28, type: 4, title: 'pandas Series', question: 'pandas Series是一维标记数组。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'Series是pandas的一维标记数组，可以保存任何数据类型，每个元素都有一个索引标签。' },
+            { id: 29, type: 4, title: '数据聚合', question: 'groupby()分组后必须调用聚合函数才能得到结果。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'groupby()只是创建分组对象，需要调用聚合函数（sum、mean、count等）才能得到实际的统计结果。' },
+            { id: 30, type: 4, title: '数据可视化', question: '散点图可以展示两个变量之间的关系。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '散点图通过点的分布展示两个数值型变量之间的关系，可用于判断相关性和发现异常值。' }
+        ];];
 
         let currentIndex = 0;
         let userAnswers = new Array(questions.length).fill(null);
