@@ -148,7 +148,7 @@
             { id: 28, type: 4, title: 'DISTINCT', question: 'SELECT DISTINCT用于去除查询结果中的重复行。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: 'DISTINCT关键字用于去除查询结果中的重复记录，只保留不重复的行。' },
             { id: 29, type: 4, title: 'HAVING子句', question: 'HAVING子句可以代替WHERE子句做任何条件过滤。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'WHERE用于分组前过滤原始数据，HAVING用于分组后过滤聚合结果，两者用途不同不可完全替代。' },
             { id: 30, type: 4, title: '数据库规范化', question: '数据库规范化的目的是消除数据冗余并避免数据异常。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '规范化通过将大表拆分为小表并建立关系，消除数据冗余，避免插入、更新、删除异常。' }
-        ];];
+        ];
 
         let currentIndex=0,userAnswers=new Array(questions.length).fill(null),correctCount=0,wrongCount=0,isSubmitted=false,questionAnswered=new Array(questions.length).fill(false);
 

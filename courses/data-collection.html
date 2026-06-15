@@ -238,7 +238,7 @@
             { id: 28, type: 4, title: '异步请求', question: 'requests库原生支持异步HTTP请求。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'requests是同步库，原生不支持异步。要做异步请求可以使用aiohttp或httpx等异步HTTP客户端。' },
             { id: 29, type: 4, title: '数据清洗', question: '爬取到的原始数据通常需要清洗后才能使用。', options: [{ label: 'A', text: '正确', isCorrect: true }, { label: 'B', text: '错误', isCorrect: false }], explanation: '爬取的原始数据往往包含HTML标签、空白字符等，需要进行去重、清洗、格式化等处理后才能使用。' },
             { id: 30, type: 4, title: 'POST请求', question: 'POST请求的数据会显示在URL中。', options: [{ label: 'A', text: '正确', isCorrect: false }, { label: 'B', text: '错误', isCorrect: true }], explanation: 'POST请求的数据放在请求体中，不会显示在URL中，GET请求的数据才会作为查询参数附加在URL后。' }
-        ];];
+        ];
 
         let currentIndex = 0;
         let userAnswers = new Array(questions.length).fill(null);
